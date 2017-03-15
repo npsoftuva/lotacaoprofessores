@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Disciplina {
     private $dcp_cod;
     private $dcp_nom;

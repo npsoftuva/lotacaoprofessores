@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Fluxo {
     private $flx_cod;
     private $flx_trn;

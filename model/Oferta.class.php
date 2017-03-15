@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Oferta {
     private $ofr_cod;
     private $prd_cod;

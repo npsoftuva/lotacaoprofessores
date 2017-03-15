@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Componente {
     private $flx_cod;
     private $dcp_cod;

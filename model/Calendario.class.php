@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Calendario {
     private $cld_dta;
     private $cld_dia;
