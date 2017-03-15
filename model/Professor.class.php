@@ -23,18 +23,5 @@
       $this->prf_sit = $sit;
     }
 
-    public function searchAll() {
-      $search = Conexao::getInstance()->prepare("SELECT * FROM tab_prf");
-
-      if ($search->execute()) {
-        while ($prf = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Professor();
-          $aux->setAll($prf["prf_cod"], $prf["prf_nom"], $prf["prf_cpf"], $prf["prf_eml"], $prf["prf_sit"]);
-          $prfs[] = $aux;
-        }
-        return $prfs;
-      } else
-        return false;
-    }
   }
 ?>

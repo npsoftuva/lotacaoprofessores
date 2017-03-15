@@ -13,7 +13,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_prf (prf_cod, prf_nom, prf_cpf, prf_eml, prf_sit) VALUES (NULL, ?, ?, ?,- ?)";
+        $sql = "INSERT INTO tab_prf (prf_cod, prf_nom, prf_cpf, prf_eml, prf_sit) VALUES (NULL, ?, ?, ?, ?)";
 
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $professor->__get("prf_nom"));
@@ -29,6 +29,34 @@
 
     }
 
+    public function update (Professor $professor) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "UPDATE tab_prf
+                SET    prf_nom = ?,
+                       prf_cpf = ?,
+                       prf_eml = ?,
+                       prf_sit = ?
+                WHERE  prf_cod = ?";
+
+        $update = $dbh->prepare($sql);
+        $update->bindValue(1, $professor->__get("prf_nom"));
+        $update->bindValue(2, $professor->__get("prf_cpf"));
+        $update->bindValue(3, $professor->__get("prf_eml"));
+        $update->bindValue(4, $professor->__get("prf_sit"));
+        $update->bindValue(5, $professor->__get("prf_cod"));
+        $update->execute();
+
+        return 1;
+      } catch (Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+      }
+
+      return 0;
+    }
+
     public function remove ($prf_cod) {
       try {
         $dbh = Connection::connect();
@@ -42,6 +70,29 @@
         return 1;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+      }
+
+      return 0;
+    }
+
+    public function search($id) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT * FROM tab_prf WHERE prf_cod = ?";
+
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $id);
+        $search->execute();
+
+        $prf = $search->fetch(PDO::FETCH_ASSOC);
+        $aux = new Professor();
+        $aux->setAll($prf["prf_cod"], $prf["prf_nom"], $prf["prf_cpf"], $prf["prf_eml"], $prf["prf_sit"]);
+
+        return $aux;
+      } catch (Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
       }
 
       return 0;
