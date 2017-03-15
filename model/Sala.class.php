@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Sala {
     private $sla_cod;
     private $sla_nom;

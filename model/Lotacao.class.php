@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Lotacao {
     private $lot_cod;
     private $ofr_cod;

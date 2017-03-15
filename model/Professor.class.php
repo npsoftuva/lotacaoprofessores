@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Professor {
     private $prf_cod;
     private $prf_nom;

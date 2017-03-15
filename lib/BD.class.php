@@ -1,5 +1,19 @@
 <?php
+// @arquivo = /lib/Connection.php
+// MVC = controller
+// objeto = Connection
 
+class Connection {
+
+  public static function connect () {
+    $dbh = new PDO("pgsql:host=localhost;port=5432;dbname=lotacao", 'postgres', '123', 
+          array(PDO::ATTR_PERSISTENT => true));
+    return $dbh;
+  }
+
+}
+
+/*
 header('Content-Type: text/html; charset=utf-8');
 
   class Conexao {
@@ -18,5 +32,5 @@ header('Content-Type: text/html; charset=utf-8');
       return self::$instance;
     }
   }
-
+*/
 ?>

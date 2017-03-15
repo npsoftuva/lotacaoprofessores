@@ -1,7 +1,5 @@
 <?php
 
-  include_once("BD.class.php");
-
   class Periodo {
     private $prd_cod;
     private $prd_ini;
