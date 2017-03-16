@@ -1,3 +1,10 @@
+<?php
+  require_once('../controller/DisciplinaController.php');
+
+  $disciplinaController = new DisciplinaController();
+  $disciplinas = $disciplinaController->searchAll();
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -53,48 +60,15 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
+<?php foreach ($disciplinas as $disciplina) { ?>
                         <tr>
-                          <td>Lógica de Programação</td>
+                          <td><?php echo $disciplina->__get("dcp_nom"); ?></td>
                           <td>
                             <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
                             <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
                           </td>
                         </tr>
-                        <tr>
-                          <td>Lógica Matemática</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Estrutura de Dados</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Programação Orientada ao Objeto</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Construção e Análise de Algoritmos</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Compiladores</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
+<?php } ?>
                       </tbody>
                     </table>
                   </div>

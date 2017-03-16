@@ -3,10 +3,10 @@
 // MVC = controller
 // objeto = Disciplina
 
-require_once($_SERVER['DOCUMENT_ROOT'] . 'dao/DisciplinaDAO.php');
+require_once('../dao/DisciplinaDAO.php');
 
 class DisciplinaController {
-    
+
     public function register (Disciplina $disciplina){
         $disciplinaDAO = new DisciplinaDAO();
         return $disciplinaDAO->register($disciplina);
@@ -17,19 +17,19 @@ class DisciplinaController {
         return $disciplinaDAO->update($disciplina);
     }
     
-    public function remove (Disciplina $disciplina){
+    public function remove ($dcp_cod){
         $disciplinaDAO = new DisciplinaDAO();
         return $disciplinaDAO->remove($dcp_cod);
     }
     
-    public function search (Disciplina $disciplina){
+    public function search ($dcp_cod) {
         $disciplinaDAO = new DisciplinaDAO();
-        return $disciplinaDAO->search($disciplina);
+        return $disciplinaDAO->search($dcp_cod);
     }
     
-    public function searchAll (Disciplina $disciplina){
+    public function searchAll () {
         $disciplinaDAO = new DisciplinaDAO();
-        return $disciplinaDAO->register();
+        return $disciplinaDAO->searchAll();
     }
 }
 
