@@ -18,19 +18,5 @@
       $this->sla_nom = $nom;
       $this->sla_cap = $cap;
     }
-
-    public function searchAll() {
-      $search = Conexao::getInstance()->prepare("SELECT * FROM tab_sla");
-
-      if ($search->execute()) {
-        while ($sla = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Sala();
-          $aux->setAll($sla["sla_cod"], $sla["sla_nom"], $sla["sla_cap"]);
-          $slas[] = $aux;
-        }
-        return $slas;
-      } else
-        return false;
-    }
   }
 ?>
