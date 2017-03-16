@@ -1,3 +1,10 @@
+<?php
+  require_once('../controller/ProfessorController.php');
+
+  $professorController = new ProfessorController();
+  $professores = $professorController->searchAll();
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -55,66 +62,14 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Situação</th>
                       </thead>
                       <tbody>
+<?php foreach ($professores as $professor) { ?>
                         <tr>
-                          <td>Cláudio</td>
-                          <td>000.000.000-00</td>
-                          <td>mail@mail.com</td>
+                          <td><?php echo $professor->__get("prf_nom"); ?></td>
+                          <td><?php echo $professor->__get("prf_cpf"); ?></td>
+                          <td><?php echo $professor->__get("prf_eml"); ?></td>
                           <td><input type="checkbox" checked="checked"></td>
                         </tr>
-                        <tr>
-                          <td>Alex</td>
-                          <td>111.111.111-11</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Cláudio</td>
-                          <td>000.000.000-00</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Alex</td>
-                          <td>111.111.111-11</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Cláudio</td>
-                          <td>000.000.000-00</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Alex</td>
-                          <td>111.111.111-11</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Cláudio</td>
-                          <td>000.000.000-00</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Alex</td>
-                          <td>111.111.111-11</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Cláudio</td>
-                          <td>000.000.000-00</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
-                        <tr>
-                          <td>Alex</td>
-                          <td>111.111.111-11</td>
-                          <td>mail@mail.com</td>
-                          <td><input type="checkbox" checked="checked"></td>
-                        </tr>
+<?php } ?>
                       </tbody>
                     </table>
                   </div>
