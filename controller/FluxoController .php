@@ -24,12 +24,12 @@ class FluxoController {
     
     public function search (Fluxo $fluxo){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->register($fluxo);
+        return $fluxoDAO->search($fluxo);
     }
     
     public function searchAll (Fluxo $fluxo){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->register();
+        return $fluxoDAO->searchAll();
     }
 
 ?>
