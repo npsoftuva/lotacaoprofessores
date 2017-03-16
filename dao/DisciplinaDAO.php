@@ -4,8 +4,8 @@
 	// MVC = controller
 	// objeto = Disciplina
 	
-	require_once($_SERVER['DOCUMENT_ROOT'] . 'model/Disciplina.class.php');
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/BD.class.php');
+	require_once('../model/Disciplina.class.php');
+	require_once('../lib/BD.class.php');
 	
 	class DisciplinaDAO {
 		
@@ -48,7 +48,7 @@
 			return 0;
 		}
 		
-		public funtion remove ($dcp_cod){
+		public function remove ($dcp_cod){
 			
 			try {
 				$dbh = Connection::connect();
@@ -67,7 +67,7 @@
 			return 0;
 		}
 		
-		public funtion search($id){
+		public function search($id){
 			
 			try {
 				$dbh = Connection::connect();
@@ -78,7 +78,7 @@
 				$search->bindValue(1, $id);
 				$search->execute();
 				
-				$dcp = search->fetch(PDO::FETCH_ASSOC);
+				$dcp = $search->fetch(PDO::FETCH_ASSOC);
 				$aux = new Disciplina();
 				$aux = setAll($dcp["dcp_cod"],$dcp["dcp_nom"]);
 				
@@ -98,12 +98,12 @@
 				
 				$sql = "SELECT * FROM tab_dcp";
 				
-				$search = dbh->prepare($sql);
+				$search = $dbh->prepare($sql);
 				$search->execute();
 				
 				while ($dcp = $search->fetch(PDO::FETCH_ASSOC)){
 					$aux = new Disciplina();
-					$axu->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
+					$aux->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
 					$prfs[] = $aux;
 				}
 				
