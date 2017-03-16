@@ -3,7 +3,7 @@
 // MVC = controller
 // objeto = Professor
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/dao/ProfessorDAO.php');
+require_once('../dao/ProfessorDAO.php');
 
 class ProfessorController {
 
