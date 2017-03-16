@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/controller/ProfessorController.php');
 
-  // listar professores
+  // listar Professor
   $professorController = new ProfessorController();
   $professores = $professorController->searchAll();
 
