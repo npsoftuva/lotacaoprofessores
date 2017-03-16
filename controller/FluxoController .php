@@ -3,7 +3,7 @@
 // MVC = controller
 // objeto = Fluxo
 
-require_once($_SERVER['DOCUMENT_ROOT'] . 'dao/FluxoDAO.php');
+require_once('../dao/FluxoDAO.php');
 
 class FluxoController {
     

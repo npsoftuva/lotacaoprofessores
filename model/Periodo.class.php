@@ -1,5 +1,7 @@
 <?php
 
+  include_once 'Calendario.class.php';
+
   class Periodo {
     private $prd_cod;
     private $prd_ini;
@@ -13,7 +15,7 @@
       return $this->$atr;
     }
 
-    public function setAll($cod, $ini, $fim) {
+    public function setAll($cod, Calendario $ini, Calendario $fim) {
       $this->prd_cod = $cod;
       $this->prd_ini = $ini;
       $this->prd_fim = $fim;
