@@ -3,7 +3,7 @@
 // MVC = controller
 // objeto = Fluxo
 
-require_once($_SERVER['DOCUMENT_ROOT'] . 'dao/FluxoDAO.php');
+require_once('../dao/FluxoDAO.php');
 
 class FluxoController {
     
@@ -24,12 +24,12 @@ class FluxoController {
     
     public function search (Fluxo $fluxo){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->register($fluxo);
+        return $fluxoDAO->search($fluxo);
     }
     
     public function searchAll (Fluxo $fluxo){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->register();
+        return $fluxoDAO->searchAll();
     }
 
 ?>
