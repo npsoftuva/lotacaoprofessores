@@ -14,8 +14,8 @@
       return $this->$atr;
     }
 
-    public function setAll($cod, $dia, $evt, $tpo) {
-      $this->cld_cod = $cod;
+    public function setAll($dta, $dia, $evt, $tpo) {
+      $this->cld_dta = $dta;
       $this->cld_dia = $dia;
       $this->cld_evt = $evt;
       $this->cld_tpo = $tpo;
