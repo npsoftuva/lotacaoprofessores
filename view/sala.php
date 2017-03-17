@@ -1,3 +1,10 @@
+<?php
+  require_once('../controller/SalaController.php');
+
+  $salaController = new SalaController();
+  $salas = $salaController->searchAll();
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -54,46 +61,16 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
+<?php foreach ($salas as $sala) { ?>
                         <tr>
-                          <td>36</td>
-                          <td>20</td>
+                          <td><?php echo $sala->__get("sla_nom"); ?></td>
+                          <td><?php echo $sala->__get("sla_cap"); ?></td>
                           <td>
                             <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
                             <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
                           </td>
                         </tr>
-                        <tr>
-                          <td>37</td>
-                          <td>50</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>38</td>
-                          <td>50</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>LAB 1</td>
-                          <td>42</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>LAB 2</td>
-                          <td>21</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
+<?php } ?>
                       </tbody>
                     </table>
                   </div>
