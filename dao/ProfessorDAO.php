@@ -114,6 +114,14 @@
           $prfs[] = $aux;
         }
 
+        usort(
+          $prfs,
+          function ($a, $b ) {
+            if( $a->prf_nom == $b->prf_nom ) return 0;
+            return (($a->prf_nom < $b->prf_nom ) ? -1 : 1);
+          }
+        );
+
         return $prfs;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
