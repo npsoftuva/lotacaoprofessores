@@ -17,17 +17,17 @@ class FluxoController {
         return $fluxoDAO->update($fluxo);
     }
     
-    public function remove (Fluxo $fluxo){
+    public function remove ($flx_cod){
         $fluxoDAO = new FluxoDAO();
         return $fluxoDAO->remove($flx_cod);
     }
     
-    public function search (Fluxo $fluxo){
+    public function search (){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->search($fluxo);
+        return $fluxoDAO->search();
     }
     
-    public function searchAll (Fluxo $fluxo){
+    public function searchAll (){
         $fluxoDAO = new FluxoDAO();
         return $fluxoDAO->searchAll();
     }
