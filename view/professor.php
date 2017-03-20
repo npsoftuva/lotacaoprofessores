@@ -33,6 +33,12 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <script>
+      $(document).ready(function () {
+        var $Cpf = $("#cpf");
+        $Cpf.mask('000.000.000-00', {reverse: true});
+      });
+    </script>
   </head>
   <body>
     <div class="wrapper">
@@ -50,7 +56,11 @@
                     <h4 class="title">Professores</h4>
                     <p class="category">
                       Lista de professores cadastrados
-                      <span class="pull-right"><button class="btn btn-success btn-fill">Adicionar</button></span>
+                      <span class="pull-right">
+                        <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
+                          Adicionar
+                        </button>
+                      </span>
                     </p>
                   </div>
                   <div class="content table-responsive table-full-width">
@@ -81,8 +91,41 @@
         <?php include("footer.inc"); ?>
       </div>
     </div>
-  </body>
 
+    <!-- Modal Adicionar -->
+
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add">Adionar Professor</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <label>Nome *</label>
+                <input class="form-control" placeholder="Nome do Professor" name="" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>CPF *</label>
+                <input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="TestaCPF(this)">
+              </div>
+              <div class="form-group">
+                <label>E-mail *</label>
+                <input class="form-control" placeholder="usuario@uvanet.br" name="" required autocomplete="off">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
 
   <!--   Core JS Files   -->
   <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
@@ -108,4 +151,62 @@
 
   <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
   <script src="assets/js/demo.js"></script>
+
+  <script type="text/javascript">
+    jQuery("#cpf").mask("999.999.999-99");
+
+    function TestaCPF(elemento) {
+      cpf = elemento.value;
+      cpf = cpf.replace(/[^\d]+/g, '');
+      if (cpf == '') {
+        $("#Adicionar").attr('disabled', 'disabled');
+        $('#cpf').closest('.form-group').addClass('has-error');
+        return elemento.style.borderColor = "#a94442";
+      }
+
+      // Elimina CPFs invalidos conhecidos
+      if (cpf.length != 11 ||
+          cpf == "00000000000" ||
+          cpf == "11111111111" ||
+          cpf == "22222222222" ||
+          cpf == "33333333333" ||
+          cpf == "44444444444" ||
+          cpf == "55555555555" ||
+          cpf == "66666666666" ||
+          cpf == "77777777777" ||
+          cpf == "88888888888" ||
+          cpf == "99999999999") {
+        $("#Adicionar").attr('disabled', 'disabled');
+        $('#cpf').closest('.form-group').addClass('has-error');
+        return elemento.style.borderColor = "#a94442";
+      }
+      // Valida 1o digito
+      add = 0;
+      for (i = 0; i < 9; i++)
+        add += parseInt(cpf.charAt(i)) * (10 - i);
+      rev = 11 - (add % 11);
+      if (rev == 10 || rev == 11)
+        rev = 0;
+      if (rev != parseInt(cpf.charAt(9))) {
+        $("#Adicionar").attr('disabled', 'disabled');
+        $('#cpf').closest('.form-group').addClass('has-error');
+        return elemento.style.borderColor = "#a94442";
+      }
+      // Valida 2o digito
+      add = 0;
+      for (i = 0; i < 10; i++)
+        add += parseInt(cpf.charAt(i)) * (11 - i);
+      rev = 11 - (add % 11);
+      if (rev == 10 || rev == 11)
+        rev = 0;
+      if (rev != parseInt(cpf.charAt(10))) {
+        $("#Adicionar").attr('disabled', 'disabled');
+        $('#cpf').closest('.form-group').addClass('has-error');
+        return elemento.style.borderColor = "#a94442";
+      }
+      $("#Adicionar").removeAttr('disabled');
+      $('#cpf').closest('.form-group').removeClass('has-error');
+      return true;
+    }
+  </script>
 </html>
