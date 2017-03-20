@@ -50,7 +50,11 @@
                     <h4 class="title">Disciplinas</h4>
                     <p class="category">
                       Lista de disciplinas cadastradas
-                      <span class="pull-right"><button class="btn btn-success btn-fill">Adicionar</button></span>
+                      <span class="pull-right">
+                        <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
+                          Adicionar
+                        </button>
+                      </span>
                     </p>
                   </div>
                   <div class="content table-responsive table-full-width">
@@ -64,8 +68,9 @@
                         <tr>
                           <td><?php echo $disciplina->__get("dcp_nom"); ?></td>
                           <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
+                            <a data-toggle="modal" data-cod="<?php echo $disciplina->__get("dcp_cod"); ?>" data-nom="<?php echo $disciplina->__get("dcp_nom"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+
+                            <a data-toggle="modal" data-cod="<?php echo $disciplina->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -78,6 +83,76 @@
           </div>
         </div>
         <?php include("footer.inc"); ?>
+      </div>
+    </div>
+
+    <!-- Modal Excluir -->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Excluir Disciplina</h4>
+          </div>
+          <div class="modal-footer">
+            <form role="form" method="POST">
+              <input type="hidden" name="dcp_codx" id="dcp_codx" value="">
+              <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
+              <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit">Editar Disciplina</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <input type="hidden" name="dcp_cod" id="dcp_cod" value="">
+                <div class="form-group">
+                  <label>Nome</label>
+                  <input class="form-control" type="text" name="dcp_nom" id="dcp_nom" value="" required autocomplete="off">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Adicionar -->
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add">Adionar Disciplina</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <label>Nome *</label>
+                <input class="form-control" placeholder="Nome da Disciplina" name="" required autocomplete="off">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </body>
@@ -107,4 +182,21 @@
 
   <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
   <script src="assets/js/demo.js"></script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".openEdit", function () {
+      var dcp_cod = $(this).data('cod');
+      $(".modal-body #dcp_cod").val(dcp_cod);
+      var dcp_nom = $(this).data('nom');
+      $(".modal-body #dcp_nom").val(dcp_nom);
+    });
+  </script>
+
+
+  <script type="text/javascript">
+    $(document).on("click", ".openDelete", function () {
+      var dcp_cod = $(this).data('cod');
+      $(".modal-footer #dcp_codx").val( dcp_cod );
+    });
+  </script>
 </html>

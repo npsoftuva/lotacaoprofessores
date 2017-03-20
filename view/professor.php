@@ -67,9 +67,10 @@
                     <table class="table table-striped table-hover" id="dataTables-example">
                       <thead>
                         <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Nome</th>
-                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">CPF</th>
+                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">CPF</th>
                         <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">E-mail</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Situação</th>
+                        <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">Situação</th>
+                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
 <?php foreach ($professores as $professor) { ?>
@@ -78,6 +79,11 @@
                           <td><?php echo $professor->__get("prf_cpf"); ?></td>
                           <td><?php echo $professor->__get("prf_eml"); ?></td>
                           <td><input type="checkbox" checked="checked"></td>
+                          <td>
+                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+
+                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                          </td>
                         </tr>
 <?php } ?>
                       </tbody>
@@ -92,8 +98,61 @@
       </div>
     </div>
 
-    <!-- Modal Adicionar -->
+    <!-- Modal Excluir -->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Excluir Professor</h4>
+          </div>
+          <div class="modal-footer">
+            <form role="form" method="POST">
+              <input type="hidden" name="prf_codx" id="prf_codx" value="">
+              <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
+              <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Modal Editar -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit">Editar Professor</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <input type="hidden" name="prf_cod" id="prf_cod" value="">
+                <div class="form-group">
+                  <label>Nome *</label>
+                  <input class="form-control" type="text" name="prf_nom" id="prf_nom" value="" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>CPF *</label>
+                  <input class="form-control" id="prf_cpf" name="prf_cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
+                </div>
+                <div class="form-group">
+                  <label>E-mail *</label>
+                  <input class="form-control" id="prf_eml" name="prf_eml" required autocomplete="off">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Adicionar -->
     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -109,7 +168,7 @@
               </div>
               <div class="form-group">
                 <label>CPF *</label>
-                <input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="TestaCPF(this)">
+                <input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
               </div>
               <div class="form-group">
                 <label>E-mail *</label>
@@ -155,7 +214,7 @@
   <script type="text/javascript">
     jQuery("#cpf").mask("999.999.999-99");
 
-    function TestaCPF(elemento) {
+    function ValidaCPF(elemento) {
       cpf = elemento.value;
       cpf = cpf.replace(/[^\d]+/g, '');
       if (cpf == '') {
@@ -206,7 +265,27 @@
       }
       $("#Adicionar").removeAttr('disabled');
       $('#cpf').closest('.form-group').removeClass('has-error');
-      return true;
+      return elemento.style.borderColor = "#e3e3e3";
     }
+  </script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".openEdit", function () {
+      var prf_cod = $(this).data('cod');
+      $(".modal-body #prf_cod").val(prf_cod);
+      var prf_nom = $(this).data('nom');
+      $(".modal-body #prf_nom").val(prf_nom);
+      var prf_cpf = $(this).data('cpf');
+      $(".modal-body #prf_cpf").val(prf_cpf);
+      var prf_eml = $(this).data('eml');
+      $(".modal-body #prf_eml").val(prf_eml);
+    });
+  </script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".openDelete", function () {
+      var prf_cod = $(this).data('cod');
+      $(".modal-footer #prf_codx").val( prf_cod );
+    });
   </script>
 </html>
