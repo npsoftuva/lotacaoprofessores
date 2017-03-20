@@ -2,7 +2,6 @@
   require_once('../controller/ProfessorController.php');
 
   $professorController = new ProfessorController();
-  $professores = $professorController->searchAll();
 
 ?>
 <!doctype html>
@@ -56,6 +55,28 @@
                     <h4 class="title">Professores</h4>
                     <p class="category">
                       Lista de professores cadastrados
+<?php
+  if (isset($_POST["Adicionar"])) {
+    $professor = new Professor();
+    $professor->__set("prf_nom", $_POST["name"]);
+    $professor->__set("prf_cpf", $_POST["cpf"]);
+    $professor->__set("prf_eml", $_POST["mail"]);
+    if ($professorController->register($professor)) { ?>
+                      <div class="alert alert-success" role="alert">Professor adicionado</div>
+<?php } else { ?>
+                      <div class="alert alert-success" role="alert">Erro ao adicionar</div>
+<?php
+    }
+  } else
+  if (isset($_POST["Excluir"])) {
+    var_dump($_POST);
+  } else
+  if (isset($_POST["Editar"])) {
+    var_dump($_POST);
+  }
+
+  $professores = $professorController->searchAll();
+?>
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
@@ -164,7 +185,7 @@
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Nome *</label>
-                <input class="form-control" placeholder="Nome do Professor" name="" required autocomplete="off">
+                <input class="form-control" placeholder="Nome do Professor" name="name" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>CPF *</label>
@@ -172,7 +193,7 @@
               </div>
               <div class="form-group">
                 <label>E-mail *</label>
-                <input class="form-control" placeholder="usuario@uvanet.br" name="" required autocomplete="off">
+                <input class="form-control" placeholder="usuario@uvanet.br" name="mail" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
