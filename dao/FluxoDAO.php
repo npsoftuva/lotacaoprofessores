@@ -48,7 +48,7 @@
       return 0;
     }
 		
-    public funtion remove ($flx_cod){
+    public function remove ($flx_cod){
 			
       try {
         $dbh = Connection::connect();
@@ -67,7 +67,7 @@
       return 0;
     }
 		
-    public funtion search($id){
+    public function search($id){
 			
       try {
         $dbh = Connection::connect();
@@ -78,7 +78,7 @@
           $search->bindValue(1, $id);
           $search->execute();
 				
-          $flx = search->fetch(PDO::FETCH_ASSOC);
+          $flx = $search->fetch(PDO::FETCH_ASSOC);
           $aux = new Fluxo();
           $aux = setAll($flx["flx_cod"],$flx["flx_trn"]);
 				
@@ -98,12 +98,12 @@
 				
         $sql = "SELECT * FROM tab_flx";
 				
-        $search = dbh->prepare($sql);
+        $search = $dbh->prepare($sql);
         $search->execute();
 				
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)){
           $aux = new Fluxo();
-          $axu->setAll($flx["flx_cod"], $flx["flx_trn"]);
+          $aux->setAll($flx["flx_cod"], $flx["flx_trn"]);
           $prfs[] = $aux;
         }
 				
