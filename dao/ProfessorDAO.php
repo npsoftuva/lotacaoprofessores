@@ -13,16 +13,17 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_prf (prf_cod, prf_nom, prf_cpf, prf_eml, prf_sit) VALUES (NULL, ?, ?, ?, ?)";
+        $sql = "INSERT INTO tab_prf (prf_cod, prf_cpf, prf_nom, prf_eml, prf_sit) VALUES (nextval('seq_prf'), ?, ?, ?, true)";
 
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $professor->__get("prf_nom"));
-        $register->bindValue(2, $professor->__get("prf_cpf"));
+        $register->bindValue(1, $professor->__get("prf_cpf"));
+        $register->bindValue(2, $professor->__get("prf_nom"));
         $register->bindValue(3, $professor->__get("prf_eml"));
-        $register->bindValue(4, $professor->__get("prf_sit"));
-        $register->execute();
 
-        return 1;
+        if ($register->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
       }
@@ -47,9 +48,11 @@
         $update->bindValue(3, $professor->__get("prf_eml"));
         $update->bindValue(4, $professor->__get("prf_sit"));
         $update->bindValue(5, $professor->__get("prf_cod"));
-        $update->execute();
 
-        return 1;
+        if($update->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
       }
@@ -65,9 +68,11 @@
 
         $remove = $dbh->prepare($sql);
         $remove->bindValue(1, $prf_cod);
-        $remove->execute();
 
-        return 1;
+        if ($remove->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
       }
@@ -84,7 +89,9 @@
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $id);
-        $search->execute();
+
+        if (!$search->execute())
+          return 0;
 
         $prf = $search->fetch(PDO::FETCH_ASSOC);
         $aux = new Professor();
@@ -103,24 +110,18 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_prf";
+        $sql = "SELECT * FROM tab_prf ORDER BY prf_nom";
 
         $search = $dbh->prepare($sql);
-        $search->execute();
+
+        if (!$search->execute())
+          return 0;
 
         while ($prf = $search->fetch(PDO::FETCH_ASSOC)) {
           $aux = new Professor();
           $aux->setAll($prf["prf_cod"], $prf["prf_nom"], $prf["prf_cpf"], $prf["prf_eml"], $prf["prf_sit"]);
           $prfs[] = $aux;
         }
-
-        usort(
-          $prfs,
-          function ($a, $b ) {
-            if( $a->prf_nom == $b->prf_nom ) return 0;
-            return (($a->prf_nom < $b->prf_nom ) ? -1 : 1);
-          }
-        );
 
         return $prfs;
       } catch (Exception $e) {
