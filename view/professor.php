@@ -80,7 +80,7 @@
                           <td><?php echo $professor->__get("prf_eml"); ?></td>
                           <td><input type="checkbox" checked="checked"></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" data-sit="<?php echo $professor->__get("prf_sit"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -139,7 +139,14 @@
                 </div>
                 <div class="form-group">
                   <label>E-mail *</label>
-                  <input class="form-control" id="prf_eml" name="prf_eml" required autocomplete="off">
+                  <input class="form-control" type="email" id="prf_eml" name="prf_eml" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>Situação *</label>
+                  <select class="form-control" name="flx_trn" id="flx_trn">
+                    <option value="1">Ativado</option>
+                    <option value="0">Desativado</option>
+                  </select>
                 </div>
               </div>
           </div>
@@ -172,7 +179,7 @@
               </div>
               <div class="form-group">
                 <label>E-mail *</label>
-                <input class="form-control" placeholder="usuario@uvanet.br" name="" required autocomplete="off">
+                <input class="form-control" placeholder="usuario@uvanet.br" type="email" name="" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
@@ -279,6 +286,8 @@
       $(".modal-body #prf_cpf").val(prf_cpf);
       var prf_eml = $(this).data('eml');
       $(".modal-body #prf_eml").val(prf_eml);
+      var prf_sit = $(this).data('sit');
+      $("#prf_sit").val(prf_sit);
     });
   </script>
 
