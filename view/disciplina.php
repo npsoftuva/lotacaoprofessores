@@ -52,7 +52,49 @@
                       Lista de disciplinas cadastradas
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
-                          Adicionar
+                          Adicionar													
+
+													
+													
+													
+<?php
+	if (isset($_POST["Adicionar"])){
+		$disciplina = new Disciplina();
+		$disciplina->__set("dcp_nom", $_POST["nom"]);
+		if ($disciplinaController->register($disciplina)){
+			echo "Adicionado";
+		} else {
+			echo "Não Adicionado";
+		}
+			
+	} else
+	if (isset($_POST["Excluir"])){
+		if ($disciplinaController->remove($_POST["dcp_codx"])){
+			echo "Removido";
+		} else {
+			echo "Não Removido";
+		}
+		
+	} else
+	if (isset($_POST["Editar"])){
+		$disciplina = new Disciplina();
+		$disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
+		$disciplina->__set("dcp_nom", $_POST["dcp_nom"]);
+		
+		if ($disciplinaController->update($disciplina)){
+			echo "Editado";
+		} else {
+			echo "Não Editado";
+		}
+	}
+
+
+	$disciplina  = $disciplinaController->searchAll();
+?>
+
+
+
+
                         </button>
                       </span>
                     </p>
