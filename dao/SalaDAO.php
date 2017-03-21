@@ -3,8 +3,8 @@
 // MVC = controller
 // objeto = Sala
 
-  require_once($_SERVER['DOCUMENT_ROOT'] . '/model/Sala.class.php');
-  require_once($_SERVER['DOCUMENT_ROOT'] . '/lib/BD.class.php');
+  require_once('../model/Sala.class.php');
+  require_once('../lib/BD.class.php');
 
 	class SalaDAO {
     
