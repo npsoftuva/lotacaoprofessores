@@ -122,6 +122,7 @@
                   <input type="text" name="flx_cod" id="flx_cod" value="" disabled="disabled">
                 </div>
                 <div class="form-group">
+                  <label>Situação *</label>
                   <select class="form-control" name="flx_trn" id="flx_trn">
                     <option value="0">Integral</option>
                     <option value="1">Manhã</option>
