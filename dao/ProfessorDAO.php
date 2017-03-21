@@ -13,7 +13,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_prf (prf_cod, prf_cpf, prf_nom, prf_eml, prf_sit) VALUES (nextval('seq_prf'), ?, ?, ?, true)";
+        $sql = "INSERT INTO tab_prf (prf_cpf, prf_nom, prf_eml, prf_sit) VALUES (?, ?, ?, 1)";
 
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $professor->__get("prf_cpf"));
