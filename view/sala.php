@@ -1,3 +1,10 @@
+<?php
+  require_once('../controller/SalaController.php');
+
+  $salaController = new SalaController();
+  $salas = $salaController->searchAll();
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -43,7 +50,11 @@
                     <h4 class="title">Salas</h4>
                     <p class="category">
                       Lista de salas cadastradas
-                      <span class="pull-right"><button class="btn btn-success btn-fill">Adicionar</button></span>
+                      <span class="pull-right">
+                        <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
+                          Adicionar
+                        </button>
+                      </span>
                     </p>
                   </div>
                   <div class="content table-responsive table-full-width">
@@ -54,46 +65,17 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
+<?php foreach ($salas as $sala) { ?>
                         <tr>
-                          <td>36</td>
-                          <td>20</td>
+                          <td><?php echo $sala->__get("sla_nom"); ?></td>
+                          <td><?php echo $sala->__get("sla_cap"); ?></td>
                           <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
+                            <a data-toggle="modal" data-cod="<?php echo $sala->__get("sla_cod"); ?>" data-nom="<?php echo $sala->__get("sla_nom"); ?>" data-cap="<?php echo $sala->__get("sla_cap"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+
+                            <a data-toggle="modal" data-cod="<?php echo $sala->__get("sla_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
-                        <tr>
-                          <td>37</td>
-                          <td>50</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>38</td>
-                          <td>50</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>LAB 1</td>
-                          <td>42</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>LAB 2</td>
-                          <td>21</td>
-                          <td>
-                            <button class="btn btn-warning"><i class="pe-7s-note"></i></button>
-                            <button class="btn btn-danger"><i class="pe-7s-trash"></i></button>
-                          </td>
-                        </tr>
+<?php } ?>
                       </tbody>
                     </table>
                   </div>
@@ -103,6 +85,84 @@
           </div>
         </div>
         <?php include("footer.inc"); ?>
+      </div>
+    </div>
+
+    <!-- Modal Excluir -->
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Excluir Sala</h4>
+          </div>
+          <div class="modal-footer">
+            <form role="form" method="POST">
+              <input type="hidden" name="sla_codx" id="sla_codx" value="">
+              <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
+              <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit">Editar Sala</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <input type="hidden" name="sla_cod" id="sla_cod" value="">
+                <div class="form-group">
+                  <label>Nome</label>
+                  <input class="form-control" type="text" name="sla_nom" id="sla_nom" value="" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label>Capacidade</label>
+                  <input class="form-control" type="number" min="1" step="1" name="sla_cap" id="sla_cap" value="" required autocomplete="off">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Adicionar -->
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add">Adionar Sala</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <label>Nome *</label>
+                <input class="form-control" placeholder="Nome da Sala" name="" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Capacidade *</label>
+                <input class="form-control" type="number" min="1" step="1" placeholder="Capacidade da Sala" name="" required autocomplete="off">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </body>
@@ -132,4 +192,22 @@
 
   <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
   <script src="assets/js/demo.js"></script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".openEdit", function () {
+      var sla_cod = $(this).data('cod');
+      $(".modal-body #sla_cod").val(sla_cod);
+      var sla_nom = $(this).data('nom');
+      $(".modal-body #sla_nom").val(sla_nom);
+      var sla_cap = $(this).data('cap');
+      $(".modal-body #sla_cap").val(sla_cap);
+    });
+  </script>
+
+  <script type="text/javascript">
+    $(document).on("click", ".openDelete", function () {
+      var sla_cod = $(this).data('cod');
+      $(".modal-footer #sla_codx").val( sla_cod );
+    });
+  </script>
 </html>

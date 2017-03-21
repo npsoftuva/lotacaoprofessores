@@ -35,6 +35,11 @@
           <i class="pe-7s-display2"></i><p>Sala</p>
         </a>
       </li>
+      <li <?php if ($atual == "fluxo.php") echo 'class="active"';?> >
+        <a href="fluxo.php">
+          <i class="pe-7s-refresh-2"></i><p>Fluxo</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
