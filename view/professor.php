@@ -68,7 +68,6 @@
     }
   } else
   if (isset($_POST["Excluir"])) {
-    var_dump($_POST);
     if ($professorController->remove($_POST["prf_codx"])) {
       echo "removido";
     } else {
@@ -76,7 +75,17 @@
     }
   } else
   if (isset($_POST["Editar"])) {
-    var_dump($_POST);
+    $professor = new Professor();
+    $professor->__set("prf_cod", $_POST["prf_cod"]);
+    $professor->__set("prf_cpf", $_POST["prf_cpf"]);
+    $professor->__set("prf_nom", $_POST["prf_nom"]);
+    $professor->__set("prf_eml", $_POST["prf_eml"]);
+    $professor->__set("prf_sit", $_POST["prf_sit"]);
+    if ($professorController->update($professor)) {
+      echo "ok";
+    } else {
+      echo "nao ok";
+    }
   }
 
 
@@ -104,9 +113,9 @@
                           <td><?php echo $professor->__get("prf_nom"); ?></td>
                           <td><?php echo $professor->__get("prf_cpf"); ?></td>
                           <td><?php echo $professor->__get("prf_eml"); ?></td>
-                          <td><input type="checkbox" checked="checked"></td>
+                          <td><?php echo $professor->__get("prf_sit") ? "Ativo" : "Inativo"; ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" data-sit="<?php echo $professor->__get("prf_sit"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $professor->__get('prf_cod'); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" data-sit="<?php echo $professor->__get('prf_sit'); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -169,9 +178,9 @@
                 </div>
                 <div class="form-group">
                   <label>Situação *</label>
-                  <select class="form-control" name="flx_trn" id="flx_trn">
+                  <select class="form-control" name="prf_sit" id="prf_sit">
                     <option value="1">Ativado</option>
-                    <option value="0">Desativado</option>
+                    <option value="0">Inativo</option>
                   </select>
                 </div>
               </div>

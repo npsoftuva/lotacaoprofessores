@@ -17,7 +17,7 @@
 
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $professor->__get("prf_cpf"));
-        $register->bindValue(2, $professor->__get("prf_nom"));
+        $register->bindValue(2, strtoupper($professor->__get("prf_nom")));
         $register->bindValue(3, $professor->__get("prf_eml"));
 
         if ($register->execute())
@@ -43,7 +43,7 @@
                 WHERE  prf_cod = ?";
 
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $professor->__get("prf_nom"));
+        $update->bindValue(1, strtoupper($professor->__get("prf_nom")));
         $update->bindValue(2, $professor->__get("prf_cpf"));
         $update->bindValue(3, $professor->__get("prf_eml"));
         $update->bindValue(4, $professor->__get("prf_sit"));

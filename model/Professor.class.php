@@ -16,7 +16,7 @@
     }
 
     public function setAll($cod, $nom, $cpf, $eml, $sit) {
-      $this->pfr_cod = $cod;
+      $this->prf_cod = $cod;
       $this->prf_nom = $nom;
       $this->prf_cpf = $cpf;
       $this->prf_eml = $eml;
