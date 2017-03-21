@@ -2,7 +2,6 @@
   require_once('../controller/ProfessorController.php');
 
   $professorController = new ProfessorController();
-  $professores = $professorController->searchAll();
 
 ?>
 <!doctype html>
@@ -56,6 +55,33 @@
                     <h4 class="title">Professores</h4>
                     <p class="category">
                       Lista de professores cadastrados
+<?php
+  if (isset($_POST["Adicionar"])) {
+    $professor = new Professor();
+    $professor->__set("prf_cpf", $_POST["cpf"]);
+    $professor->__set("prf_nom", $_POST["name"]);
+    $professor->__set("prf_eml", $_POST["email"]);
+    if ($professorController->register($professor)) {
+      echo "ok";
+    } else {
+      echo "nao ok";
+    }
+  } else
+  if (isset($_POST["Excluir"])) {
+    var_dump($_POST);
+    if ($professorController->remove($_POST["prf_codx"])) {
+      echo "removido";
+    } else {
+      echo "Não removido";
+    }
+  } else
+  if (isset($_POST["Editar"])) {
+    var_dump($_POST);
+  }
+
+
+  $professores = $professorController->searchAll();
+?>
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
@@ -171,15 +197,15 @@
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Nome *</label>
-                <input class="form-control" placeholder="Nome do Professor" name="" required autocomplete="off">
+                <input class="form-control" placeholder="Nome do Professor" name="name" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>CPF *</label>
-                <input class="form-control" placeholder="000.000.000-00" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
+                <input class="form-control" placeholder="00000000000" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
               </div>
               <div class="form-group">
                 <label>E-mail *</label>
-                <input class="form-control" placeholder="usuario@uvanet.br" type="email" name="" required autocomplete="off">
+                <input class="form-control" placeholder="usuario@uvanet.br" type="email" name="email" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
