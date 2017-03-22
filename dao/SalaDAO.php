@@ -13,14 +13,17 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_sla (sla_cod, sla_nom, sla_cap) VALUES (NULL, ?, ?)";
+        $sql = "INSERT INTO tab_sla (sla_nom, sla_cap) VALUES (?, ?)";
 
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $sala->__get("sla_nom"));
         $register->bindValue(2, $sala->__get("sla_cap"));
         $register->execute();
 
-        return 1;
+        if ($register->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
       }
@@ -43,7 +46,10 @@
         $update->bindValue(3, $sala->__get("sla_cod"));
         $update->execute();
 
-        return 1;
+        if ($update->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
       }
@@ -61,7 +67,10 @@
         $remove->bindValue(1, $sla_cod);
         $remove->execute();
 
-        return 1;
+        if ($remove->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
       }
@@ -97,7 +106,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_sla";
+        $sql = "SELECT * FROM tab_sla ORDER BY sla_nom";
 
         $search = $dbh->prepare($sql);
         $search->execute();
