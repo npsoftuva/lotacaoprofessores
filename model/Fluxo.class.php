@@ -16,6 +16,7 @@
       $this->flx_cod = $cod;
       $this->flx_trn = $trn;
     }
+		
 
     public function searchAll() {
       $search = Conexao::getInstance()->prepare("SELECT * FROM tab_flx");
