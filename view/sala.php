@@ -2,7 +2,6 @@
   require_once('../controller/SalaController.php');
 
   $salaController = new SalaController();
-  $salas = $salaController->searchAll();
 
 ?>
 <!doctype html>
@@ -50,6 +49,38 @@
                     <h4 class="title">Salas</h4>
                     <p class="category">
                       Lista de salas cadastradas
+<?php
+  if (isset($_POST["Adicionar"])) {
+    $sala = new Sala();
+    $sala->__set("sla_nom", $_POST["name"]);
+    $sala->__set("sla_cap", $_POST["capacity"]);
+    if ($salaController->register($sala)) {
+      echo "ok";
+    } else {
+      echo "nao ok";
+    }
+  } else
+  if (isset($_POST["Excluir"])) {
+    if ($salaController->remove($_POST["sla_codx"])) {
+      echo "removido";
+    } else {
+      echo "Não removido";
+    }
+  } else
+  if (isset($_POST["Editar"])) {
+    $sala = new Sala();
+    $sala->__set("sla_cod", $_POST["sla_cod"]);
+    $sala->__set("sla_cap", $_POST["sla_cap"]);
+    $sala->__set("sla_nom", $_POST["sla_nom"]);
+    if ($salaController->update($sala)) {
+      echo "ok";
+    } else {
+      echo "nao ok";
+    }
+  }
+
+  $salas = $salaController->searchAll();
+?>
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
@@ -144,17 +175,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adionar Sala</h4>
+            <h4 class="modal-title" id="add">Adicionar Sala</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Nome *</label>
-                <input class="form-control" placeholder="Nome da Sala" name="" required autocomplete="off">
+                <input class="form-control" placeholder="Nome da Sala" name="name" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Capacidade *</label>
-                <input class="form-control" type="number" min="1" step="1" placeholder="Capacidade da Sala" name="" required autocomplete="off">
+                <input class="form-control" type="number" min="1" step="1" placeholder="Capacidade da Sala" name="capacity" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
