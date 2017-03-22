@@ -53,6 +53,41 @@
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
+<?php
+	if (isset($_POST["Adicionar"])){
+		$fluxo = new Fluxo();
+		$fluxo->__set("flx_trn", $_POST["trn"]);
+		if ($fluxoController->register($fluxo)){
+			echo "OK";
+		} else {
+			echo "Não OK";
+		}
+	} else 
+	if (isset($_POST["Excluir"])){
+		if ($fluxoController->remove($_POST["flx_codx"])){
+			echo "Removido";
+		} else {
+			echo "Não Removido";
+		}
+	} else 
+	if (isset($_POST["Editar"])){
+		$fluxo = new Fluxo();
+		$fluxo->__set("flx_cod", $_POST["flx_cod"]);
+		$fluxo->__set("flx_trn", $_POST["flx_trn"]);
+		
+		if ($fluxoController->update($fluxo)){
+			echo "OK";
+		} else {
+			echo "Não OK";
+		}
+	}	
+	
+	
+	
+	$fluxo = $fluxoController->searchAll();
+?>
+ 
+						 						  
                         </button>
                       </span>
                     </p>
