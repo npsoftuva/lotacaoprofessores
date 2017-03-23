@@ -20,7 +20,6 @@
         $register->bindValue(2, $calendario->__get("cld_dia"));
         $register->bindValue(3, $calendario->__get("cld_evt"));
         $register->bindValue(4, $calendario->__get("cld_tpo"));
-        $register->execute();
 
         if ($register->execute())
           return 1;
@@ -48,7 +47,6 @@
         $update->bindValue(2, $calendario->__get("cld_evt"));
         $update->bindValue(3, $calendario->__get("cld_tpo"));
         $update->bindValue(4, $calendario->__get("cld_dta"));
-        $update->execute();
 
         if($update->execute())
           return 1;
@@ -69,7 +67,6 @@
 
         $remove = $dbh->prepare($sql);
         $remove->bindValue(1, $cld_dta);
-        $remove->execute();
 
         if ($remove->execute())
           return 1;
