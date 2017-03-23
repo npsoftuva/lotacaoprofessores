@@ -18,7 +18,6 @@
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $sala->__get("sla_nom"));
         $register->bindValue(2, $sala->__get("sla_cap"));
-        $register->execute();
 
         if ($register->execute())
           return 1;
@@ -44,7 +43,6 @@
         $update->bindValue(1, $sala->__get("sla_nom"));
         $update->bindValue(2, $sala->__get("sla_cap"));
         $update->bindValue(3, $sala->__get("sla_cod"));
-        $update->execute();
 
         if ($update->execute())
           return 1;
@@ -65,7 +63,6 @@
 
         $remove = $dbh->prepare($sql);
         $remove->bindValue(1, $sla_cod);
-        $remove->execute();
 
         if ($remove->execute())
           return 1;
