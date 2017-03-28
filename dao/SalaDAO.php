@@ -106,7 +106,9 @@
         $sql = "SELECT * FROM tab_sla ORDER BY sla_nom";
 
         $search = $dbh->prepare($sql);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         while ($sla = $search->fetch(PDO::FETCH_ASSOC)) {
           $aux = new Sala();
