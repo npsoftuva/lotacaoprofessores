@@ -3,6 +3,7 @@
   class Fluxo {
     private $flx_cod;
     private $flx_trn;
+		private $flx_sem;
 
     public function __set($atr, $value) {
       $this->$atr = $value;
@@ -12,9 +13,10 @@
       return $this->$atr;
     }
 
-    public function setAll($cod, $trn) {
+    public function setAll($cod, $trn, $sem) {
       $this->flx_cod = $cod;
       $this->flx_trn = $trn;
+			$this->flx_sem = $sem;
     }
 		
 
@@ -24,7 +26,7 @@
       if ($search->execute()) {
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)) {
           $aux = new Fluxo();
-          $aux->setAll($flx["flx_cod"], $flx["flx_trn"]);
+          $aux->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
           $flxs[] = $aux;
         }
         return $flxs;
