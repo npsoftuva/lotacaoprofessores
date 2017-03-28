@@ -110,7 +110,9 @@
         $sql = "SELECT * FROM tab_cld ORDER BY cld_dta";
 
         $search = $dbh->prepare($sql);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         while ($cld = $search->fetch(PDO::FETCH_ASSOC)) {
           $aux = new Calendario();

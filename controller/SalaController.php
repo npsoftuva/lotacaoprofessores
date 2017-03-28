@@ -22,7 +22,7 @@ class SalaController {
     return $salaDAO->remove($sla_cod);
   }
 
-  public function search () {
+  public function search ($id) {
     $salaDAO = new SalaDAO();
     return $salaDAO->search();
   }
