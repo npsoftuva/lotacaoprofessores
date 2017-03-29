@@ -46,6 +46,58 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                 <?php
+                    if (isset($_POST["Adicionar"])) {
+                        $fluxo = new Fluxo();
+                        $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                        $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                        if ($fluxoController->register($fluxo)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Fluxo adicionado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar adicionar o fluxo.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Excluir"])) {
+                        if ($fluxoController->remove($_POST["flx_codx"])) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Fluxo excluído com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar excluir o fluxo.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Editar"])) {
+                        $fluxo = new Fluxo();
+                        $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                        $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+
+                        if ($fluxoController->update($fluxo)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Fluxo editado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar editar o fluxo.</span>
+                          </div>
+                        <?php }
+                    }
+
+
+
+                    $fluxos = $fluxoController->searchAll();
+                ?>
                   <div class="header">
                     <h4 class="title">Fluxos</h4>
                     <p class="category">
@@ -53,41 +105,6 @@
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
-<?php
-	if (isset($_POST["Adicionar"])){
-		$fluxo = new Fluxo();
-		$fluxo->__set("flx_trn", $_POST["trn"]);
-		if ($fluxoController->register($fluxo)){
-			echo "OK";
-		} else {
-			echo "Não OK";
-		}
-	} else 
-	if (isset($_POST["Excluir"])){
-		if ($fluxoController->remove($_POST["flx_codx"])){
-			echo "Removido";
-		} else {
-			echo "Não Removido";
-		}
-	} else 
-	if (isset($_POST["Editar"])){
-		$fluxo = new Fluxo();
-		$fluxo->__set("flx_cod", $_POST["flx_cod"]);
-		$fluxo->__set("flx_trn", $_POST["flx_trn"]);
-		
-		if ($fluxoController->update($fluxo)){
-			echo "OK";
-		} else {
-			echo "Não OK";
-		}
-	}	
-	
-	
-	
-	$fluxo = $fluxoController->searchAll();
-?>
- 
-						 						  
                         </button>
                       </span>
                     </p>
@@ -129,11 +146,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Fluxo</h4>
+            <h4 class="modal-title"><span class="pe-7s-refresh-2"></span> Excluir Fluxo</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="flx_codx" id="flx_codx" value="">
+              <p>Você deseja excluir o fluxo "<b id="flx_codxx"></b>"?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -148,14 +166,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit">Editar Fluxo</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Fluxo</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
                 <div class="form-group">
                   <label>Código *</label>
-                  <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" disabled="disabled">
+                  <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
                 </div>
                 <div class="form-group">
                   <label>Situação *</label>
@@ -183,17 +201,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adionar Fluxo</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-refresh-2"></span> Adicionar Fluxo</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" placeholder="Código do Fluxo" name="" required autocomplete="off">
+                <input class="form-control" placeholder="Código do Fluxo" name="flx_cod" required autocomplete="off" maxlength="5" max="5" min="5">
               </div>
               <div class="form-group">
                 <label>Turno *</label>
-                <select class="form-control" name="">
+                <select class="form-control" name="flx_trn">
                   <option value="0">Integral</option>
                   <option value="1">Manhã</option>
                   <option value="2">Tarde</option>
@@ -250,6 +268,7 @@
     $(document).on("click", ".openDelete", function () {
       var flx_cod = $(this).data('cod');
       $(".modal-footer #flx_codx").val( flx_cod );
+      $(".modal-footer #flx_codxx").html( flx_cod );
     });
   </script>
 </html>

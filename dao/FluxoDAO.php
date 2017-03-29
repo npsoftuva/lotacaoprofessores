@@ -14,13 +14,16 @@
       try {
         $dbh = Connection::connect();
 				
-        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn) VALUES (NULL, ?)";
+        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn) VALUES (?, ?)";
 				
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $fluxo->__get("flx_trn"));
-        $register->execute();
+        $register->bindValue(1, $fluxo->__get("flx_cod"));
+        $register->bindValue(2, $fluxo->__get("flx_trn"));
 				
-        return 1;				
+        if ($register->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e){
          //echo "Failed: ". $e->getMessage();
       }
@@ -38,9 +41,10 @@
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $fluxo->__get("flx_trn"));
         $update->bindValue(2, $fluxo->__get("flx_cod"));
-        $update->execute();
-				
-        return 1;				
+
+        if ($update->execute())
+          return 1;
+        return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
       }
@@ -56,10 +60,11 @@
         $sql = "DELETE FROM tab_flx WHERE flx_cod = ?";
 			
         $remove = $dbh->prepare($sql);
-        $remove->bindValue(1, flx_cod);
-        $remove->execute();
+        $remove->bindValue(1, $flx_cod);
 				
-        return 1;
+        if ($remove->execute())
+          return 1;
+        return 0;
       } catch (Exception $e){
         //echo "Failed: "  . $e->getMessage();
       }
@@ -96,7 +101,7 @@
       try {
         $dbh = Connection::connect();
 				
-        $sql = "SELECT * FROM tab_flx";
+        $sql = "SELECT * FROM tab_flx ORDER BY flx_cod";
 				
         $search = $dbh->prepare($sql);
         $search->execute();
@@ -104,10 +109,10 @@
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)){
           $aux = new Fluxo();
           $aux->setAll($flx["flx_cod"], $flx["flx_trn"]);
-          $prfs[] = $aux;
+          $flxs[] = $aux;
         }
 				
-        return $prfs;
+        return $flxs;
 				
       } catch(Exception $e){
         //die("Unable to connect: " . $e->getMessage());

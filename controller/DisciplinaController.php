@@ -8,8 +8,8 @@ require_once('../dao/DisciplinaDAO.php');
 class DisciplinaController {
 
     public function register (Disciplina $disciplina){
-        $disciplinaDAO = new DisciplinaDAO();
-        return $disciplinaDAO->register($disciplina);
+      $disciplinaDAO = new DisciplinaDAO();
+      return $disciplinaDAO->register($disciplina);
     }
     
     public function update (Disciplina $disciplina){
@@ -21,7 +21,7 @@ class DisciplinaController {
         $disciplinaDAO = new DisciplinaDAO();
         return $disciplinaDAO->remove($dcp_cod);
     }
-    
+
     public function search () {
         $disciplinaDAO = new DisciplinaDAO();
         return $disciplinaDAO->search();
