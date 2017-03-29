@@ -1,7 +1,7 @@
 <?php
   $atual = explode("/",$_SERVER['PHP_SELF'])[count(explode("/",$_SERVER['PHP_SELF']))-1];
 ?>
-<div class="sidebar" data-color="blue">
+<div class="sidebar">
   <!--
     Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
     Tip 2: you can also add an image using data-image tag
@@ -38,6 +38,11 @@
       <li <?php if ($atual == "fluxo.php") echo 'class="active"';?> >
         <a href="fluxo.php">
           <i class="pe-7s-refresh-2"></i><p>Fluxo</p>
+        </a>
+      </li>
+      <li <?php if ($atual == "calendario.php") echo 'class="active"';?> >
+        <a href="calendario.php">
+          <i class="pe-7s-date"></i><p>Calendário</p>
         </a>
       </li>
     </ul>
