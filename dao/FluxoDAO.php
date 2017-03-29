@@ -9,17 +9,21 @@
 	
   class FluxoDAO {
 		
+		
+		
     public function register (Fluxo $fluxo){
 		
       try {
         $dbh = Connection::connect();
 				
-        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn) VALUES (NULL, ?)";
+        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn, flx_sem) VALUES (NULL, ?, ?)";
 				
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $fluxo->__get("flx_trn"));
+				$register->bindValue(2, $fluxo->__get("flx_sem"));
         $register->execute();
 				
+							
         return 1;				
       } catch (Exception $e){
          //echo "Failed: ". $e->getMessage();
@@ -32,12 +36,14 @@
         $dbh = Connection::connect();
 				
         $sql = "UPDATE tab_flx
-        SET     flx_trn = ?
+        SET     flx_trn = ?,
+				        flx_sem = ?
         WHERE   flx_cod = ?";
 				
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $fluxo->__get("flx_trn"));
-        $update->bindValue(2, $fluxo->__get("flx_cod"));
+				$update->bindValue(2, $fluxo->__get("flx_sem"));
+        $update->bindValue(3, $fluxo->__get("flx_cod"));
         $update->execute();
 				
         return 1;				
@@ -80,7 +86,7 @@
 				
           $flx = $search->fetch(PDO::FETCH_ASSOC);
           $aux = new Fluxo();
-          $aux = setAll($flx["flx_cod"],$flx["flx_trn"]);
+          $aux = setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
 				
           return aux;
 				
@@ -96,17 +102,21 @@
       try {
         $dbh = Connection::connect();
 				
-        $sql = "SELECT * FROM tab_flx";
+				$sql = "SELECT * FROM tab_flx";
 				
         $search = $dbh->prepare($sql);
         $search->execute();
 				
+				
+				
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)){
-          $aux = new Fluxo();
-          $aux->setAll($flx["flx_cod"], $flx["flx_trn"]);
+					
+					$aux = new Fluxo();
+          $aux->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
           $prfs[] = $aux;
         }
 				
+							
         return $prfs;
 				
       } catch(Exception $e){
