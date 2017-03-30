@@ -8,17 +8,17 @@
   require_once('../lib/BD.class.php');
 	
   class FluxoDAO {
-		
     public function register (Fluxo $fluxo){
 		
       try {
         $dbh = Connection::connect();
 				
-        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn) VALUES (?, ?)";
+        $sql = "INSERT INTO tab_flx (flx_cod, flx_trn, flx_sem) VALUES (?, ?, ?)";
 				
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $fluxo->__get("flx_cod"));
         $register->bindValue(2, $fluxo->__get("flx_trn"));
+        $register->bindValue(3, $fluxo->__get("flx_sem"));
 				
         if ($register->execute())
           return 1;
@@ -36,11 +36,13 @@
 				
         $sql = "UPDATE tab_flx
         SET     flx_trn = ?
+                flx_sem = ?
         WHERE   flx_cod = ?";
 				
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $fluxo->__get("flx_trn"));
-        $update->bindValue(2, $fluxo->__get("flx_cod"));
+        $update->bindValue(1, $fluxo->__get("flx_trn"));        
+        $update->bindValue(2, $fluxo->__get("flx_sem"));
+        $update->bindValue(3, $fluxo->__get("flx_cod"));
 
         if ($update->execute())
           return 1;
@@ -85,7 +87,7 @@
 				
           $flx = $search->fetch(PDO::FETCH_ASSOC);
           $aux = new Fluxo();
-          $aux = setAll($flx["flx_cod"],$flx["flx_trn"]);
+          $aux = setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
 				
           return aux;
 				
@@ -108,7 +110,7 @@
 				
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)){
           $aux = new Fluxo();
-          $aux->setAll($flx["flx_cod"], $flx["flx_trn"]);
+          $aux->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
           $flxs[] = $aux;
         }
 				
@@ -119,6 +121,6 @@
       }
 			
       return 0;		
-    }		
+    }	
   }
 ?>
