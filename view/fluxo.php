@@ -51,6 +51,7 @@
                         $fluxo = new Fluxo();
                         $fluxo->__set("flx_cod", $_POST["flx_cod"]);
                         $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                        $fluxo->__set("flx_sem", $_POST["flx_sem"]);
                         if ($fluxoController->register($fluxo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -80,6 +81,7 @@
                         $fluxo = new Fluxo();
                         $fluxo->__set("flx_cod", $_POST["flx_cod"]);
                         $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                        $fluxo->__set("flx_sem", $_POST["flx_sem"]);
 
                         if ($fluxoController->update($fluxo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -112,8 +114,9 @@
                   <div class="content table-responsive table-full-width">
                     <table class="table table-striped table-hover" id="dataTables-example">
                       <thead>
-                        <th class="col-xs-7 col-sm-7 col-md-7 col-lg-7">Código</th>
+                        <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Código</th>
                         <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Turno</th>
+                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Semestres</th>
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
@@ -121,8 +124,9 @@
                         <tr>
                           <td><?php echo $fluxo->__get("flx_cod"); ?></td>
                           <td><?php echo ($fluxo->__get("flx_trn") == "0" ? "Integral" : ($fluxo->__get("flx_trn") == "1" ? "Manhã" : ($fluxo->__get("flx_trn") == "2" ? "Tarde" : "Noite"))); ?></td>
+                          <td><?php echo $fluxo->__get("flx_sem"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" data-trn="<?php echo $fluxo->__get("flx_trn"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" data-trn="<?php echo $fluxo->__get("flx_trn"); ?>" data-sem="<?php echo $fluxo->__get("flx_sem"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -176,13 +180,17 @@
                   <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
                 </div>
                 <div class="form-group">
-                  <label>Situação *</label>
+                  <label>Turno *</label>
                   <select class="form-control" name="flx_trn" id="flx_trn">
                     <option value="0">Integral</option>
                     <option value="1">Manhã</option>
                     <option value="2">Tarde</option>
                     <option value="3">Noite</option>
                   </select>
+                </div>
+                <div class="form-group">
+                  <label>Semestres *</label>
+                  <input class="form-control" type="number" min="1" name="flx_sem" id="flx_sem" value="" required>
                 </div>
               </div>
           </div>
@@ -217,6 +225,10 @@
                   <option value="2">Tarde</option>
                   <option value="3">Noite</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label>Semestres *</label>
+                <input class="form-control" type="number" min="1" name="flx_sem" id="flx_sem" placeholder="Quant. de Semestres" required>
               </div>
           </div>
           <div class="modal-footer">
@@ -261,6 +273,8 @@
       $(".modal-body #flx_cod").val(flx_cod);
       var flx_trn = $(this).data('trn');
       $("#flx_trn").val(flx_trn);
+      var flx_sem = $(this).data('sem');
+      $("#flx_sem").val(flx_sem);
     });
   </script>
 
