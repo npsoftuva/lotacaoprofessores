@@ -15,3 +15,9 @@ function mskDate(v) {
   v = v.replace(/(\d)(\d{4})$/,"$1/$2");
   return v;
 }
+
+function mskCPF(v) {
+  v = v.replace(/\D/g,"");
+  v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})$/,"$1.$2.$3-$4");
+  return v;
+}

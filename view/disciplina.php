@@ -46,55 +46,63 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                  <?php
+                    if (isset($_POST["Adicionar"])){
+                        $disciplina = new Disciplina();
+                        $disciplina->__set("dcp_nom", $_POST["nom"]);
+                        if ($disciplinaController->register($disciplina)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Disciplina adicionada com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar adicionar a disciplina.</span>
+                          </div>
+                        <?php }
+
+                    } else if (isset($_POST["Excluir"])) {
+                        if ($disciplinaController->remove($_POST["dcp_codx"])) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Disciplina excluída com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar excluir a disciplina.</span>
+                          </div>
+                        <?php }
+
+                    } else if (isset($_POST["Editar"])){
+                        $disciplina = new Disciplina();
+                        $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
+                        $disciplina->__set("dcp_nom", $_POST["dcp_nom"]);
+
+                        if ($disciplinaController->update($disciplina)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Disciplina editada com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar editar a disciplina.</span>
+                          </div>
+                        <?php }
+                    }
+
+
+                    $disciplinas  = $disciplinaController->searchAll();
+                ?>
                   <div class="header">
                     <h4 class="title">Disciplinas</h4>
                     <p class="category">
                       Lista de disciplinas cadastradas
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
-                          Adicionar													
-
-													
-													
-													
-<?php
-	if (isset($_POST["Adicionar"])){
-		$disciplina = new Disciplina();
-		$disciplina->__set("dcp_nom", $_POST["nom"]);
-		if ($disciplinaController->register($disciplina)){
-			echo "Adicionado";
-		} else {
-			echo "Não Adicionado";
-		}
-			
-	} else
-	if (isset($_POST["Excluir"])){
-		if ($disciplinaController->remove($_POST["dcp_codx"])){
-			echo "Removido";
-		} else {
-			echo "Não Removido";
-		}
-		
-	} else
-	if (isset($_POST["Editar"])){
-		$disciplina = new Disciplina();
-		$disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
-		$disciplina->__set("dcp_nom", $_POST["dcp_nom"]);
-		
-		if ($disciplinaController->update($disciplina)){
-			echo "Editado";
-		} else {
-			echo "Não Editado";
-		}
-	}
-
-
-	$disciplina  = $disciplinaController->searchAll();
-?>
-
-
-
-
+                          Adicionar
                         </button>
                       </span>
                     </p>
@@ -112,7 +120,7 @@
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $disciplina->__get("dcp_cod"); ?>" data-nom="<?php echo $disciplina->__get("dcp_nom"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="<?php echo $disciplina->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $disciplina->__get("dcp_cod"); ?>" data-nom="<?php echo $disciplina->__get("dcp_nom"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -134,11 +142,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Disciplina</h4>
+            <h4 class="modal-title"><span class="pe-7s-notebook"></span> Excluir Disciplina</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="dcp_codx" id="dcp_codx" value="">
+              <p>Você deseja excluir a disciplina "<b id="dcp_nomx"></b>"?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -153,7 +162,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit">Editar Disciplina</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-notebook"></span> Editar Disciplina</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -180,13 +189,13 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adionar Disciplina</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-notebook"></span> Adicionar Disciplina</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Nome *</label>
-                <input class="form-control" placeholder="Nome da Disciplina" name="" required autocomplete="off">
+                <input class="form-control" placeholder="Nome da Disciplina" name="nom" id="nom" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
@@ -239,6 +248,14 @@
     $(document).on("click", ".openDelete", function () {
       var dcp_cod = $(this).data('cod');
       $(".modal-footer #dcp_codx").val( dcp_cod );
+      var dcp_nom = $(this).data('nom');
+      $(".modal-footer #dcp_nomx").html(dcp_nom);
+    });
+  </script>
+
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>
