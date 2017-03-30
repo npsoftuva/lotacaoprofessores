@@ -22,9 +22,9 @@ class FluxoController {
         return $fluxoDAO->remove($flx_cod);
     }
 
-    public function search (){
+    public function search ($flx_cod){
         $fluxoDAO = new FluxoDAO();
-        return $fluxoDAO->search();
+        return $fluxoDAO->search($flx_cod);
     }
 
     public function searchAll (){
