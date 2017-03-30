@@ -51,6 +51,7 @@
                         $fluxo = new Fluxo();
                         $fluxo->__set("flx_cod", $_POST["flx_cod"]);
                         $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                        $fluxo->__set("flx_sem", $_POST["flx_sem"]);
                         if ($fluxoController->register($fluxo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -122,7 +123,7 @@
                           <td><?php echo $fluxo->__get("flx_cod"); ?></td>
                           <td><?php echo ($fluxo->__get("flx_trn") == "0" ? "Integral" : ($fluxo->__get("flx_trn") == "1" ? "Manhã" : ($fluxo->__get("flx_trn") == "2" ? "Tarde" : "Noite"))); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" data-trn="<?php echo $fluxo->__get("flx_trn"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" data-trn="<?php echo $fluxo->__get("flx_trn"); ?>" data-sem="<?php echo $fluxo->__get("flx_sem"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $fluxo->__get("flx_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -184,6 +185,10 @@
                     <option value="3">Noite</option>
                   </select>
                 </div>
+                <div class="form-group">
+                <label>Semestre *</label>
+                <input class="form-control" type="number" placeholder="Quant. de semestres do Fluxo" name="flx_sem" id="flx_sem" required autocomplete="off" min="1">
+              </div>
               </div>
           </div>
           <div class="modal-footer">
@@ -217,6 +222,10 @@
                   <option value="2">Tarde</option>
                   <option value="3">Noite</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label>Semestre *</label>
+                <input class="form-control" type="number" placeholder="Quant. de semestres do Fluxo" name="flx_sem" required autocomplete="off" min="1">
               </div>
           </div>
           <div class="modal-footer">
@@ -261,6 +270,8 @@
       $(".modal-body #flx_cod").val(flx_cod);
       var flx_trn = $(this).data('trn');
       $("#flx_trn").val(flx_trn);
+      var flx_sem = $(this).data('sem');
+      $("#flx_sem").val(flx_sem);
     });
   </script>
 
