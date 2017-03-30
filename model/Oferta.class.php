@@ -1,4 +1,8 @@
 <?php
+  
+  include_once 'Fluxo.class.php';
+  include_once 'Disciplina.class.php';
+  include_once 'Periodo.class.php';
 
   class Oferta {
     private $ofr_cod;
@@ -16,7 +20,7 @@
       return $this->$atr;
     }
 
-    public function setAll($cod, $prd, $flx, $dcp, $trm, $vag) {
+    public function setAll($cod, Periodo $prd, Fluxo $flx, Disciplina $dcp, $trm, $vag) {
       $this->ofr_cod = $cod;
       $this->prd_cod = $prd;
       $this->flx_cod = $flx;

@@ -22,9 +22,9 @@ class CalendarioController {
     return $calendarioDAO->remove($cld_dta);
   }
 
-  public function search ($data) {
+  public function search ($cld_dta) {
     $calendarioDAO = new CalendarioDAO();
-    return $calendarioDAO->search();
+    return $calendarioDAO->search($cld_dta);
   }
 
   public function searchAll () {

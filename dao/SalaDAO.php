@@ -25,6 +25,7 @@
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+        return 0;
       }
 
     }
@@ -50,9 +51,9 @@
         return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
     
     public function remove ($sla_cod) {
@@ -70,12 +71,12 @@
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+        return 0;
       }
 
-      return 0;
     }
 
-    public function search($id) {
+    public function search($sla_cod) {
 
       try {
         $dbh = Connection::connect();
@@ -83,7 +84,7 @@
         $sql = "SELECT * FROM tab_sla WHERE sla_cod = ?";
 
         $search = $dbh->prepare($sql);
-        $search->bindValue(1, $id);
+        $search->bindValue(1, $sla_cod);
         $search->execute();
 
         $sla = $search->fetch(PDO::FETCH_ASSOC);
@@ -93,9 +94,9 @@
         return $aux;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
 
     public function searchAll() {
@@ -119,9 +120,9 @@
         return $slas;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
   }
 ?>

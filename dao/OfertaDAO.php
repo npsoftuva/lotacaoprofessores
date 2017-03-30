@@ -6,7 +6,7 @@
   require_once('../model/Oferta.class.php');
   require_once('../lib/BD.class.php');
 
-	class SalaDAO {
+	class OfertaDAO {
     
     public function register (Oferta $oferta) {
 
@@ -28,6 +28,7 @@
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+        return 0;
       }
 
     }
@@ -59,12 +60,13 @@
         return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
-
-      return 0;
+      
     }
     
     public function remove ($ofr_cod) {
+      
       try {
         $dbh = Connection::connect();
 
@@ -79,12 +81,12 @@
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+        return 0;
       }
 
-      return 0;
     }
 
-    public function search($id) {
+    public function search($ofr_cod) {
 
       try {
         $dbh = Connection::connect();
@@ -92,21 +94,79 @@
         $sql = "SELECT * FROM tab_ofr WHERE ofr_cod = ?";
 
         $search = $dbh->prepare($sql);
-        $search->bindValue(1, $id);
+        $search->bindValue(1, $ofr_cod);
         
         if (!$search->execute())
           return 0;
 
+        // Inicia o objeto Oferta
         $ofr = $search->fetch(PDO::FETCH_ASSOC);
-        $aux = new Oferta();
-        $aux->setAll($sla["ofr_cod"], $sla["prd_cod"], $sla["flx_cod"], $sla["dcp_cod"], $sla["ofr_trm"], $sla["ofr_vag"]);
+        $oferta = new Oferta();
+        $oferta->__set("ofr_cod", $ofr["ofr_cod"]);
+        $oferta->__set("ofr_trm", $ofr["ofr_trm"]);
+        $oferta->__set("ofr_vag", $ofr["ofr_vag"]);
+            
+        // Seta o objeto Período em PRD_COD
+        $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $ofr["prd_cod"]);
+        $search->execute();
 
-        return $aux;
+        $per = $search->fetch(PDO::FETCH_ASSOC);
+        $periodo = new Periodo();
+        $periodo->__set("prd_cod", $per["prd_cod"]);
+
+        // Seta o objeto Calendario em PRD_INI
+        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $per["prd_ini"]);
+        $search->execute();
+
+        $cld = $search->fetch(PDO::FETCH_ASSOC);
+        $prd_ini = new Calendario();
+        $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+        $periodo->__set("prd_ini", $prd_ini);
+
+        // Seta o objeto Calendario em PRD_FIM
+        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $per["prd_fim"]);
+        $search->execute();
+
+        $cld = $search->fetch(PDO::FETCH_ASSOC);
+        $prd_fim = new Calendario();
+        $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+        $periodo->__set("prd_fim", $prd_fim);
+        $oferta->__set("prd_cod", $periodo);
+
+        // Seta o objeto Fluxo em FLX_COD
+        $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $ofr["flx_cod"]);
+        $search->execute();
+
+        $flx = $search->fetch(PDO::FETCH_ASSOC);
+        $fluxo = new Fluxo();
+        $fluxo->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
+        $oferta->__set("flx_cod", $fluxo);
+
+        // Seta o objeto Disciplina em DCP_COD
+        $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $ofr["dcp_cod"]);
+        $search->execute();
+
+        $dcp = $search->fetch(PDO::FETCH_ASSOC);
+        $disciplina = new Disciplina();
+        $disciplina->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
+        $oferta->__set("dcp_cod", $disciplina);
+        
+        return $oferta;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
 
     public function searchAll() {
@@ -114,7 +174,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_ofr"; //falta ordenar
+        $sql = "SELECT * FROM tab_ofr ORDER BY flx_cod, prd_cod";
 
         $search = $dbh->prepare($sql);
         
@@ -122,17 +182,74 @@
           return 0;
 
         while ($ofr = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Oferta();
-          $aux->setAll($sla["ofr_cod"], $sla["prd_cod"], $sla["flx_cod"], $sla["dcp_cod"], $sla["ofr_trm"], $sla["ofr_vag"]);
-          $ofrs[] = $aux;
+          $oferta = new Oferta();
+          $oferta->__set("ofr_cod", $ofr["ofr_cod"]);
+          $oferta->__set("ofr_trm", $ofr["ofr_trm"]);
+          $oferta->__set("ofr_vag", $ofr["ofr_vag"]);
+          
+          // Seta o objeto Período em PRD_COD
+          $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $ofr["prd_cod"]);
+          $searchAux->execute();
+
+          $per = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $periodo = new Periodo();
+          $periodo->__set("prd_cod", $per["prd_cod"]);
+
+          // Seta o objeto Calendario em PRD_INI
+          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $per["prd_ini"]);
+          $searchAux->execute();
+
+          $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $prd_ini = new Calendario();
+          $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $periodo->__set("prd_ini", $prd_ini);
+
+          // Seta o objeto Calendario em PRD_FIM
+          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $per["prd_fim"]);
+          $searchAux->execute();
+
+          $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $prd_fim = new Calendario();
+          $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $periodo->__set("prd_fim", $prd_fim);
+          $oferta->__set("prd_cod", $periodo);
+          
+          // Seta o objeto Fluxo em FLX_COD
+          $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $ofr["flx_cod"]);
+          $searchAux->execute();
+
+          $flx = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $fluxo = new Fluxo();
+          $fluxo->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
+          $oferta->__set("flx_cod", $fluxo);
+
+          // Seta o objeto Disciplina em DCP_COD
+          $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $ofr["dcp_cod"]);
+          $searchAux->execute();
+
+          $dcp = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $disciplina = new Disciplina();
+          $disciplina->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
+          $oferta->__set("dcp_cod", $disciplina);
+          $ofertas[] = $oferta;
         }
 
-        return $ofrs;
+        return $ofertas;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
   }
 ?>
