@@ -29,8 +29,7 @@
       }
     }
 		
-    public function update (Fluxo $fluxo){
-			
+    public function update (Fluxo $fluxo) {
       try {
         $dbh = Connection::connect();
 				
