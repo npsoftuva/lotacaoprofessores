@@ -46,6 +46,11 @@
           <i class="pe-7s-date"></i><p>Calendário</p>
         </a>
       </li>
+      <li <?php if ($atual == "periodo") echo 'class="active"';?> >
+        <a href="periodo.php">
+          <i class="pe-7s-folder"></i><p>Período</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
