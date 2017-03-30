@@ -18,20 +18,5 @@
       $this->flx_trn = $trn;
       $this->flx_sem = $sem;
     }
-		
-
-    public function searchAll() {
-      $search = Conexao::getInstance()->prepare("SELECT * FROM tab_flx");
-
-      if ($search->execute()) {
-        while ($flx = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Fluxo();
-          $aux->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
-          $flxs[] = $aux;
-        }
-        return $flxs;
-      } else
-        return false;
-    }
   }
 ?>

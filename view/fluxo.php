@@ -168,37 +168,35 @@
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Fluxo</h4>
-          </div>
-          <div class="modal-body">
-            <form role="form" method="POST">
+          <form role="form" method="POST">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Fluxo</h4>
+            </div>
+            <div class="modal-body">
               <div class="form-group">
-                <div class="form-group">
-                  <label>Código *</label>
-                  <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
-                </div>
-                <div class="form-group">
-                  <label>Turno *</label>
-                  <select class="form-control" name="flx_trn" id="flx_trn">
-                    <option value="0">Integral</option>
-                    <option value="1">Manhã</option>
-                    <option value="2">Tarde</option>
-                    <option value="3">Noite</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Semestres *</label>
-                  <input class="form-control" type="number" min="1" name="flx_sem" id="flx_sem" value="" required>
-                </div>
+                <label>Código *</label>
+                <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
               </div>
-          </div>
-          <div class="modal-footer">
-            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
-            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
-            </form>
-          </div>
+              <div class="form-group">
+                <label>Turno *</label>
+                <select class="form-control" name="flx_trn" id="flx_trn">
+                  <option value="0">Integral</option>
+                  <option value="1">Manhã</option>
+                  <option value="2">Tarde</option>
+                  <option value="3">Noite</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Semestres *</label>
+                <input class="form-control" type="number" min="1" name="flx_sem" id="flx_sem" value="" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+              <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -207,12 +205,12 @@
     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add"><span class="pe-7s-refresh-2"></span> Adicionar Fluxo</h4>
-          </div>
-          <div class="modal-body">
-            <form role="form" method="POST">
+          <form role="form" method="POST">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="add"><span class="pe-7s-refresh-2"></span> Adicionar Fluxo</h4>
+            </div>
+            <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
                 <input class="form-control" placeholder="Código do Fluxo" name="flx_cod" required autocomplete="off" maxlength="5" max="5" min="5">
@@ -230,12 +228,12 @@
                 <label>Semestres *</label>
                 <input class="form-control" type="number" min="1" name="flx_sem" id="flx_sem" placeholder="Quant. de Semestres" required>
               </div>
-          </div>
-          <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
-            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
-            </form>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
+              <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
