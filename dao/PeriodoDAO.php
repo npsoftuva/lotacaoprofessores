@@ -13,18 +13,19 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_prd (prd_ini, prd_fim) VALUES (?, ?)";
+        $sql = "INSERT INTO tab_prd (prd_cod, prd_ini, prd_fim) VALUES (?, ?, ?)";
 
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $periodo->__get("prd_ini"));
-        $register->bindValue(2, $periodo->__get("prd_fim"));
+        $register->bindValue(1, $periodo->__get("prd_cod"));
+        $register->bindValue(2, $periodo->__get("prd_ini")->__get("cld_dta"));
+        $register->bindValue(3, $periodo->__get("prd_fim")->__get("cld_dta"));
 
         if ($register->execute())
           return 1;
 
         return 0;
       } catch (Exception $e) {
-        //echo "Failed: " . $e->getMessage();
+        echo "Failed: " . $e->getMessage();
         return 0;
       }
 
@@ -41,8 +42,8 @@
                 WHERE  prd_cod = ?";
 
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $periodo->__get("prd_ini"));
-        $update->bindValue(2, $periodo->__get("prd_fim"));
+        $update->bindValue(1, $periodo->__get("prd_ini")->__get("cld_dta"));
+        $update->bindValue(2, $periodo->__get("prd_fim")->__get("cld_dta"));
         $update->bindValue(3, $periodo->__get("prd_cod"));
 
         if ($update->execute())
@@ -50,7 +51,7 @@
 
         return 0;
       } catch (Exception $e) {
-        //die("Unable to connect: " . $e->getMessage());
+        die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
