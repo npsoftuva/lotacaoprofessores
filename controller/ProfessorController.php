@@ -22,9 +22,9 @@ class ProfessorController {
     return $professorDAO->remove($prf_cod);
   }
 
-  public function search () {
+  public function search ($prf_cod) {
     $professorDAO = new ProfessorDAO();
-    return $professorDAO->search();
+    return $professorDAO->search($prf_cod);
   }
 
   public function searchAll () {
