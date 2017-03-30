@@ -22,9 +22,9 @@ class DisciplinaController {
         return $disciplinaDAO->remove($dcp_cod);
     }
 
-    public function search () {
+    public function search ($dcp_cod) {
         $disciplinaDAO = new DisciplinaDAO();
-        return $disciplinaDAO->search();
+        return $disciplinaDAO->search($dcp_cod);
     }
     
     public function searchAll () {

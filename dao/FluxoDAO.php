@@ -74,7 +74,7 @@
       return 0;
     }
 		
-    public function search($id){
+    public function search($flx_cod){
 			
       try {
         $dbh = Connection::connect();
@@ -82,7 +82,7 @@
           $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
 				
           $search = $dbh->prepare($sql);
-          $search->bindValue(1, $id);
+          $search->bindValue(1, $flx_cod);
           $search->execute();
 				
           $flx = $search->fetch(PDO::FETCH_ASSOC);

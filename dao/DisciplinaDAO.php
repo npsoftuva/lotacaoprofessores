@@ -71,7 +71,7 @@
       return 0;
     }
 		
-    public function search($id){
+    public function search($dcp_cod){
 			
       try {
         $dbh = Connection::connect();
@@ -79,7 +79,7 @@
         $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
 				
         $search = $dbh->prepare($sql);
-        $search->bindValue(1, $id);
+        $search->bindValue(1, $dcp_cod);
         $search->execute();
 				
         $dcp = $search->fetch(PDO::FETCH_ASSOC);

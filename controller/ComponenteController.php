@@ -19,12 +19,12 @@ class ComponenteController {
 
   public function remove ($flx_cod, $dcp_cod) {
     $componenteDAO = new ComponenteDAO();
-    return $professorDAO->remove($prf_cod);
+    return $componenteDAO->remove($prf_cod);
   }
 
   public function search ($flx_cod, $dcp_cod) {
     $componenteDAO = new ComponenteDAO();
-    return $componenteDAO->search();
+    return $componenteDAO->search($flx_cod, $dcp_cod);
   }
 
   public function searchAll () {
