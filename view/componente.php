@@ -41,15 +41,64 @@
       <div class="main-panel">
         <?php include("navbar.inc"); ?>
 
-<?php
-	$componente = $componenteController->searchAll();
-?>
-
         <div class="content">
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                 <?php
+                    if (isset($_POST["Adicionar"])) {
+                        $componente = new Componente();
+                        $componente->__set("flx_cod", $_POST["flx_cod"]);
+                        $componente->__set("flx_trn", $_POST["flx_trn"]);
+                        $componente->__set("flx_sem", $_POST["flx_sem"]);
+                        if ($componenteController->register($componente)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Componente adicionado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar adicionar o componente.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Excluir"])) {
+                        if ($componenteController->remove($_POST["flx_codx"])) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Componente excluído com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar excluir o componente.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Editar"])) {
+                        $componente = new Componente();
+                        $componente->__set("flx_cod", $_POST["flx_cod"]);
+                        $componente->__set("flx_trn", $_POST["flx_trn"]);
+
+                        if ($componenteController->update($componente)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Componente editado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar editar o componente.</span>
+                          </div>
+                        <?php }
+                    }
+
+
+
+                    $componentes = $componenteController->searchAll();
+                ?>
                   <div class="header">
                     <h4 class="title">Componentes</h4>
                     <p class="category">
@@ -64,23 +113,23 @@
                   <div class="content table-responsive table-full-width">
                     <table class="table table-striped table-hover" id="dataTables-example">
                       <thead>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Fluxo</th>
-                        <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Disciplina</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Semestre</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">CH</th>
+                        <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">Fluxo</th>
+                        <th class="col-xs-7 col-sm-7 col-md-7 col-lg-7">Disciplina</th>
+                        <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">Semestre</th>
+                        <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1">CH</th>
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
 <?php foreach ($componentes as $componente) { ?>
                         <tr>
                           <td><?php echo $componente->__get("flx_cod"); ?></td>
-                          <td><?php echo ($componente->__get("dcp_cod"); ?></td>
-                          <td><?php echo ($componente->__get("cmp_sem"); ?></td>
-                          <td><?php echo ($componente->__get("cmp_hor"); ?></td>
+                          <td><?php echo $componente->__get("dcp_cod"); ?></td>
+                          <td><?php echo $componente->__get("cmp_sem"); ?></td>
+                          <td><?php echo $componente->__get("cmp_hor"); ?></td>
                           <td>
                             <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -102,12 +151,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Componente</h4>
+            <h4 class="modal-title"><span class="pe-7s-refresh-2"></span> Excluir Componente</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="flx_codx" id="flx_codx" value="">
-              <input type="hidden" name="dcp_codx" id="dcp_codx" value="">
+              <p>Você deseja excluir o componente "<b id="flx_codxx"></b>"?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -119,93 +168,75 @@
     <!-- Modal Editar -->
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
       <div class="modal-dialog" role="document">
-        <form role="form" method="POST">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="edit">Editar Componente</h4>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label>Fluxo *</label>
-                <select class="form-control" name="flx_cod" id="flx_cod">
-                  <option value="20161">2016.1</option>
-                  <option value="20162">2016.2</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Disciplina *</label>
-                <select class="form-control" name="dcp_cod" id="dcp_cod">
-                  <option value="1">Disciplina 1</option>
-                  <option value="2">Disciplina 2</option>
-                  <option value="3">Disciplina 3</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Semestre *</label>
-                <select class="form-control" name="cmp_sem" id="cmp_sem">
-                  <option value="1">1º</option>
-                  <option value="2">2º</option>
-                  <option value="3">3º</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Carga Horária *</label>
-                <input type="number" name="cmp_hor" id="cmp_hor" step="1" min="1">
-              </div>
-            </div>
-            <div class="modal-footer">
-              <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
-              <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
-            </div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Componente</h4>
           </div>
-        </form>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <div class="form-group">
+                <div class="form-group">
+                  <label>Código *</label>
+                  <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
+                </div>
+                <div class="form-group">
+                  <label>Situação *</label>
+                  <select class="form-control" name="flx_trn" id="flx_trn">
+                    <option value="0">Integral</option>
+                    <option value="1">Manhã</option>
+                    <option value="2">Tarde</option>
+                    <option value="3">Noite</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                <label>Semestre *</label>
+                <input class="form-control" type="number" placeholder="Quant. de semestres do Componente" name="flx_sem" id="flx_sem" required autocomplete="off" min="1">
+              </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Modal Adicionar -->
     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add">
       <div class="modal-dialog" role="document">
-        <form role="form" method="POST">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="add">Adionar Componente</h4>
-            </div>
-            <div class="modal-body">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add"><span class="pe-7s-refresh-2"></span> Adicionar Componente</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
               <div class="form-group">
-                <label>Fluxo *</label>
-                <select class="form-control" name="flx_cod" id="flx_cod">
-                  <option value="20161">2016.1</option>
-                  <option value="20162">2016.2</option>
-                </select>
+                <label>Código *</label>
+                <input class="form-control" placeholder="Código do Componente" name="flx_cod" required autocomplete="off" maxlength="5" max="5" min="5">
               </div>
               <div class="form-group">
-                <label>Disciplina *</label>
-                <select class="form-control" name="dcp_cod" id="dcp_cod">
-                  <option value="1">Disciplina 1</option>
-                  <option value="2">Disciplina 2</option>
-                  <option value="3">Disciplina 3</option>
+                <label>Turno *</label>
+                <select class="form-control" name="flx_trn">
+                  <option value="0">Integral</option>
+                  <option value="1">Manhã</option>
+                  <option value="2">Tarde</option>
+                  <option value="3">Noite</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Semestre *</label>
-                <select class="form-control" name="cmp_sem" id="cmp_sem">
-                  <option value="1">1º</option>
-                  <option value="2">2º</option>
-                  <option value="3">3º</option>
-                </select>
+                <input class="form-control" type="number" placeholder="Quant. de semestres do Componente" name="flx_sem" required autocomplete="off" min="1">
               </div>
-              <div class="form-group">
-                <label>Carga Horária *</label>
-                <input type="number" name="cmp_hor" id="cmp_hor" step="1" min="1">
-              </div>
-            </div>
-            <div class="modal-footer">
-              <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
-              <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
-            </div>
-          </form>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -239,23 +270,20 @@
 
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
-      var flx_cod = $(this).data('flx');
+      var flx_cod = $(this).data('cod');
       $(".modal-body #flx_cod").val(flx_cod);
-      var dcp_cod = $(this).data('dcp');
-      $(".modal-body #dcp_cod").val(dcp_cod);
-      var cmp_sem = $(this).data('sem');
-      $(".modal-body #cmp_sem").val(cmp_sem);
-      var cmp_hor = $(this).data('hor');
-      $(".modal-body #cmp_hor").val(cmp_hor);
+      var flx_trn = $(this).data('trn');
+      $("#flx_trn").val(flx_trn);
+      var flx_sem = $(this).data('sem');
+      $("#flx_sem").val(flx_sem);
     });
   </script>
 
   <script type="text/javascript">
     $(document).on("click", ".openDelete", function () {
-      var flx_cod = $(this).data('flx');
+      var flx_cod = $(this).data('cod');
       $(".modal-footer #flx_codx").val( flx_cod );
-      var dcp_cod = $(this).data('dcp');
-      $(".modal-footer #dcp_codx").val( dcp_cod );
+      $(".modal-footer #flx_codxx").html( flx_cod );
     });
   </script>
 </html>
