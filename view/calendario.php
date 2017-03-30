@@ -124,7 +124,7 @@
                           <td>
                             <a data-toggle="modal" data-dta="<?php echo $calendario->__get("cld_dta"); ?>" data-evt="<?php echo $calendario->__get("cld_evt"); ?>" data-tpo="<?php echo $calendario->__get("cld_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-dta="<?php echo $calendario->__get("cld_dta"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-dta="<?php echo $calendario->__get("cld_dta"); ?>" data-evt="<?php echo $calendario->__get("cld_evt"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -146,11 +146,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Evento</h4>
+            <h4 class="modal-title"><span class="pe-7s-date"></span> Excluir Evento</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="cld_dtax" id="cld_dtax" value="">
+              <p>Você deseja excluir o evento "<b id="cld_evtx"></b>"?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -165,7 +166,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit">Editar Evento</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-date"></span> Editar Evento</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -200,7 +201,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adicionar Evento</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-date"></span> Adicionar Evento</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -273,12 +274,14 @@
     $(document).on("click", ".openDelete", function () {
       var cld_dta = $(this).data('dta');
       $(".modal-footer #cld_dtax").val( cld_dta );
+      var cld_evt = $(this).data('evt');
+      $(".modal-footer #cld_evtx").html(cld_evt);
     });
   </script>
 
   <script>
-    $(".alert").fadeTo(2000, 500).slideUp(1000, function(){
-      $(".alert").slideUp(2000);
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>

@@ -45,42 +45,61 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                  <?php
+                    if (isset($_POST["Adicionar"])) {
+                      $sala = new Sala();
+                      $sala->__set("sla_nom", $_POST["sla_nom"]);
+                      $sala->__set("sla_cap", $_POST["sla_cap"]);
+                      if ($salaController->register($sala)) { ?>
+                      <div class="alert alert-success alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Sala adicionada com sucesso!</span>
+                      </div>
+                    <?php } else { ?>
+                      <div class="alert alert-danger alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Ocorreu um erro ao tentar adicionar a sala.</span>
+                      </div>
+                    <?php }
+                    } else
+                    if (isset($_POST["Excluir"])) {
+                      if ($salaController->remove($_POST["sla_codx"])) { ?>
+                      <div class="alert alert-success alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Sala excluída com sucesso!</span>
+                      </div>
+                    <?php } else { ?>
+                      <div class="alert alert-danger alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Ocorreu um erro ao tentar excluir a sala.</span>
+                      </div>
+                    <?php }
+                    } else
+                    if (isset($_POST["Editar"])) {
+                      $sala = new Sala();
+                      $sala->__set("sla_cod", $_POST["sla_cod"]);
+                      $sala->__set("sla_cap", $_POST["sla_cap"]);
+                      $sala->__set("sla_nom", $_POST["sla_nom"]);
+                      if ($salaController->update($sala)) { ?>
+                      <div class="alert alert-success alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Sala editada com sucesso!</span>
+                      </div>
+                    <?php } else { ?>
+                      <div class="alert alert-danger alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Ocorreu um erro ao tentar editar a sala.</span>
+                      </div>
+                    <?php }
+                    }
+
+                    $salas = $salaController->searchAll();
+                  ?>
+
                   <div class="header">
                     <h4 class="title">Salas</h4>
                     <p class="category">
                       Lista de salas cadastradas
-<?php
-  if (isset($_POST["Adicionar"])) {
-    $sala = new Sala();
-    $sala->__set("sla_nom", $_POST["name"]);
-    $sala->__set("sla_cap", $_POST["capacity"]);
-    if ($salaController->register($sala)) {
-      echo "ok";
-    } else {
-      echo "nao ok";
-    }
-  } else
-  if (isset($_POST["Excluir"])) {
-    if ($salaController->remove($_POST["sla_codx"])) {
-      echo "removido";
-    } else {
-      echo "Não removido";
-    }
-  } else
-  if (isset($_POST["Editar"])) {
-    $sala = new Sala();
-    $sala->__set("sla_cod", $_POST["sla_cod"]);
-    $sala->__set("sla_cap", $_POST["sla_cap"]);
-    $sala->__set("sla_nom", $_POST["sla_nom"]);
-    if ($salaController->update($sala)) {
-      echo "ok";
-    } else {
-      echo "nao ok";
-    }
-  }
-
-  $salas = $salaController->searchAll();
-?>
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
@@ -103,7 +122,7 @@
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $sala->__get("sla_cod"); ?>" data-nom="<?php echo $sala->__get("sla_nom"); ?>" data-cap="<?php echo $sala->__get("sla_cap"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="<?php echo $sala->__get("sla_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $sala->__get("sla_cod"); ?>" data-nom="<?php echo $sala->__get("sla_nom"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -125,11 +144,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Sala</h4>
+            <h4 class="modal-title"><span class="pe-7s-display2"></span> Excluir Sala</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="sla_codx" id="sla_codx" value="">
+              <p>Você deseja excluir a sala <b id="sla_nomx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -144,7 +164,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit">Editar Sala</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-display2"></span> Editar Sala</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -175,17 +195,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adicionar Sala</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-display2"></span> Adicionar Sala</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Nome *</label>
-                <input class="form-control" placeholder="Nome da Sala" name="name" required autocomplete="off">
+                <input class="form-control" placeholder="Nome da Sala" name="sla_nom" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Capacidade *</label>
-                <input class="form-control" type="number" min="1" step="1" placeholder="Capacidade da Sala" name="capacity" required autocomplete="off">
+                <input class="form-control" type="number" min="1" step="1" placeholder="Capacidade da Sala" name="sla_cap" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
@@ -239,6 +259,8 @@
     $(document).on("click", ".openDelete", function () {
       var sla_cod = $(this).data('cod');
       $(".modal-footer #sla_codx").val( sla_cod );
+      var sla_nom = $(this).data('nom');
+      $(".modal-footer #sla_nomx").html(sla_nom);
     });
   </script>
 </html>

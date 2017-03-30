@@ -13,14 +13,16 @@
 
       try {
         $dbh = Connection::connect();
-			
-        $sql = "INSERT INTO tab_dcp (dcp_cod, dcp_nom) VALUES (NULL, ?)";
-				
+
+        $sql = "INSERT INTO tab_dcp (dcp_nom) VALUES (?)";
+
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $disciplina->__get("dcp_nom"));
-        $register->execute();
-				
-        return 1;				
+        $register->bindValue(1, strtoupper($disciplina->__get("dcp_nom")));
+
+        if ($register->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e){
           //echo "Failed: ". $e->getMessage();
       }
@@ -36,11 +38,11 @@
         WHERE   dcp_cod = ?";
 				
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $disciplina->__get("dcp_nom"));
+        $update->bindValue(1, strtoupper($disciplina->__get("dcp_nom")));
         $update->bindValue(2, $disciplina->__get("dcp_cod"));
-        $update->execute();
-
-        return 1;				
+        if ($update->execute())
+          return 1;
+        return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
       }
@@ -56,10 +58,12 @@
         $sql = "DELETE FROM tab_dcp WHERE dcp_cod = ?";
 			
         $remove = $dbh->prepare($sql);
-        $remove->bindValue(1, dcp_cod);
-        $remove->execute();
+        $remove->bindValue(1, $dcp_cod);
 				
-        return 1;
+        if ($remove->execute())
+          return 1;
+
+        return 0;
       } catch (Exception $e){
         //echo "Failed: "  . $e->getMessage();
       }
@@ -67,7 +71,7 @@
       return 0;
     }
 		
-    public function search($id){
+    public function search($dcp_cod){
 			
       try {
         $dbh = Connection::connect();
@@ -75,7 +79,7 @@
         $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
 				
         $search = $dbh->prepare($sql);
-        $search->bindValue(1, $id);
+        $search->bindValue(1, $dcp_cod);
         $search->execute();
 				
         $dcp = $search->fetch(PDO::FETCH_ASSOC);
@@ -96,18 +100,19 @@
       try {
         $dbh = Connection::connect();
 				
-        $sql = "SELECT * FROM tab_dcp";
+        $sql = "SELECT * FROM tab_dcp ORDER BY dcp_nom";
 				
         $search = $dbh->prepare($sql);
-        $search->execute();
+        if (!$search->execute())
+          return 0;
 				
         while ($dcp = $search->fetch(PDO::FETCH_ASSOC)){
           $aux = new Disciplina();
           $aux->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
-          $prfs[] = $aux;
+          $dcps[] = $aux;
         }
 				
-        return $prfs;
+        return $dcps;
 				
         } catch(Exception $e){
           //die("Unable to connect: " . $e->getMessage());

@@ -51,46 +51,64 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                  <?php
+                    if (isset($_POST["Adicionar"])) {
+                      $professor = new Professor();
+                      $professor->__set("prf_cpf", preg_replace( '#[^0-9]#', '', $_POST["cpf"]));
+                      $professor->__set("prf_nom", $_POST["name"]);
+                      $professor->__set("prf_eml", $_POST["email"]);
+                      if ($professorController->register($professor)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Professor(a) adicionado com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar adicionar o(a) professor(a).</span>
+                        </div>
+                      <?php }
+                    } else
+                    if (isset($_POST["Excluir"])) {
+                      if ($professorController->remove($_POST["prf_codx"])) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Professor(a) removido(a) com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar excluir o(a) professor(a).</span>
+                        </div>
+                      <?php }
+                    } else
+                    if (isset($_POST["Editar"])) {
+                      $professor = new Professor();
+                      $professor->__set("prf_cod", $_POST["prf_cod"]);
+                      $professor->__set("prf_cpf", $_POST["prf_cpf"]);
+                      $professor->__set("prf_nom", $_POST["prf_nom"]);
+                      $professor->__set("prf_eml", $_POST["prf_eml"]);
+                      $professor->__set("prf_sit", $_POST["prf_sit"]);
+                      if ($professorController->update($professor)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Professor(a) editado(a) com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar editar o(a) professor(a).</span>
+                        </div>
+                      <?php }
+                    }
+
+
+                    $professores = $professorController->searchAll();
+                  ?>
                   <div class="header">
                     <h4 class="title">Professores</h4>
                     <p class="category">
                       Lista de professores cadastrados
-<?php
-  if (isset($_POST["Adicionar"])) {
-    $professor = new Professor();
-    $professor->__set("prf_cpf", $_POST["cpf"]);
-    $professor->__set("prf_nom", $_POST["name"]);
-    $professor->__set("prf_eml", $_POST["email"]);
-    if ($professorController->register($professor)) {
-      echo "ok";
-    } else {
-      echo "nao ok";
-    }
-  } else
-  if (isset($_POST["Excluir"])) {
-    if ($professorController->remove($_POST["prf_codx"])) {
-      echo "removido";
-    } else {
-      echo "Não removido";
-    }
-  } else
-  if (isset($_POST["Editar"])) {
-    $professor = new Professor();
-    $professor->__set("prf_cod", $_POST["prf_cod"]);
-    $professor->__set("prf_cpf", $_POST["prf_cpf"]);
-    $professor->__set("prf_nom", $_POST["prf_nom"]);
-    $professor->__set("prf_eml", $_POST["prf_eml"]);
-    $professor->__set("prf_sit", $_POST["prf_sit"]);
-    if ($professorController->update($professor)) {
-      echo "ok";
-    } else {
-      echo "nao ok";
-    }
-  }
-
-
-  $professores = $professorController->searchAll();
-?>
                       <span class="pull-right">
                         <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
                           Adicionar
@@ -111,13 +129,13 @@
 <?php foreach ($professores as $professor) { ?>
                         <tr>
                           <td><?php echo $professor->__get("prf_nom"); ?></td>
-                          <td><?php echo $professor->__get("prf_cpf"); ?></td>
+                          <td><?php echo substr($professor->__get('prf_cpf'), 0, 3).".".substr($professor->__get('prf_cpf'), 3, 3).".".substr($professor->__get('prf_cpf'), 6, 3).".".substr($professor->__get('prf_cpf'), 9, 2); ?></td>
                           <td><?php echo $professor->__get("prf_eml"); ?></td>
                           <td><?php echo $professor->__get("prf_sit") ? "Ativo" : "Inativo"; ?></td>
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $professor->__get('prf_cod'); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" data-cpf="<?php echo $professor->__get("prf_cpf"); ?>" data-eml="<?php echo $professor->__get("prf_eml"); ?>" data-sit="<?php echo $professor->__get('prf_sit'); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $professor->__get("prf_cod"); ?>" data-nom="<?php echo $professor->__get("prf_nom"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -139,11 +157,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Excluir Professor</h4>
+            <h4 class="modal-title"><span class="pe-7s-users"></span> Excluir Professor</h4>
           </div>
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="prf_codx" id="prf_codx" value="">
+              <p>Você deseja excluir o(a) professor(a) <b id="prf_nomx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -158,7 +177,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit">Editar Professor</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-users"></span> Editar Professor</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -170,7 +189,7 @@
                 </div>
                 <div class="form-group">
                   <label>CPF *</label>
-                  <input class="form-control" id="prf_cpf" name="prf_cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
+                  <input class="form-control" id="prf_cpf" name="prf_cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)"  onkeyup="mascara( this, mskCPF );">
                 </div>
                 <div class="form-group">
                   <label>E-mail *</label>
@@ -200,7 +219,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add">Adionar Professor</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-users"></span> Adicionar Professor</h4>
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
@@ -210,7 +229,7 @@
               </div>
               <div class="form-group">
                 <label>CPF *</label>
-                <input class="form-control" placeholder="00000000000" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)">
+                <input class="form-control" placeholder="00000000000" id="cpf" name="cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)" onkeyup="mascara( this, mskCPF );">
               </div>
               <div class="form-group">
                 <label>E-mail *</label>
@@ -253,9 +272,9 @@
   <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
   <script src="assets/js/demo.js"></script>
 
-  <script type="text/javascript">
-    jQuery("#cpf").mask("999.999.999-99");
+  <script src="assets/js/mask.js"></script>
 
+  <script type="text/javascript">
     function ValidaCPF(elemento) {
       cpf = elemento.value;
       cpf = cpf.replace(/[^\d]+/g, '');
@@ -330,6 +349,13 @@
     $(document).on("click", ".openDelete", function () {
       var prf_cod = $(this).data('cod');
       $(".modal-footer #prf_codx").val( prf_cod );
+      var prf_nom = $(this).data('nom');
+      $(".modal-footer #prf_nomx").html(prf_nom);
+    });
+  </script>
+  <script>
+    $(".alert").fadeTo(1000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>
