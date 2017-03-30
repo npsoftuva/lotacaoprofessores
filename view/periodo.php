@@ -52,10 +52,17 @@
                 <div class="card card-plain">
                  <?php
                     if (isset($_POST["Adicionar"])) {
+                        // criando um objeto Periodo.
                         $periodo = new Periodo();
                         $periodo->__set("prd_cod", $_POST["prd_cod"]);
-                        $periodo->__set("prd_ini", $_POST["prd_ini"]);
-                        $periodo->__set("prd_fim", $_POST["prd_fim"]);
+                        // criando um objeto Calendario para setar em Periodo
+                        $prd_ini = new Calendario();
+                        $prd_ini->__set("cld_dta", $_POST["prd_ini"]);
+                        $periodo->__set("prd_ini", $prd_ini);
+                        // criando um objeto Calendario para setar em Periodo
+                        $prd_fim = new Calendario();
+                        $prd_fim->__set("cld_dta", $_POST["prd_fim"]);
+                        $periodo->__set("prd_fim", $prd_fim);
                         if ($periodoController->register($periodo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -82,10 +89,17 @@
                         <?php }
                     } else
                     if (isset($_POST["Editar"])) {
+                        // criando um objeto Periodo.
                         $periodo = new Periodo();
                         $periodo->__set("prd_cod", $_POST["prd_cod"]);
-                        $periodo->__set("prd_ini", $_POST["prd_ini"]);
-                        $periodo->__set("prd_fim", $_POST["prd_fim"]);
+                        // criando um objeto Calendario para setar em Periodo
+                        $prd_ini = new Calendario();
+                        $prd_ini->__set("cld_dta", $_POST["prd_ini"]);
+                        $periodo->__set("prd_ini", $prd_ini);
+                        // criando um objeto Calendario para setar em Periodo
+                        $prd_fim = new Calendario();
+                        $prd_fim->__set("cld_dta", $_POST["prd_fim"]);
+                        $periodo->__set("prd_fim", $prd_fim);
 
                         if ($periodoController->update($periodo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">

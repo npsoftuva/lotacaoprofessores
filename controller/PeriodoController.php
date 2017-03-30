@@ -9,13 +9,17 @@ class PeriodoController {
 
   public function register (Periodo $periodo) {
     $periodoDAO = new PeriodoDAO();
+    $periodo->__get("prd_ini")->__set("cld_dta", date('Y-d-m', strtotime($periodo->__get("prd_ini")->__get("cld_dta"))));
+    $periodo->__get("prd_fim")->__set("cld_dta", date('Y-d-m', strtotime($periodo->__get("prd_fim")->__get("cld_dta"))));
     return $periodoDAO->register($periodo);
   }
 
   public function update (Periodo $periodo) {
-    if ($periodo->__get("prd_ini") > $periodo->__get("prd_fim"))
-      return 0;
     $periodoDAO = new PeriodoDAO();
+    $periodo->__get("prd_ini")->__set("cld_dta", date('Y-d-m', strtotime($periodo->__get("prd_ini")->__get("cld_dta"))));
+    $periodo->__get("prd_fim")->__set("cld_dta", date('Y-d-m', strtotime($periodo->__get("prd_fim")->__get("cld_dta"))));
+    if ($periodo->__get("prd_ini")->__get("cld_dta") > $periodo->__get("prd_fim")->__get("cld_dta"))
+      return 0;
     return $periodoDAO->update($periodo);
   }
 
