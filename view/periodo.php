@@ -42,7 +42,7 @@
         <?php include("navbar.inc"); ?>
 
 <?php
-	$periodo = $periodoController->searchAll();
+	$periodos = $periodoController->searchAll();
 ?>
 
         <div class="content">
@@ -50,6 +50,60 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                 <?php
+                    if (isset($_POST["Adicionar"])) {
+                        $periodo = new Periodo();
+                        $periodo->__set("prd_cod", $_POST["prd_cod"]);
+                        $periodo->__set("prd_ini", $_POST["prd_ini"]);
+                        $periodo->__set("prd_fim", $_POST["prd_fim"]);
+                        if ($periodoController->register($periodo)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Período adicionado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar adicionar o período.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Excluir"])) {
+                        if ($periodoController->remove($_POST["prd_codx"])) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Período excluído com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar excluir o período.</span>
+                          </div>
+                        <?php }
+                    } else
+                    if (isset($_POST["Editar"])) {
+                        $periodo = new Periodo();
+                        $periodo->__set("prd_cod", $_POST["prd_cod"]);
+                        $periodo->__set("prd_ini", $_POST["prd_ini"]);
+                        $periodo->__set("prd_fim", $_POST["prd_fim"]);
+
+                        if ($periodoController->update($periodo)) { ?>
+                          <div class="alert alert-success alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Período editado com sucesso!</span>
+                          </div>
+                        <?php } else { ?>
+                          <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar editar o período.</span>
+                          </div>
+                        <?php }
+                    }
+
+
+
+                    $periodos = $periodoController->searchAll();
+                ?>
                   <div class="header">
                     <h4 class="title">Períodos</h4>
                     <p class="category">
@@ -73,10 +127,10 @@
 <?php foreach ($periodos as $periodo) { ?>
                         <tr>
                           <td><?php echo $periodo->__get("prd_cod"); ?></td>
-                          <td><?php echo $periodo->__get("prd_ini"); ?></td>
-                          <td><?php echo $periodo->__get("prd_fim"); ?></td>
+                          <td><?php echo $periodo->__get("prd_ini")->__get("cld_dta"); ?></td>
+                          <td><?php echo $periodo->__get("prd_fim")->__get("cld_dta"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $periodo->__get("prd_cod"); ?>" data-ini="<?php echo $periodo->__get("prd_ini"); ?>" data-fim="<?php echo $periodo->__get("prd_fim"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $periodo->__get("prd_cod"); ?>" data-ini="<?php echo $periodo->__get("prd_ini")->__get("cld_dta"); ?>" data-fim="<?php echo $periodo->__get("prd_fim")->__get("cld_dta"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $periodo->__get("prd_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -129,11 +183,11 @@
               </div>
               <div class="form-group">
                 <label>Início *</label>
-                <input class="form-control" type="text" name="prd_ini" id="prd_ini" value="" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" type="text" name="prd_ini" id="prd_ini" value="" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
               <div class="form-group">
                 <label>Fim *</label>
-                <input class="form-control" type="text" name="prd_fim" id="prd_fim" value="" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" type="text" name="prd_fim" id="prd_fim" value="" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
             </div>
             <div class="modal-footer">
@@ -157,15 +211,15 @@
             <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" type="text" name="prd_cod" id="prd_cod" value="">
+                <input class="form-control" type="text" name="prd_cod" id="prd_cod">
               </div>
               <div class="form-group">
                 <label>Início *</label>
-                <input class="form-control" type="text" name="prd_ini" id="prd_ini" value="" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" type="text" name="prd_ini" id="prd_ini" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
               <div class="form-group">
                 <label>Fim *</label>
-                <input class="form-control" type="text" name="prd_fim" id="prd_fim" value="" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" type="text" name="prd_fim" id="prd_fim" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
             </div>
             <div class="modal-footer">
