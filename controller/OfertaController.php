@@ -22,9 +22,9 @@ class OfertaController {
     return $ofertaDAO->remove($ofr_cod);
   }
 
-  public function search ($id) {
+  public function search ($ofr_cod) {
     $ofertaDAO = new OfertaDAO();
-    return $ofertaDAO->search();
+    return $ofertaDAO->search($ofr_cod);
   }
 
   public function searchAll () {
