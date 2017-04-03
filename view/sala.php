@@ -48,6 +48,7 @@
                   <?php
                     if (isset($_POST["Adicionar"])) {
                       $sala = new Sala();
+											$sala->__set("sla_cod", $_POST["sla_cod"]);	
                       $sala->__set("sla_nom", $_POST["sla_nom"]);
                       $sala->__set("sla_cap", $_POST["sla_cap"]);
                       if ($salaController->register($sala)) { ?>
@@ -110,13 +111,15 @@
                   <div class="content table-responsive table-full-width">
                     <table class="table table-striped table-hover" id="dataTables-example">
                       <thead>
-                        <th class="col-xs-7 col-sm-7 col-md-7 col-lg-7">Nome</th>
+                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Código</th>
+                        <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Nome</th>
                         <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Capacidade</th>
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
 <?php foreach ($salas as $sala) { ?>
                         <tr>
+                          <td><?php echo $sala->__get("sla_cod"); ?></td>
                           <td><?php echo $sala->__get("sla_nom"); ?></td>
                           <td><?php echo $sala->__get("sla_cap"); ?></td>
                           <td>
@@ -169,7 +172,10 @@
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
-                <input type="hidden" name="sla_cod" id="sla_cod" value="">
+								<div class="form-group">
+                  <label>Código</label>
+                  <input class="form-control" type="text" name="sla_cod" id="sla_cod" value="" readonly>
+                </div>
                 <div class="form-group">
                   <label>Nome</label>
                   <input class="form-control" type="text" name="sla_nom" id="sla_nom" value="" required autocomplete="off">
@@ -199,6 +205,10 @@
           </div>
           <div class="modal-body">
             <form role="form" method="POST">
+              <div class="form-group">
+                <label>Código *</label>
+                <input class="form-control" placeholder="Código da Sala" name="sla_cod" required autocomplete="off">
+              </div>
               <div class="form-group">
                 <label>Nome *</label>
                 <input class="form-control" placeholder="Nome da Sala" name="sla_nom" required autocomplete="off">

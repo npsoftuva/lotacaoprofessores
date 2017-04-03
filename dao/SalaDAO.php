@@ -13,11 +13,12 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "INSERT INTO tab_sla (sla_nom, sla_cap) VALUES (?, ?)";
+        $sql = "INSERT INTO tab_sla (sla_cod, sla_nom, sla_cap) VALUES (?, ?, ?)";
 
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $sala->__get("sla_nom"));
-        $register->bindValue(2, $sala->__get("sla_cap"));
+				$register->bindValue(1, $sala->__get("sla_cod"));
+        $register->bindValue(2, $sala->__get("sla_nom"));
+        $register->bindValue(3, $sala->__get("sla_cap"));
 
         if ($register->execute())
           return 1;
