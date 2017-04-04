@@ -16,9 +16,9 @@
         $sql = "INSERT INTO tab_ofr (prd_cod, flx_cod, dcp_cod, ofr_trm, ofr_vag) VALUES (?, ?, ?, ?, ?)";
 
         $register = $dbh->prepare($sql);
-        $register->bindValue(1, $oferta->__get("prd_cod"));
-        $register->bindValue(2, $oferta->__get("flx_cod"));
-        $register->bindValue(3, $oferta->__get("dcp_cod"));
+        $register->bindValue(1, $oferta->__get("prd_cod")->__get("prd_cod"));
+        $register->bindValue(2, $oferta->__get("flx_cod")->__get("flx_cod"));
+        $register->bindValue(3, $oferta->__get("dcp_cod")->__get("dcp_cod"));
         $register->bindValue(4, $oferta->__get("ofr_trm"));
         $register->bindValue(5, $oferta->__get("ofr_vag"));
 
@@ -47,12 +47,12 @@
                 WHERE  ofr_cod = ?";
 
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $sala->__get("prd_cod"));
-        $update->bindValue(2, $sala->__get("flx_cod"));
-        $update->bindValue(3, $sala->__get("dcp_cod"));
-        $update->bindValue(4, $sala->__get("ofr_trm"));
-        $update->bindValue(5, $sala->__get("ofr_vag"));
-        $update->bindValue(6, $sala->__get("ofr_cod"));
+        $update->bindValue(1, $oferta->__get("prd_cod")->__get("prd_cod"));
+        $update->bindValue(2, $oferta->__get("flx_cod")->__get("flx_cod"));
+        $update->bindValue(3, $oferta->__get("dcp_cod")->__get("dcp_cod"));
+        $update->bindValue(4, $oferta->__get("ofr_trm"));
+        $update->bindValue(5, $oferta->__get("ofr_vag"));
+        $update->bindValue(6, $oferta->__get("ofr_cod"));
 
         if ($update->execute())
           return 1;
@@ -110,7 +110,9 @@
         $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $ofr["prd_cod"]);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $per = $search->fetch(PDO::FETCH_ASSOC);
         $periodo = new Periodo();
@@ -120,7 +122,9 @@
         $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $per["prd_ini"]);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $cld = $search->fetch(PDO::FETCH_ASSOC);
         $prd_ini = new Calendario();
@@ -131,7 +135,9 @@
         $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $per["prd_fim"]);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $cld = $search->fetch(PDO::FETCH_ASSOC);
         $prd_fim = new Calendario();
@@ -143,7 +149,9 @@
         $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $ofr["flx_cod"]);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $flx = $search->fetch(PDO::FETCH_ASSOC);
         $fluxo = new Fluxo();
@@ -154,7 +162,9 @@
         $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $ofr["dcp_cod"]);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $dcp = $search->fetch(PDO::FETCH_ASSOC);
         $disciplina = new Disciplina();
@@ -191,7 +201,9 @@
           $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
           $searchAux = $dbh->prepare($sql);
           $searchAux->bindValue(1, $ofr["prd_cod"]);
-          $searchAux->execute();
+          
+          if (!$searchAux->execute())
+            return 0;
 
           $per = $searchAux->fetch(PDO::FETCH_ASSOC);
           $periodo = new Periodo();
@@ -201,7 +213,9 @@
           $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
           $searchAux = $dbh->prepare($sql);
           $searchAux->bindValue(1, $per["prd_ini"]);
-          $searchAux->execute();
+          
+          if (!$searchAux->execute())
+            return 0;
 
           $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
           $prd_ini = new Calendario();
@@ -212,7 +226,9 @@
           $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
           $searchAux = $dbh->prepare($sql);
           $searchAux->bindValue(1, $per["prd_fim"]);
-          $searchAux->execute();
+          
+          if (!$searchAux->execute())
+            return 0;
 
           $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
           $prd_fim = new Calendario();
@@ -224,7 +240,9 @@
           $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
           $searchAux = $dbh->prepare($sql);
           $searchAux->bindValue(1, $ofr["flx_cod"]);
-          $searchAux->execute();
+          
+          if (!$searchAux->execute())
+            return 0;
 
           $flx = $searchAux->fetch(PDO::FETCH_ASSOC);
           $fluxo = new Fluxo();
@@ -235,7 +253,9 @@
           $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
           $searchAux = $dbh->prepare($sql);
           $searchAux->bindValue(1, $ofr["dcp_cod"]);
-          $searchAux->execute();
+          
+          if (!$searchAux->execute())
+            return 0;
 
           $dcp = $searchAux->fetch(PDO::FETCH_ASSOC);
           $disciplina = new Disciplina();

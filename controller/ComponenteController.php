@@ -7,7 +7,7 @@ require_once('../dao/ComponenteDAO.php');
 
 class ComponenteController {
 
-  public function register (Componente $componente, $flx_cod, $dcp_cod) {
+  public function register (Componente $componente) {
     $componenteDAO = new ComponenteDAO();
     return $componenteDAO->register($componente);
   }
@@ -19,7 +19,7 @@ class ComponenteController {
 
   public function remove ($flx_cod, $dcp_cod) {
     $componenteDAO = new ComponenteDAO();
-    return $componenteDAO->remove($prf_cod);
+    return $componenteDAO->remove($flx_cod, $dcp_cod);
   }
 
   public function search ($flx_cod, $dcp_cod) {

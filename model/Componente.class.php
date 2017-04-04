@@ -1,5 +1,8 @@
 <?php
 
+  include_once 'Fluxo.class.php';
+  include_once 'Disciplina.class.php';
+
   class Componente {
     private $flx_cod;
     private $dcp_cod;

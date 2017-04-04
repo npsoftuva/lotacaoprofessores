@@ -26,6 +26,7 @@
         return 0;
       } catch (Exception $e){
          //echo "Failed: ". $e->getMessage();
+        return 0;
       }
     }
 
@@ -45,12 +46,13 @@
 
         if ($update->execute())
           return 1;
+        
         return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
 
     public function remove ($flx_cod){
@@ -65,12 +67,13 @@
 
         if ($remove->execute())
           return 1;
+        
         return 0;
       } catch (Exception $e){
         //echo "Failed: "  . $e->getMessage();
+        return 0;
       }
 
-      return 0;
     }
 
     public function search($flx_cod){
@@ -78,23 +81,24 @@
       try {
         $dbh = Connection::connect();
 
-          $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
+        $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
 
-          $search = $dbh->prepare($sql);
-          $search->bindValue(1, $flx_cod);
-          $search->execute();
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $flx_cod);
+        
+        if (!$search->execute())
+          return 0;
 
-          $flx = $search->fetch(PDO::FETCH_ASSOC);
-          $aux = new Fluxo();
-          $aux = setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
+        $flx = $search->fetch(PDO::FETCH_ASSOC);
+        $aux = new Fluxo();
+        $aux = setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
 
-          return aux;
-
+        return aux;
       } catch(Exception $e){
-         //die("Unable to connect: " . $e->getMessage());
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
 
     public function searchAll(){
@@ -105,7 +109,9 @@
         $sql = "SELECT * FROM tab_flx ORDER BY flx_cod";
 
         $search = $dbh->prepare($sql);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         while ($flx = $search->fetch(PDO::FETCH_ASSOC)){
           $aux = new Fluxo();
@@ -114,12 +120,11 @@
         }
 
         return $flxs;
-
       } catch(Exception $e){
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 
-      return 0;
     }
   }
 ?>
