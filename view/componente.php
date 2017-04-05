@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
   require_once('../controller/ComponenteController.php');
 
   $componenteController = new ComponenteController();
@@ -129,7 +132,7 @@
                           <td>
                             <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -156,7 +159,7 @@
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="flx_codx" id="flx_codx" value="">
-              <p>Você deseja excluir o componente "<b id="flx_codxx"></b>"?</p>
+              <input type="hidden" name="dcp_codx" id="dcp_codx" value="">
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -281,9 +284,10 @@
 
   <script type="text/javascript">
     $(document).on("click", ".openDelete", function () {
-      var flx_cod = $(this).data('cod');
+      var flx_cod = $(this).data('flx');
       $(".modal-footer #flx_codx").val( flx_cod );
-      $(".modal-footer #flx_codxx").html( flx_cod );
+      var dcp_cod = $(this).data('dcp');
+      $(".modal-footer #dcp_codx").val( dcp_cod );
     });
   </script>
 </html>
