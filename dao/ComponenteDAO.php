@@ -43,7 +43,7 @@
                 WHERE  flx_cod = ? and dcp_cod = ?";
 
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, $componente->__get("cmp_sem")));
+        $update->bindValue(1, $componente->__get("cmp_sem"));
         $update->bindValue(2, $componente->__get("cmp_hor"));
         $update->bindValue(3, $componente->__get("flx_cod"));
         $update->bindValue(4, $componente->__get("dcp_cod"));
@@ -135,4 +135,4 @@
     }
 	}
 
-?>	
+?>
