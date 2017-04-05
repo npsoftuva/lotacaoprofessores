@@ -53,13 +53,24 @@
                 <div class="card card-plain">
                   <?php
                     if (isset($_POST["Adicionar"])) {
+                      // criando um objeto Oferta
                       $oferta = new Oferta();
                       $oferta->__set("ofr_cod", $_POST["ofr_coda"]);
-                      $oferta->__set("prd_cod", $_POST["prd_coda"]);
-                      $oferta->__set("flx_cod", $_POST["flx_coda"]);
-                      $oferta->__set("dcp_cod", $_POST["dcp_coda"]);
                       $oferta->__set("ofr_trm", $_POST["ofr_trma"]);
                       $oferta->__set("ofr_vag", $_POST["ofr_vaga"]);
+                      // criando um objeto Periodo para setar em Oferta
+                      $periodo = new Periodo();
+                      $periodo->__set("prd_cod", $_POST["prd_coda"]);
+                      $oferta->__set("prd_cod", $periodo);
+                      // criando um objeto Fluxo para setar em Oferta
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_coda"]);
+                      $oferta->__set("flx_cod", $fluxo);
+                      // criando um objeto Disciplina para setar em Oferta
+                      $disciplina = new Disciplina();
+                      $disciplina->__set("dcp_cod", $_POST["dcp_coda"]);
+                      $oferta->__set("dcp_cod", $disciplina);
+                      
                       if ($ofertaController->register($oferta)) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
@@ -86,13 +97,24 @@
                       <?php }
                     } else
                     if (isset($_POST["Editar"])) {
+                      // criando um objeto Oferta
                       $oferta = new Oferta();
                       $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
-                      $oferta->__set("prd_cod", $_POST["prd_cod"]);
-                      $oferta->__set("flx_cod", $_POST["flx_cod"]);
-                      $oferta->__set("dcp_cod", $_POST["dcp_cod"]);
                       $oferta->__set("ofr_trm", $_POST["ofr_trm"]);
                       $oferta->__set("ofr_vag", $_POST["ofr_vag"]);
+                      // criando um objeto Periodo para setar em Oferta
+                      $periodo = new Periodo();
+                      $periodo->__set("prd_cod", $_POST["prd_cod"]);
+                      $oferta->__set("prd_cod", $periodo);
+                      // criando um objeto Fluxo para setar em Oferta
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                      $oferta->__set("flx_cod", $fluxo);
+                      // criando um objeto Disciplina para setar em Oferta
+                      $disciplina = new Disciplina();
+                      $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
+                      $oferta->__set("dcp_cod", $disciplina);
+                      
                       if ($ofertaController->update($oferta)) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
@@ -132,13 +154,13 @@
                       <tbody>
 <?php foreach ($ofertas as $oferta) { ?>
                         <tr>
-                          <td><?php echo $oferta->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo $oferta->__get("cmp")->__get("flx_cod"); ?></td>
                           <td><?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?></td>
-                          <td><?php echo $oferta->__get("dcp_cod")->__get("dcp_nom"); ?></td>
+                          <td><?php echo $oferta->__get("cmp")->__get("dcp_nom"); ?></td>
                           <td><?php echo $oferta->__get("ofr_trm"); ?></td>
                           <td><?php echo $oferta->__get("ofr_vag"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-flx="<?php echo $oferta->__get("flx_cod")->__get("flx_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-dcp="<?php echo $oferta->__get("dcp_cod")->__get("dcp_nom"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-flx="<?php echo $oferta->__get("cmp")->__get("flx_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-dcp="<?php echo $oferta->__get("cmp")->__get("dcp_nom"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
