@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors',1);
-ini_set('display_startup_erros',1);
-error_reporting(E_ALL);
   require_once('../controller/ComponenteController.php');
 
   $componenteController = new ComponenteController();
@@ -125,14 +122,14 @@ error_reporting(E_ALL);
                       <tbody>
 <?php foreach ($componentes as $componente) { ?>
                         <tr>
-                          <td><?php echo $componente->__get("flx_cod"); ?></td>
-                          <td><?php echo $componente->__get("dcp_cod"); ?></td>
+                          <td><?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?></td>
                           <td><?php echo $componente->__get("cmp_sem"); ?></td>
                           <td><?php echo $componente->__get("cmp_hor"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>

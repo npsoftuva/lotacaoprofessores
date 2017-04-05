@@ -2,6 +2,7 @@
 
   include_once 'Fluxo.class.php';
   include_once 'Disciplina.class.php';
+  include_once 'Fluxo.class.php';
 
   class Componente {
     private $flx_cod;
@@ -10,7 +11,7 @@
     private $cmp_hor;
 
     public function __set($atr, $value){
-			$this->atr = $value;
+			$this->$atr = $value;
 		}
 		
 		public function __get($atr){
