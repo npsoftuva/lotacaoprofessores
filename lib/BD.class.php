@@ -2,6 +2,10 @@
 // @arquivo = /lib/Connection.php
 // MVC = controller
 // objeto = Connection
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+
 class Connection {
   public static function connect () {
     $dbh = new PDO("pgsql:host=localhost;port=5432;dbname=lotacao", 'postgres', '123456', 
