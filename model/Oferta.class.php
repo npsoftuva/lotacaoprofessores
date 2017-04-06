@@ -1,14 +1,12 @@
 <?php
   
-  include_once 'Fluxo.class.php';
-  include_once 'Disciplina.class.php';
+  include_once 'Componente.class.php';
   include_once 'Periodo.class.php';
 
   class Oferta {
     private $ofr_cod;
     private $prd_cod;
-    private $flx_cod;
-    private $dcp_cod;
+    private $cmp;
     private $ofr_trm;
     private $ofr_vag;
 

@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 class Connection {
   public static function connect () {
-    $dbh = new PDO("pgsql:host=localhost;port=5432;dbname=lotacao", 'postgres', '123456', 
+    $dbh = new PDO("pgsql:host=localhost;port=5432;dbname=lotacao", 'postgres', 'admin', 
           array(PDO::ATTR_PERSISTENT => true));
     return $dbh;
   }

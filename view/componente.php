@@ -47,62 +47,73 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
-                 <?php
+                  <?php
                     if (isset($_POST["Adicionar"])) {
-                        $componente = new Componente();
-                        $componente->__set("flx_cod", $_POST["flx_cod"]);
-                        $componente->__set("dcp_cod", $_POST["dcp_cod"]);
-                        $componente->__set("cmp_sem", $_POST["cmp_sem"]);
-                        $componente->__set("cmp_hor", $_POST["cmp_hor"]);
-                        if ($componenteController->register($componente)) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Componente adicionado com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar adicionar o componente.</span>
-                          </div>
-                        <?php }
+                      // criando o objeto Componente
+                      $componente = new Componente();
+                      $componente->__set("cmp_sem", $_POST["cmp_sem"]);
+                      $componente->__set("cmp_hor", $_POST["cmp_hor"]);                                                                      
+                      // criando um objeto Fluxo para setar em Componente
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                      $componente->__set("flx_cod", $fluxo);
+                      // criando um objeto Disciplina para setar em Componente
+                      $disciplina = new Disciplina();
+                      $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
+                      $componente->__set("dcp_cod", $disciplina);
+                      if ($componenteController->register($componente)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Componente adicionado com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar adicionar o componente.</span>
+                        </div>
+                      <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                        if ($componenteController->remove($_POST["flx_codx"],$_POST["dcp_codx"])) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Componente excluído com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar excluir o componente.</span>
-                          </div>
-                        <?php }
+                      if ($componenteController->remove($_POST["flx_codx"],$_POST["dcp_codx"])) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Componente excluído com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar excluir o componente.</span>
+                        </div>
+                      <?php }
                     } else
                     if (isset($_POST["Editar"])) {
-                        $componente = new Componente();
-                        $componente->__set("flx_cod", $_POST["flx_code"]);
-                        $componente->__set("dcp_cod", $_POST["dcp_code"]);
-                        $componente->__set("cmp_sem", $_POST["cmp_seme"]);
-                        $componente->__set("cmp_hor", $_POST["cmp_hore"]);
-
-                        if ($componenteController->update($componente)) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Componente editado com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar editar o componente.</span>
-                          </div>
-                        <?php }
+                      // criando o objeto Componente
+                      $componente = new Componente();
+                      $componente->__set("cmp_sem", $_POST["cmp_seme"]);
+                      $componente->__set("cmp_hor", $_POST["cmp_hore"]);                                                                      
+                      // criando um objeto Fluxo para setar em Componente
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_code"]);
+                      $componente->__set("flx_cod", $fluxo);
+                      // criando um objeto Disciplina para setar em Componente
+                      $disciplina = new Disciplina();
+                      $disciplina->__set("dcp_cod", $_POST["dcp_code"]);
+                      $componente->__set("dcp_cod", $disciplina);
+                      if ($componenteController->update($componente)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Componente editado com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-notebook"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar editar o componente.</span>
+                        </div>
+                      <?php }
                     }
 
-
-
                     $componentes = $componenteController->searchAll();
-                ?>
+                  ?>
                   <div class="header">
                     <h4 class="title">Componentes</h4>
                     <p class="category">

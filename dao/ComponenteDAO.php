@@ -19,7 +19,7 @@
         $register->bindValue(1, $componente->__get("flx_cod")->__get("flx_cod"));
         $register->bindValue(2, $componente->__get("dcp_cod")->__get("dcp_cod"));
         $register->bindValue(3, $componente->__get("cmp_sem"));
-        $register->bindValue(4, $componente->__get("cmp_hor"));
+        $register->bindValue(4, $componente->__get("cmp_hor"));        
         
         if ($register->execute())
           return 1;
