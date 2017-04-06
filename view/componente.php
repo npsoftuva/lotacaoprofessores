@@ -1,9 +1,10 @@
 <?php
   require_once('../controller/ComponenteController.php');
+  require_once('../controller/FluxoController.php');
+  require_once('../controller/DisciplinaController.php');
 
   $componenteController = new ComponenteController();
   $componentes = $componenteController->searchAll();
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -50,8 +51,9 @@
                     if (isset($_POST["Adicionar"])) {
                         $componente = new Componente();
                         $componente->__set("flx_cod", $_POST["flx_cod"]);
-                        $componente->__set("flx_trn", $_POST["flx_trn"]);
-                        $componente->__set("flx_sem", $_POST["flx_sem"]);
+                        $componente->__set("dcp_cod", $_POST["dcp_cod"]);
+                        $componente->__set("cmp_sem", $_POST["cmp_sem"]);
+                        $componente->__set("cmp_hor", $_POST["cmp_hor"]);
                         if ($componenteController->register($componente)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -65,7 +67,7 @@
                         <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                        if ($componenteController->remove($_POST["flx_codx"])) { ?>
+                        if ($componenteController->remove($_POST["flx_codx"],$_POST["dcp_codx"])) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Componente excluído com sucesso!</span>
@@ -79,8 +81,10 @@
                     } else
                     if (isset($_POST["Editar"])) {
                         $componente = new Componente();
-                        $componente->__set("flx_cod", $_POST["flx_cod"]);
-                        $componente->__set("flx_trn", $_POST["flx_trn"]);
+                        $componente->__set("flx_cod", $_POST["flx_code"]);
+                        $componente->__set("dcp_cod", $_POST["dcp_code"]);
+                        $componente->__set("cmp_sem", $_POST["cmp_seme"]);
+                        $componente->__set("cmp_hor", $_POST["cmp_hore"]);
 
                         if ($componenteController->update($componente)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -127,9 +131,9 @@
                           <td><?php echo $componente->__get("cmp_sem"); ?></td>
                           <td><?php echo $componente->__get("cmp_hor"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_cod"); ?>" data-sem="<?php echo $componente->__get("cmp_sem"); ?>" data-hor="<?php echo $componente->__get("cmp_hor"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-flx="<?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $componente->__get("dcp_cod")->__get("dcp_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -169,37 +173,50 @@
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Componente</h4>
-          </div>
-          <div class="modal-body">
-            <form role="form" method="POST">
+          <form role="form" method="POST">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="edit"><span class="pe-7s-refresh-2"></span> Editar Componente</h4>
+            </div>
+            <div class="modal-body">
               <div class="form-group">
-                <div class="form-group">
-                  <label>Código *</label>
-                  <input class="form-control" type="text" name="flx_cod" id="flx_cod" value="" readonly>
-                </div>
-                <div class="form-group">
-                  <label>Situação *</label>
-                  <select class="form-control" name="flx_trn" id="flx_trn">
-                    <option value="0">Integral</option>
-                    <option value="1">Manhã</option>
-                    <option value="2">Tarde</option>
-                    <option value="3">Noite</option>
-                  </select>
-                </div>
-                <div class="form-group">
+                <label>Fluxo *</label>
+                <select class="form-control" name="flx_code" id="flx_code" required>
+                  <?php
+                  $fluxoController = new FluxoController();
+                  $fluxos = $fluxoController->searchAll();
+                  foreach ($fluxos as $fluxo) {
+                  ?>
+                  <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo $fluxo->__get('flx_cod'); ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Disciplina *</label>
+                <select class="form-control" name="dcp_code" id="dcp_code" required>
+                  <?php
+                  $disciplinaController = new DisciplinaController();
+                  $disciplinas = $disciplinaController->searchAll();
+                  foreach ($disciplinas as $disciplina) {
+                  ?>
+                  <option value="<?php echo $disciplina->__get('dcp_cod'); ?>"><?php echo $disciplina->__get('dcp_nom'); ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group">
                 <label>Semestre *</label>
-                <input class="form-control" type="number" placeholder="Quant. de semestres do Componente" name="flx_sem" id="flx_sem" required autocomplete="off" min="1">
+                <select class="form-control" name="cmp_seme" id="cmp_seme" required></select>
               </div>
+              <div class="form-group">
+                <label>Carga horária *</label>
+                <input class="form-control" type="number" placeholder="Carga horária da disciplina" name="cmp_hore" id="cmp_hore" required autocomplete="off" min="1">
               </div>
-          </div>
-          <div class="modal-footer">
-            <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
-            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
-            </form>
-          </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
+              <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -215,21 +232,36 @@
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
-                <label>Código *</label>
-                <input class="form-control" placeholder="Código do Componente" name="flx_cod" required autocomplete="off" maxlength="5" max="5" min="5">
+                <label>Fluxo *</label>
+                <select class="form-control" name="flx_cod" id="flx_cod" required>
+                  <?php
+                  $fluxoController = new FluxoController();
+                  $fluxos = $fluxoController->searchAll();
+                  foreach ($fluxos as $fluxo) {
+                  ?>
+                  <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo $fluxo->__get('flx_cod'); ?></option>
+                  <?php } ?>
+                </select>
               </div>
               <div class="form-group">
-                <label>Turno *</label>
-                <select class="form-control" name="flx_trn">
-                  <option value="0">Integral</option>
-                  <option value="1">Manhã</option>
-                  <option value="2">Tarde</option>
-                  <option value="3">Noite</option>
+                <label>Disciplina *</label>
+                <select class="form-control" name="dcp_cod" required>
+                  <?php
+                  $disciplinaController = new DisciplinaController();
+                  $disciplinas = $disciplinaController->searchAll();
+                  foreach ($disciplinas as $disciplina) {
+                  ?>
+                  <option value="<?php echo $disciplina->__get('dcp_cod'); ?>"><?php echo $disciplina->__get('dcp_nom'); ?></option>
+                  <?php } ?>
                 </select>
               </div>
               <div class="form-group">
                 <label>Semestre *</label>
-                <input class="form-control" type="number" placeholder="Quant. de semestres do Componente" name="flx_sem" required autocomplete="off" min="1">
+                <select class="form-control" name="cmp_sem" id="cmp_sem" required></select>
+              </div>
+              <div class="form-group">
+                <label>Carga horária *</label>
+                <input class="form-control" type="number" placeholder="Carga horária da disciplina" name="cmp_hor" required autocomplete="off" min="1">
               </div>
           </div>
           <div class="modal-footer">
@@ -244,6 +276,7 @@
 
 
   <!--   Core JS Files   -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
   <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
 
@@ -270,12 +303,14 @@
 
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
-      var flx_cod = $(this).data('cod');
-      $(".modal-body #flx_cod").val(flx_cod);
-      var flx_trn = $(this).data('trn');
-      $("#flx_trn").val(flx_trn);
-      var flx_sem = $(this).data('sem');
-      $("#flx_sem").val(flx_sem);
+      var flx_cod = $(this).data('flx');
+      $(".modal-body #flx_code").val(flx_cod);
+      var dcp_cod = $(this).data('dcp');
+      $(".modal-body #dcp_code").val(dcp_cod);
+      var cmp_sem = $(this).data('sem');
+      $("#cmp_seme").val(cmp_sem);
+      var cmp_hor = $(this).data('hor');
+      $("#cmp_hore").val(cmp_hor);
     });
   </script>
 
@@ -287,4 +322,51 @@
       $(".modal-footer #dcp_codx").val( dcp_cod );
     });
   </script>
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+    var fluxo = {};
+
+    <?php
+      $fluxoController = new FluxoController();
+      $fluxos = $fluxoController->searchAll();
+      foreach ($fluxos as $f) { ?>
+      fluxo[<?php echo $f->__get("flx_cod"); ?>] = [
+      <?php for ($i = 1; $i < $f->__get("flx_sem"); $i++) { ?>
+      {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
+      <?php } ?>
+      {display: "<?php echo $f->__get('flx_sem'); ?>", value: "<?php echo $f->__get('flx_sem'); ?>" }
+      ];
+    <?php } ?>
+
+    $("#flx_cod").change(function() {
+      var parent = $(this).val();
+      list(fluxo[parent]);
+    });
+
+    list(fluxo[<?php echo $fluxos[0]->__get('flx_cod');?>]);
+
+    function list(array_list) {
+      $("#cmp_sem").html("");
+      $(array_list).each(function (i) {
+        $("#cmp_sem").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+      });
+    }
+
+    $("#flx_code").change(function() {
+      var parent = $(this).val();
+      liste(fluxo[parent]);
+    });
+
+    liste(fluxo[$('#flx_code').val()]);
+
+    function liste(array_list) {
+      $("#cmp_seme").html("");
+      $(array_list).each(function (i) {
+        $("#cmp_seme").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+      });
+    }
+  });
+</script>
+
 </html>
