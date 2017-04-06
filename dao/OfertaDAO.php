@@ -17,8 +17,8 @@
 
         $register = $dbh->prepare($sql);
         $register->bindValue(1, $oferta->__get("prd_cod")->__get("prd_cod"));
-        $register->bindValue(2, $oferta->__get("cmp")->__get("flx_cod"));
-        $register->bindValue(3, $oferta->__get("cmp")->__get("dcp_cod"));
+        $register->bindValue(2, $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"));
+        $register->bindValue(3, $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_cod"));
         $register->bindValue(4, $oferta->__get("ofr_trm"));
         $register->bindValue(5, $oferta->__get("ofr_vag"));
 
@@ -48,8 +48,8 @@
 
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $oferta->__get("prd_cod")->__get("prd_cod"));
-        $update->bindValue(2, $oferta->__get("cmp")->__get("flx_cod"));
-        $update->bindValue(3, $oferta->__get("cmp")->__get("dcp_cod"));
+        $update->bindValue(2, $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"));
+        $update->bindValue(3, $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_cod"));
         $update->bindValue(4, $oferta->__get("ofr_trm"));
         $update->bindValue(5, $oferta->__get("ofr_vag"));
         $update->bindValue(6, $oferta->__get("ofr_cod"));
@@ -253,47 +253,40 @@
           
           // Seta o objeto Componente em CMP
           $sql = "SELECT * FROM tab_cmp WHERE flx_cod = ? AND dcp_cod = ?";
-          $search = $dbh->prepare($sql);
-          echo $ofr["flx_cod"] . ' ' . $ofr["dcp_cod"];
-          $search->bindValue(1, $ofr["flx_cod"]);
-          $search->bindValue(1, $ofr["dcp_cod"]);
-
-          try {
-           $search->execute();
-            echo "ENTREI NO ERRO";
-            //return 0;
+          $searchAux = $dbh->prepare($sql);          
+          $searchAux->bindValue(1, $ofr["flx_cod"]);
+          $searchAux->bindValue(2, $ofr["dcp_cod"]);
           
-          } catch (PDOException $er) {
-            echo $er->getMessage();
-          }
-
-          $cmp = $search->fetch(PDO::FETCH_ASSOC);
+          if (!$searchAux->execute())
+            return 0;
+          
+          $cmp = $searchAux->fetch(PDO::FETCH_ASSOC);
           $componente = new Componente();
           $componente->__set("cmp_sem", $cmp["cmp_sem"]);
           $componente->__set("cmp_hor", $cmp["cmp_hor"]);
 
           // Seta o objeto Fluxo em COD_FLX
           $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
-          $search = $dbh->prepare($sql);
-          $search->bindValue(1, $cmp["flx_cod"]);
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $cmp["flx_cod"]);
 
-          if (!$search->execute())
+          if (!$searchAux->execute())
             return 0;
 
-          $flx = $search->fetch(PDO::FETCH_ASSOC);
+          $flx = $searchAux->fetch(PDO::FETCH_ASSOC);
           $fluxo = new Fluxo();
           $fluxo->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);        
           $componente->__set("flx_cod", $fluxo);
 
           // Seta o objeto Disciplina em DCP_COD
           $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
-          $search = $dbh->prepare($sql);
-          $search->bindValue(1, $cmp["dcp_cod"]);
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $cmp["dcp_cod"]);
 
-          if (!$search->execute())
+          if (!$searchAux->execute())
             return 0;
 
-          $dcp = $search->fetch(PDO::FETCH_ASSOC);
+          $dcp = $searchAux->fetch(PDO::FETCH_ASSOC);
           $disciplina = new Disciplina();
           $disciplina->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
           $componente->__set("dcp_cod", $disciplina);

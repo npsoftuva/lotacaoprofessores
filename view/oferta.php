@@ -55,7 +55,6 @@
                     if (isset($_POST["Adicionar"])) {
                       // criando um objeto Oferta
                       $oferta = new Oferta();
-                      $oferta->__set("ofr_cod", $_POST["ofr_coda"]);
                       $oferta->__set("ofr_trm", $_POST["ofr_trma"]);
                       $oferta->__set("ofr_vag", $_POST["ofr_vaga"]);
                       // criando um objeto Periodo para setar em Oferta
@@ -65,11 +64,14 @@
                       // criando um objeto Fluxo para setar em Oferta
                       $fluxo = new Fluxo();
                       $fluxo->__set("flx_cod", $_POST["flx_coda"]);
-                      $oferta->__set("flx_cod", $fluxo);
                       // criando um objeto Disciplina para setar em Oferta
                       $disciplina = new Disciplina();
                       $disciplina->__set("dcp_cod", $_POST["dcp_coda"]);
-                      $oferta->__set("dcp_cod", $disciplina);
+                      // criando um objeto Componente para setar em Oferta
+                      $componente = new Componente();
+                      $componente->__set("flx_cod", $fluxo);
+                      $componente->__set("dcp_cod", $disciplina);
+                      $oferta->__set("cmp", $componente);
                       
                       if ($ofertaController->register($oferta)) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -109,11 +111,14 @@
                       // criando um objeto Fluxo para setar em Oferta
                       $fluxo = new Fluxo();
                       $fluxo->__set("flx_cod", $_POST["flx_cod"]);
-                      $oferta->__set("flx_cod", $fluxo);
                       // criando um objeto Disciplina para setar em Oferta
                       $disciplina = new Disciplina();
                       $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
-                      $oferta->__set("dcp_cod", $disciplina);
+                      // criando um objeto Componente para setar em Oferta
+                      $componente = new Componente();
+                      $componente->__set("flx_cod", $fluxo);
+                      $componente->__set("dcp_cod", $disciplina);
+                      $oferta->__set("cmp", $componente);
                       
                       if ($ofertaController->update($oferta)) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -128,7 +133,7 @@
                       <?php }
                     }
 
-                    $ofertas = $ofertaController->searchAll();
+                    $ofertas = $ofertaController->searchAll();                    
                   ?>
                   <div class="header">
                     <h4 class="title">Ofertas</h4>
@@ -154,13 +159,13 @@
                       <tbody>
 <?php foreach ($ofertas as $oferta) { ?>
                         <tr>
-                          <td><?php echo $oferta->__get("cmp")->__get("flx_cod"); ?></td>
+                          <td><?php echo $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?></td>
                           <td><?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?></td>
-                          <td><?php echo $oferta->__get("cmp")->__get("dcp_nom"); ?></td>
+                          <td><?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
                           <td><?php echo $oferta->__get("ofr_trm"); ?></td>
                           <td><?php echo $oferta->__get("ofr_vag"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-flx="<?php echo $oferta->__get("cmp")->__get("flx_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-dcp="<?php echo $oferta->__get("cmp")->__get("dcp_nom"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-flx="<?php echo $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-dcp="<?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -221,23 +226,11 @@
               <div class="form-group">
                 <label>Período *</label>
                 <select class="form-control" name="prd_cod" id="prd_cod">
-                  <option value=""></option>
-                  <?php
-                    $periodos = $periodoController->searchAll();
-                    foreach ($periodos as $periodo) { ?>
-                    <option value="<?php echo $periodo->__get("prd_cod"); ?>"><?php echo $periodo->__get("prd_cod"); ?></option>
-                  <?php } ?>
                 </select>
               </div>
               <div class="form-group">
                 <label>Disciplina *</label>
                 <select class="form-control" name="dcp_cod" id="dcp_cod">
-                  <option value=""></option>
-                  <?php
-                    $disciplinas = $disciplinaController->searchAll();
-                    foreach ($disciplinas as $disciplina) { ?>
-                    <option value="<?php echo $disciplina->__get("dcp_cod"); ?>"><?php echo $disciplina->__get("dcp_nom"); ?></option>
-                  <?php } ?>
                 </select>
               </div>
               <div class="form-group">
@@ -268,7 +261,6 @@
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
-              <input type="hidden" name="ofr_coda" id="ofr_coda" value="">
               <div class="form-group">
                 <label>Fluxo *</label>
                 <select class="form-control" name="flx_coda" id="flx_coda">
@@ -283,23 +275,11 @@
               <div class="form-group">
                 <label>Período *</label>
                 <select class="form-control" name="prd_coda" id="prd_coda">
-                  <option value=""></option>
-                  <?php
-                    $periodos = $periodoController->searchAll();
-                    foreach ($periodos as $periodo) { ?>
-                    <option value="<?php echo $periodo->__get("prd_cod"); ?>"><?php echo $periodo->__get("prd_cod"); ?></option>
-                  <?php } ?>
                 </select>
               </div>
               <div class="form-group">
                 <label>Disciplina *</label>
                 <select class="form-control" name="dcp_coda" id="dcp_coda">
-                  <option value=""></option>
-                  <?php
-                    $disciplinas = $disciplinaController->searchAll();
-                    foreach ($disciplinas as $disciplina) { ?>
-                    <option value="<?php echo $disciplina->__get("dcp_cod"); ?>"><?php echo $disciplina->__get("dcp_nom"); ?></option>
-                  <?php } ?>
                 </select>
               </div>
               <div class="form-group">
@@ -349,7 +329,7 @@
 
   <script src="assets/js/mask.js"></script>
 
-  <!-- <script type="text/javascript">
+   <script type="text/javascript">
     $(document).ready(function(){
       var periodo = [
         {display: php echo "'TESTE'";?>, value: "dark-chocolate" },
@@ -382,7 +362,7 @@
         });
       }
     });
-  </script> -->
+  </script>
   
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
