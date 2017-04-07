@@ -3,11 +3,13 @@
   require_once('../controller/FluxoController.php');
   require_once('../controller/PeriodoController.php');
   require_once('../controller/DisciplinaController.php');
+  require_once('../controller/ComponenteController.php');
 
   $ofertaController = new OfertaController();
   $fluxoController = new FluxoController();
   $periodoController = new PeriodoController();
   $disciplinaController = new DisciplinaController();
+  $componenteController = new ComponenteController();
 
 ?>
 <!doctype html>
@@ -264,7 +266,6 @@
               <div class="form-group">
                 <label>Fluxo *</label>
                 <select class="form-control" name="flx_coda" id="flx_coda">
-                  <option value=""></option>
                   <?php
                     $fluxos = $fluxoController->searchAll();
                     foreach ($fluxos as $fluxo) { ?>
@@ -328,41 +329,6 @@
   <script src="assets/js/demo.js"></script>
 
   <script src="assets/js/mask.js"></script>
-
-   <script type="text/javascript">
-    $(document).ready(function(){
-      var periodo = [
-        {display: php echo "'TESTE'";?>, value: "dark-chocolate" },
-        {display: "Gianduja chocolate", value: "gianduja-chocolate" }];
-
-      var vegetables = [
-        {display: "Carrot", value: "carrot" },
-        {display: "Cauliflower", value: "cauliflower" }];
-
-      $("#flx_coda").change(function() {
-        var parent = $(this).val();
-        switch(parent) {
-          case '20121':
-            list(periodo);
-            break;
-          case '20161':
-            list(vegetables);
-            break;             
-          default: //default child option is blank
-            $("#prd_coda").html('');
-            break;
-        }
-      });
-
-      //function to populate child select box
-      function list(array_list) {
-        $("#prd_coda").html(""); //reset child options
-        $(array_list).each(function (i) { //populate child options
-          $("#prd_coda").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
-        });
-      }
-    });
-  </script>
   
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
@@ -390,6 +356,94 @@
   <script>
     $(".alert").fadeTo(1000, 500).slideUp(1000, function(){
       $(".alert").slideUp(4000);
+    });
+  </script>
+  
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var fluxo = {};
+      var disciplina = {};
+      
+      <?php
+      $fluxos = $fluxoController->searchAll();
+      foreach ($fluxos as $f) { ?>
+      fluxo[<?php echo $f->__get("flx_cod")?>] = [
+        <?php for ($i = 1; $i < $f->__get("flx_sem"); $i++) { ?>
+          {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
+        <?php } ?>
+        {display: "<?php echo $f->__get("flx_sem"); ?>", value: "<?php echo $f->__get("flx_sem"); ?>"}
+      ];
+      <?php } ?>
+      
+      <?php
+      foreach ($fluxos as $f) { 
+        for ($i = 1; $i <= $f->__get("flx_sem"); $i++) { 
+          $disciplinas = $componenteController->searchDisciplinas($f->__get("flx_cod"), $i); 
+          if ($disciplinas != null) {?>
+            disciplina[<?php echo $f->__get("flx_cod").$i; ?>] = [
+              <?php foreach ($disciplinas as $d) { ?>
+              {display: "<?php echo $d->__get("dcp_nom"); ?>", value: "<?php echo $d->__get("dcp_cod"); ?>" },
+              <?php } ?>
+            ];
+          <?php }
+        }
+      } ?>
+        
+      $("#flx_coda").change(function() {
+        var parent = $(this).val();
+        listaPeriodosA(fluxo[parent]);
+      });
+      
+      function listaPeriodosA(array_list) {
+        $("#prd_coda").html("");
+        $(array_list).each(function (i) {
+          $("#prd_coda").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+        });
+      }
+      
+      $("#flx_cod").change(function() {
+        var parent = $(this).val();
+        listaPeriodosE(fluxo[parent]);
+      });
+      
+      function listaPeriodosE(array_list) {
+        $("#prd_cod").html("");
+        $(array_list).each(function (i) {
+          $("#prd_cod").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+        });
+      }
+      
+      $("#prd_coda").change(function() {
+        var parent = $(this).val();
+        listaDisciplinasA(disciplina[$("#flx_coda").val() + parent]);
+      });
+      
+      function listaDisciplinasA(array_list) {
+        $("#dcp_coda").html("");
+        $(array_list).each(function(i) {
+          $("#dcp_coda").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+        });
+      }
+      
+      $("#prd_cod").change(function() {
+        var parent = $(this).val();
+        listaDisciplinasE(disciplina[$("#flx_cod").val() + parent]);
+      });
+      
+      function listaDisciplinasE(array_list) {
+        $("#dcp_cod").html("");
+        $(array_list).each(function(i) {
+          $("#dcp_cod").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+        });
+      }
+      //INSERT INTO tab_ofr (prd_cod, flx_cod, dcp_cod, ofr_trm, ofr_vag) VALUES (3, 20161, 2, 3, 200);
+      /**
+      select distinct o.prd_cod
+      from tab_ofr as o, tab_cmp as c, tab_prd as p 
+      where o.flx_cod = c.flx_cod and
+            o.prd_cod = p.prd_cod and
+            o.flx_cod = 20161;
+      */
     });
   </script>
 </html>

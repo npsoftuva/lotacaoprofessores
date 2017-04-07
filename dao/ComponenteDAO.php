@@ -185,6 +185,47 @@
       }
 
     }
+    
+    public function searchDisciplinas($flx_cod, $cmp_sem) {
+      
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT dcp_cod FROM tab_cmp WHERE flx_cod = ? AND cmp_sem = ?";
+
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $flx_cod);
+        $search->bindValue(2, $cmp_sem);
+
+        if (!$search->execute())
+          return 0;
+
+        $disciplinas = null;
+        
+        while ($dcp = $search->fetch(PDO::FETCH_ASSOC)) {
+          $disciplina = new Disciplina();
+          $disciplina->__set("dcp_cod", $dcp["dcp_cod"]);
+
+          // Seta o nome da disciplina em $disciplina
+          $sql = "SELECT dcp_nom FROM tab_dcp WHERE dcp_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $dcp["dcp_cod"]);
+
+          if (!$searchAux->execute())
+            return 0;
+
+          $dcp_nom = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $disciplina->__set("dcp_nom", $dcp_nom["dcp_nom"]);
+          $disciplinas[] = $disciplina;
+        }
+        
+        return $disciplinas;
+      } catch (Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
+      
+    }
   }
 
-?>  
+?>
