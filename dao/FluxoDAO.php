@@ -1,5 +1,4 @@
 <?php
-
  // @arquivo = /dao/FluxoDAO.php
  // MVC = controller
  // objeto = Fluxo
@@ -8,7 +7,8 @@
   require_once('../lib/BD.class.php');
 
   class FluxoDAO {
-    public function register (Fluxo $fluxo){
+    
+    public function register(Fluxo $fluxo) {
 
       try {
         $dbh = Connection::connect();
@@ -24,20 +24,21 @@
           return 1;
 
         return 0;
-      } catch (Exception $e){
+      } catch(Exception $e) {
          //echo "Failed: ". $e->getMessage();
         return 0;
       }
     }
 
-    public function update (Fluxo $fluxo) {
+    public function update(Fluxo $fluxo) {
+      
       try {
         $dbh = Connection::connect();
 
         $sql = "UPDATE tab_flx
-        SET     flx_trn = ?,
-                flx_sem = ?
-        WHERE   flx_cod = ?";
+                SET    flx_trn = ?,
+                       flx_sem = ?
+                WHERE  flx_cod = ?";
 
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $fluxo->__get("flx_trn"));
@@ -48,14 +49,14 @@
           return 1;
         
         return 0;
-      } catch (Exception $e) {
+      } catch(Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
     }
 
-    public function remove ($flx_cod){
+    public function remove($flx_cod) {
 
       try {
         $dbh = Connection::connect();
@@ -69,14 +70,14 @@
           return 1;
         
         return 0;
-      } catch (Exception $e){
+      } catch(Exception $e) {
         //echo "Failed: "  . $e->getMessage();
         return 0;
       }
 
     }
 
-    public function search($flx_cod){
+    public function search($flx_cod) {
 
       try {
         $dbh = Connection::connect();
@@ -91,22 +92,22 @@
 
         $flx = $search->fetch(PDO::FETCH_ASSOC);
         $aux = new Fluxo();
-        $aux = setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
+        $aux->setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
 
-        return aux;
-      } catch(Exception $e){
+        return $aux;
+      } catch(Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
     }
 
-    public function searchAll(){
+    public function searchAll() {
 
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_flx ORDER BY flx_cod";
+        $sql = "SELECT * FROM tab_flx ORDER BY flx_cod DESC";
 
         $search = $dbh->prepare($sql);
         
@@ -120,11 +121,35 @@
         }
 
         return $flxs;
-      } catch(Exception $e){
+      } catch(Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
+    }
+    
+    public function searchLastCod() {
+      
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT * FROM tab_flx
+                WHERE flx_cod = (SELECT MAX(flx_cod) FROM tab_flx)";
+
+        $search = $dbh->prepare($sql);
+        
+        if (!$search->execute())
+          return 0;
+
+        $flx = $search->fetch(PDO::FETCH_ASSOC);
+        $aux = new Fluxo();
+        $aux->setAll($flx["flx_cod"],$flx["flx_trn"], $flx["flx_sem"]);
+
+        return $aux;
+      } catch(Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
     }
   }
 ?>
