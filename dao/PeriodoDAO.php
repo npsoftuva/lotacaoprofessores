@@ -129,7 +129,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_prd ORDER BY prd_ini";
+        $sql = "SELECT * FROM tab_prd ORDER BY prd_cod DESC";
 
         $search = $dbh->prepare($sql);
         
@@ -172,5 +172,57 @@
 
     }
 
+    public function searchLastCod() {
+      
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT * 
+                FROM   tab_prd
+                WHERE  prd_cod = (SELECT MAX(prd_cod) FROM tab_prd)";
+
+        $search = $dbh->prepare($sql);
+        
+        if (!$search->execute())
+          return 0;
+
+        // Inicia o objeto Periodo
+        $per = $search->fetch(PDO::FETCH_ASSOC);
+        $periodo = new Periodo();
+        $periodo->__set("prd_cod", $per["prd_cod"]);
+
+        // Seta o objeto Calendario em PRD_INI
+        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $per["prd_ini"]);
+        
+        if (!$search->execute())
+          return 0;
+
+        $cld = $search->fetch(PDO::FETCH_ASSOC);
+        $prd_ini = new Calendario();
+        $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+        $periodo->__set("prd_ini", $prd_ini);
+
+        // Seta o objeto Calendario em PRD_FIM
+        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $per["prd_fim"]);
+        
+        if (!$search->execute())
+          return 0;
+
+        $cld = $search->fetch(PDO::FETCH_ASSOC);
+        $prd_fim = new Calendario();
+        $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+        $periodo->__set("prd_fim", $prd_fim);
+
+        return $periodo;
+      } catch (Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
+      
+    }
   }
 ?>

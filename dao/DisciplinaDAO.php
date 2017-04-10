@@ -1,5 +1,4 @@
 <?php
-
 // @arquivo = /dao/DisciplinaDAO.php
 // MVC = controller
 // objeto = Disciplina
@@ -9,7 +8,7 @@
 	
   class DisciplinaDAO {
 	
-    public function register (Disciplina $disciplina){
+    public function register(Disciplina $disciplina) {
 
       try {
         $dbh = Connection::connect();
@@ -23,34 +22,37 @@
           return 1;
 
         return 0;
-      } catch (Exception $e){
-          //echo "Failed: ". $e->getMessage();
+      } catch(Exception $e) {
+        //echo "Failed: ". $e->getMessage();
+        return 0;
       }
     }
 		
-    public function update (Disciplina $disciplina){
+    public function update(Disciplina $disciplina) {
 			
       try {
         $dbh = Connection::connect();
 				
         $sql = "UPDATE tab_dcp
-        SET     dcp_nom = ?
-        WHERE   dcp_cod = ?";
+                SET    dcp_nom = ?
+                WHERE  dcp_cod = ?";
 				
         $update = $dbh->prepare($sql);
         $update->bindValue(1, strtoupper($disciplina->__get("dcp_nom")));
         $update->bindValue(2, $disciplina->__get("dcp_cod"));
+        
         if ($update->execute())
           return 1;
+        
         return 0;
-      } catch (Exception $e) {
+      } catch(Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 			
-      return 0;
     }
 		
-    public function remove ($dcp_cod){
+    public function remove($dcp_cod) {
 			
       try {
         $dbh = Connection::connect();
@@ -64,14 +66,14 @@
           return 1;
 
         return 0;
-      } catch (Exception $e){
+      } catch(Exception $e) {
         //echo "Failed: "  . $e->getMessage();
+        return 0;
       }
 			
-      return 0;
     }
 		
-    public function search($dcp_cod){
+    public function search($dcp_cod) {
 			
       try {
         $dbh = Connection::connect();
@@ -80,22 +82,23 @@
 				
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $dcp_cod);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 				
         $dcp = $search->fetch(PDO::FETCH_ASSOC);
         $aux = new Disciplina(); 
         $aux = setAll($dcp["dcp_cod"],$dcp["dcp_nom"]);
 				
         return aux;
-				
-      } catch(Exception $e){
+      } catch(Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+        return 0;
       }
 			
-      return 0;
     }
 		
-    public function searchAll(){
+    public function searchAll() {
 			
       try {
         $dbh = Connection::connect();
@@ -103,6 +106,7 @@
         $sql = "SELECT * FROM tab_dcp ORDER BY dcp_nom";
 				
         $search = $dbh->prepare($sql);
+        
         if (!$search->execute())
           return 0;
 				
@@ -113,12 +117,42 @@
         }
 				
         return $dcps;
-				
-        } catch(Exception $e){
-          //die("Unable to connect: " . $e->getMessage());
-        }
+      } catch(Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
 			
-        return 0;			
-      }		
     }
+    
+    public function disciplinasFromSemestre($sem) {
+      
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT d.dcp_cod, d.dcp_nom FROM tab_cmp AS c INNER JOIN tab_dcp AS d
+                ON d.dcp_cod = c.dcp_cod
+                WHERE c.cmp_sem = ?";
+
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $sem);
+        
+        if (!$search->execute())
+          return 0;
+
+        $dcps = null;
+        
+        while ($dcp = $search->fetch(PDO::FETCH_ASSOC)){
+          $aux = new Disciplina();
+          $aux->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
+          $dcps[] = $aux;
+        }
+				
+        return $dcps;
+      } catch(Exception $e) {
+        //die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
+      
+    }
+  }
 ?>

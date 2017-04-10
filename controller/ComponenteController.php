@@ -31,6 +31,11 @@ class ComponenteController {
     $componenteDAO = new ComponenteDAO();
     return $componenteDAO->searchAll();
   }
+  
+  public function searchDisciplinas($flx_cod, $cmp_sem) {
+    $componenteDAO = new ComponenteDAO();
+    return $componenteDAO->searchDisciplinas($flx_cod, $cmp_sem);
+  }
 
 }
 

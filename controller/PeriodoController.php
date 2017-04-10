@@ -42,7 +42,11 @@ class PeriodoController {
     }
     return $periodos;
   }
-
+  
+  public function searchLastCod() {
+    $periodoDAO = new PeriodoDAO();
+    return $periodoDAO->searchLastCod();
+  }
+  
 }
-
 ?>
