@@ -11,7 +11,7 @@
     private $cmp_hor;
 
     public function __set($atr, $value){
-			$this->$atr = $value;
+      $this->$atr = $value;
 		}
 		
 		public function __get($atr){
