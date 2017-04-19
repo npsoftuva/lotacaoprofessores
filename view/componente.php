@@ -1,4 +1,5 @@
 <?php
+  require_once('verificaSessao.php');
   require_once('../controller/ComponenteController.php');
   require_once('../controller/FluxoController.php');
   require_once('../controller/DisciplinaController.php');
