@@ -1,4 +1,5 @@
 <?php
+  require_once('verificaSessao.php');
   require_once('../controller/PeriodoController.php');
 
   $periodoController = new PeriodoController();

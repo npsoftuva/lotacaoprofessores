@@ -56,6 +56,21 @@
           <i class="pe-7s-folder"></i><p>Lotação</p>
         </a>
       </li>
+      <li <?php if ($atual == "oferta") echo 'class="active"';?> >
+        <a href="oferta.php">
+          <i class="pe-7s-folder"></i><p>Oferta</p>
+        </a>
+      </li>
+      <li <?php if ($atual == "componente") echo 'class="active"';?> >
+        <a href="componente.php">
+          <i class="pe-7s-folder"></i><p>Componente</p>
+        </a>
+      </li>
+      <li <?php if ($atual == "usuario") echo 'class="active"';?> >
+        <a href="usuario.php">
+          <i class="pe-7s-user"></i><p>Usuário</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>

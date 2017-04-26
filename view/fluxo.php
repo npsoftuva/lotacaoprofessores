@@ -1,4 +1,5 @@
 <?php
+  require_once('verificaSessao.php');
   require_once('../controller/FluxoController.php');
 
   $fluxoController = new FluxoController();
