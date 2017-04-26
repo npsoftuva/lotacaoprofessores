@@ -51,6 +51,11 @@
           <i class="pe-7s-folder"></i><p>Período</p>
         </a>
       </li>
+      <li <?php if ($atual == "lotacao") echo 'class="active"';?> >
+        <a href="lotacao.php">
+          <i class="pe-7s-folder"></i><p>Lotação</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
