@@ -1,5 +1,7 @@
 <?php
 
+  include_once 'Oferta.class.php';
+
   class Lotacao {
     private $lot_cod;
     private $ofr_cod;

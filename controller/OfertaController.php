@@ -32,6 +32,11 @@ class OfertaController {
     return $ofertaDAO->searchAll();
   }
 
+  public function gerarFrequencia ($ofr_cod) {
+    $ofertaDAO = new OfertaDAO();
+    return $ofertaDAO->gerarFrequencia($ofr_cod);
+  }
+
 }
 
 ?>
