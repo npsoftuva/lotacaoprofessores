@@ -1,7 +1,12 @@
 <?php
-  ini_set('display_errors', 1);
-  ini_set('display_startup_errors', 1);
-  error_reporting(E_ALL);
+  require_once('verificaSessao.php');
+  require_once('../controller/LotacaoController.php');
+  require_once('../controller/OfertaController.php');
+
+  $lotacaoController = new LotacaoController();
+  $lotacoes = $lotacaoController->searchAll();
+
+  $ofertaController = new OfertaController();
 ?>
 <!doctype html>
 <html lang="en">
@@ -72,24 +77,38 @@
                         <th>Ações</th>
                       </thead>
                       <tbody>
+<?php if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
                         <tr>
-                          <td>1º</td>
-                          <td>Cálculo I</td>
-                          <td>2016.1</td>
-                          <td>1</td>
-                          <td>80</td>
-                          <td>5</td>
-                          <td>19</td>
-                          <td>5BCD 6EF</td>
-                          <td>50</td>
-                          <td>37</td>
-                          <td>Marcus Fábio Lima Ferreira</td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem"); ?></td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("ofr_trm"); ?></td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_hor"); ?></td>
+                          <td><?php echo $lotacao->__get("lot_qtd"); ?></td>
+                          <td><?php echo count($ofertaController->gerarFrequencia($lotacao->__get("ofr_cod")->__get("ofr_cod"))); ?></td>
+                          <td><?php
+                            foreach ($lotacao->__get("lot_dia") as $dia) {
+                              echo $dia . "<br>";
+                            }
+                        ?></td>
+                          <td><?php echo $lotacao->__get("ofr_cod")->__get("ofr_vag"); ?></td>
+                          <td><?php
+                            foreach ($lotacao->__get("sla_cod") as $sala) {
+                              echo $sala . "<br>";
+                            }
+                        ?></td>
+                          <td><?php
+                            foreach ($lotacao->__get("prf_cod") as $professor) {
+                              echo $professor->__get("prf_nom") . "<br>";
+                            }
+                        ?></td>
                           <td>
                             <a data-toggle="modal" data-cod="1" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="1" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
+<?php } ?>
                       </tbody>
                     </table>
                   </div>

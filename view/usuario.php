@@ -119,7 +119,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($usuarios as $usuario) { ?>
+<?php if ($usuarios) foreach ($usuarios as $usuario) { ?>
                         <tr>
                           <td><?php echo $usuario->__get("usu_log"); ?></td>
                           <td><?php echo $usuario->__get("usu_sen"); ?></td>
