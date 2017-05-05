@@ -5,7 +5,7 @@
   $usuario = $usuarioController->search($_POST['usu_log'], $_POST['usu_sen']);
 
   if ($usuario == null) {
-    echo 'Login ou senha inválidos';
+    echo 'Login ou senha inválido(s)';
   } else {
     if (!isset($_SESSION))
       session_start();

@@ -81,7 +81,6 @@
                       $usuario = new Usuario();
                       $usuario->__set("usu_cod", $_POST["usu_cod"]);
                       $usuario->__set("usu_log", $_POST["usu_log"]);
-                      $usuario->__set("usu_sen", $_POST["usu_sen"]);
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
                       if ($usuarioController->update($usuario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -94,6 +93,22 @@
                         <span data-notify="message">Ocorreu um erro ao tentar editar o usuário.</span>
                       </div>
                     <?php }
+                    } else
+                    if (isset($_POST["NewPass"])) {
+                      $usuario = new Usuario();
+                      $usuario->__set("usu_cod", $_POST["usu_codp"]);
+                      $usuario->__set("usu_sen", $_POST["usu_senp"]);
+                      if ($usuarioController->newPassword($usuario)) { ?>
+                      <div class="alert alert-success alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Senha alterada com sucesso!</span>
+                      </div>  
+                      <?php } else { ?>
+                      <div class="alert alert-danger alert-with-icon" data-notify="container">
+                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="message">Ocorreu um erro ao tentar editar a senha do usuário.</span>
+                      </div>
+                      <?php }
                     }
 
                     $usuarios = $usuarioController->searchAll();
@@ -113,19 +128,18 @@
                   <div class="content table-responsive table-full-width">
                     <table class="table table-striped table-hover" id="dataTables-example">
                       <thead>
-                        <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Login</th>
-                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Senha</th>
-                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Tipo</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
+                        <th class="col-xs-5 col-sm-5 col-md-5 col-lg-5">Login</th>
+                        <th class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Nível</th>
+                        <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Ações</th>
                       </thead>
                       <tbody>
 <?php foreach ($usuarios as $usuario) { ?>
                         <tr>
                           <td><?php echo $usuario->__get("usu_log"); ?></td>
-                          <td><?php echo $usuario->__get("usu_sen"); ?></td>
                           <td><?php echo $usuario->__get("usu_tpo") ? "Secretário(a)" : "Coordenador(a)"; ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" data-sen="<?php echo $usuario->__get("usu_sen"); ?>" data-tpo="<?php echo $usuario->__get("usu_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" title="Nova senha" class="openNewPass btn btn-info" href="#new-pass"><span class="pe-7s-lock" aria-hidden="true"></span> </a>
+                            <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" data-tpo="<?php echo $usuario->__get("usu_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -180,11 +194,7 @@
                   <input class="form-control" type="text" name="usu_log" id="usu_log" value="" maxlength="25" required autocomplete="off">
                 </div>
                 <div class="form-group">
-                  <label>Senha</label>
-                  <input class="form-control" type="text" name="usu_sen" id="usu_sen" value="" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                  <label>Tipo *</label>
+                  <label>Nível *</label>
                   <select class="form-control" name="usu_tpo" id="usu_tpo">
                     <option value="0">Coordenador(a)</option>
                     <option value="1">Secretário(a)</option>
@@ -213,16 +223,16 @@
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Login *</label>
-                <input class="form-control" placeholder="Login do Usuário" name="usu_log" maxlength="25" required autocomplete="off">
+                <input class="form-control" placeholder="Login do Usuário" name="usu_log" required minlength="5" maxlength="25" autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Senha *</label>
-                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required autocomplete="off">
+                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required minlength="8" autocomplete="off">
               </div>
               <div class="form-group">
-                <label>Tipo *</label>
-                <select class="form-control" name="usu_tpo">
-                  <option value=""></option>
+                <label>Nível *</label>
+                <select class="form-control" required name="usu_tpo">
+                  <option value="">Selecione uma opção</option>
                   <option value="0">Coordenador(a)</option>
                   <option value="1">Secretário(a)</option>
                 </select>
@@ -236,9 +246,37 @@
         </div>
       </div>
     </div>
+  
+    <!-- Modal Nova Senha -->
+    <div class="modal fade" id="new-pass" tabindex="-1" role="dialog" aria-labelledby="new-pass">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="new-pass"><span class="pe-7s-lock"></span> Nova senha</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST">
+              <input type="hidden" name="usu_codp" id="usu_codp" value="">
+              <div class="form-group">
+                <label>Nova senha *</label>
+                <input class="form-control" placeholder="Nova senha" name="usu_senp" id="usu_senp" required minlength="8" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Repita a senha *</label>
+                <input class="form-control" placeholder="Repita a senha" name="rep_senp" id="rep_senp" required minlength="8" autocomplete="off">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="NewPass" id="NewPass">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
-
-
+  
   <!--   Core JS Files   -->
   <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
   <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
@@ -270,8 +308,6 @@
       $(".modal-body #usu_cod").val(usu_cod);
       var usu_log = $(this).data('log');
       $(".modal-body #usu_log").val(usu_log);
-      var usu_sen = $(this).data('sen');
-      $(".modal-body #usu_sen").val(usu_sen);
       var usu_tpo = $(this).data('tpo');
       $("#usu_tpo").val(usu_tpo);
     });
@@ -283,6 +319,24 @@
       $(".modal-footer #usu_codx").val(usu_cod);
       var usu_log = $(this).data('log');
       $(".modal-footer #usu_logx").html(usu_log);
+    });
+  </script>
+  
+  <script type="text/javascript">
+    $(document).on("click", ".openNewPass", function () {
+      var usu_cod = $(this).data('cod');
+      $(".modal-body #usu_codp").val(usu_cod);
+    });
+  </script>
+  
+  <script type="text/javascript">
+    $("#NewPass").click(function() {
+      var usu_sen = $("#usu_senp").val();
+      var rep_sen = $("#rep_senp").val();
+      
+      if (usu_sen != rep_sen) {
+        return false;
+      }
     });
   </script>
   

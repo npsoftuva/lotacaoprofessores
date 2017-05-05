@@ -31,5 +31,10 @@ class UsuarioController {
     $usuarioDAO = new UsuarioDAO();
     return $usuarioDAO->searchAll();
   }
+  
+  public function newPassword(Usuario $usuario) {
+    $usuarioDAO = new UsuarioDAO();
+    return $usuarioDAO->newPassword($usuario);
+  }
 }
 ?>
