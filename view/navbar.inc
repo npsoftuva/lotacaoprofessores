@@ -28,6 +28,11 @@
           </ul>
         </li>-->
         <li>
+          <a href="#">
+            <p>Perfil</p>
+          </a>
+        </li>
+        <li>
           <a href="logout.php">
             <p>Sair</p>
           </a>
