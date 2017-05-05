@@ -133,7 +133,7 @@
                         <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($usuarios as $usuario) { ?>
+<?php if ($usuarios) foreach ($usuarios as $usuario) { ?>
                         <tr>
                           <td><?php echo $usuario->__get("usu_log"); ?></td>
                           <td><?php echo $usuario->__get("usu_tpo") ? "Secretário(a)" : "Coordenador(a)"; ?></td>

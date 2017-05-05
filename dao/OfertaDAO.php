@@ -99,92 +99,92 @@
         if (!$search->execute())
           return 0;
 
-        // Inicia o objeto Oferta
         $ofr = $search->fetch(PDO::FETCH_ASSOC);
-        $oferta = new Oferta();
-        $oferta->__set("ofr_cod", $ofr["ofr_cod"]);
-        $oferta->__set("ofr_trm", $ofr["ofr_trm"]);
-        $oferta->__set("ofr_vag", $ofr["ofr_vag"]);
-            
-        // Seta o objeto Período em PRD_COD
-        $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $ofr["prd_cod"]);
-        
-        if (!$search->execute())
-          return 0;
 
-        $per = $search->fetch(PDO::FETCH_ASSOC);
-        $periodo = new Periodo();
-        $periodo->__set("prd_cod", $per["prd_cod"]);
+          $oferta = new Oferta();
+          $oferta->__set("ofr_cod", $ofr["ofr_cod"]);
+          $oferta->__set("ofr_trm", $ofr["ofr_trm"]);
+          $oferta->__set("ofr_vag", $ofr["ofr_vag"]);
+          
+          // Seta o objeto Período em PRD_COD
+          $sql = "SELECT * FROM tab_prd WHERE prd_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $ofr["prd_cod"]);
+          
+          if (!$searchAux->execute())
+            return 0;
 
-        // Seta o objeto Calendario em PRD_INI
-        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $per["prd_ini"]);
-        
-        if (!$search->execute())
-          return 0;
+          $per = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $periodo = new Periodo();
+          $periodo->__set("prd_cod", $per["prd_cod"]);
 
-        $cld = $search->fetch(PDO::FETCH_ASSOC);
-        $prd_ini = new Calendario();
-        $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-        $periodo->__set("prd_ini", $prd_ini);
+          // Seta o objeto Calendario em PRD_INI
+          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $per["prd_ini"]);
+          
+          if (!$searchAux->execute())
+            return 0;
 
-        // Seta o objeto Calendario em PRD_FIM
-        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $per["prd_fim"]);
-        
-        if (!$search->execute())
-          return 0;
+          $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $prd_ini = new Calendario();
+          $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $periodo->__set("prd_ini", $prd_ini);
 
-        $cld = $search->fetch(PDO::FETCH_ASSOC);
-        $prd_fim = new Calendario();
-        $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-        $periodo->__set("prd_fim", $prd_fim);
-        $oferta->__set("prd_cod", $periodo);
+          // Seta o objeto Calendario em PRD_FIM
+          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $per["prd_fim"]);
+          
+          if (!$searchAux->execute())
+            return 0;
 
-        // Seta o objeto Componente em CMP
-        $sql = "SELECT * FROM tab_cmp WHERE flx_cod = ? AND dcp_cod = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $ofr["flx_cod"]);
-        $search->bindValue(1, $ofr["dcp_cod"]);
-        
-        if (!$search->execute())
-          return 0;
+          $cld = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $prd_fim = new Calendario();
+          $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $periodo->__set("prd_fim", $prd_fim);
+          $oferta->__set("prd_cod", $periodo);
+          
+          // Seta o objeto Componente em CMP
+          $sql = "SELECT * FROM tab_cmp WHERE flx_cod = ? AND dcp_cod = ?";
+          $searchAux = $dbh->prepare($sql);          
+          $searchAux->bindValue(1, $ofr["flx_cod"]);
+          $searchAux->bindValue(2, $ofr["dcp_cod"]);
+          
+          if (!$searchAux->execute())
+            return 0;
+          
+          $cmp = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $componente = new Componente();
+          $componente->__set("cmp_sem", $cmp["cmp_sem"]);
+          $componente->__set("cmp_hor", $cmp["cmp_hor"]);
 
-        $cmp = $search->fetch(PDO::FETCH_ASSOC);
-        $componente = new Componente();
-        $componente->__set("cmp_sem", $cmp["cmp_sem"]);
-        $componente->__set("cmp_hor", $cmp["cmp_hor"]);
-        
-        // Seta o objeto Fluxo em COD_FLX
-        $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $cmp["flx_cod"]);
-        
-        if (!$search->execute())
-          return 0;
+          // Seta o objeto Fluxo em COD_FLX
+          $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $cmp["flx_cod"]);
 
-        $flx = $search->fetch(PDO::FETCH_ASSOC);
-        $fluxo = new Fluxo();
-        $fluxo->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);        
-        $componente->__set("flx_cod", $fluxo);
+          if (!$searchAux->execute())
+            return 0;
 
-        // Seta o objeto Disciplina em DCP_COD
-        $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $cmp["dcp_cod"]);
-        
-        if (!$search->execute())
-          return 0;
+          $flx = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $fluxo = new Fluxo();
+          $fluxo->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);        
+          $componente->__set("flx_cod", $fluxo);
 
-        $dcp = $search->fetch(PDO::FETCH_ASSOC);
-        $disciplina = new Disciplina();
-        $disciplina->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
-        $componente->__set("dcp_cod", $disciplina);
-        $oferta->__set("cmp", $componente);
+          // Seta o objeto Disciplina em DCP_COD
+          $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
+          $searchAux = $dbh->prepare($sql);
+          $searchAux->bindValue(1, $cmp["dcp_cod"]);
+
+          if (!$searchAux->execute())
+            return 0;
+
+          $dcp = $searchAux->fetch(PDO::FETCH_ASSOC);
+          $disciplina = new Disciplina();
+          $disciplina->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
+          $componente->__set("dcp_cod", $disciplina);
+          $oferta->__set("cmp", $componente);
         
         return $oferta;
       } catch (Exception $e) {
@@ -301,5 +301,30 @@
       }
 
     }
+
+    public function gerarFrequencia ($ofr_cod) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT gerarfrequencia(?)";
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $ofr_cod);
+
+        if (!$search->execute())
+          return 0;
+
+        $frequencia = NULL;
+        while ($freq = $search->fetch(PDO::FETCH_ASSOC))
+          $frequencia[] = $freq;
+
+        return $frequencia;
+      } catch (Exception $e) {
+        //echo "Failed: " . $e->getMessage();
+        return 0;
+      }
+
+    }
+
   }
 ?>
