@@ -49,7 +49,7 @@
                   <?php
                     if (isset($_POST["Adicionar"])) {
                       $usuario = new Usuario();
-											$usuario->__set("usu_log", $_POST["usu_log"]);
+                      $usuario->__set("usu_log", $_POST["usu_log"]);
                       $usuario->__set("usu_sen", $_POST["usu_sen"]);
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
                       if ($usuarioController->register($usuario)) { ?>
