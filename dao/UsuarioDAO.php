@@ -15,9 +15,11 @@
 
         $sql = "INSERT INTO tab_usu (usu_log, usu_sen, usu_tpo) VALUES (?, ?, ?)";
 
+        $pass = password_hash($usuario->__get("usu_sen"), PASSWORD_DEFAULT);
+
         $register = $dbh->prepare($sql);
-				$register->bindValue(1, $usuario->__get("usu_log"));
-        $register->bindValue(2, md5($usuario->__get("usu_sen")));
+        $register->bindValue(1, $usuario->__get("usu_log"));
+        $register->bindValue(2, $pass);
         $register->bindValue(3, $usuario->__get("usu_tpo"));
 
         if ($register->execute())
@@ -38,15 +40,13 @@
 
         $sql = "UPDATE tab_usu
                 SET    usu_log = ?,
-                       usu_sen = ?,
                        usu_tpo = ?
                 WHERE  usu_cod = ?";
 
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $usuario->__get("usu_log"));
-        $update->bindValue(2, $usuario->__get("usu_sen"));
-        $update->bindValue(3, $usuario->__get("usu_tpo"));
-        $update->bindValue(4, $usuario->__get("usu_cod"));
+        $update->bindValue(2, $usuario->__get("usu_tpo"));
+        $update->bindValue(3, $usuario->__get("usu_cod"));
 
         if ($update->execute())
           return 1;
@@ -83,20 +83,19 @@
       
     }
     
-    public function search($usu_log, $usu_sen) {
+    public function search($usu_log) {
 
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_usu WHERE usu_log = ? AND usu_sen = ?";
+        $sql = "SELECT * FROM tab_usu WHERE usu_log = ?";
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $usu_log);
-        $search->bindValue(2, md5($usu_sen));
-        
+
         if (!$search->execute() || $search->rowCount() == 0)
           return null;
-        
+
         $user = $search->fetch(PDO::FETCH_ASSOC);
         $aux = new Usuario();
         $aux->setAll($user["usu_cod"], $user["usu_log"], $user["usu_sen"], $user["usu_tpo"]);
@@ -141,9 +140,11 @@
         $dbh = Connection::connect();
         
         $sql = "UPDATE tab_usu SET usu_sen = ? WHERE usu_cod = ?";
-        
+
+        $pass = password_hash($usuario->__get("usu_sen"), PASSWORD_DEFAULT);
+
         $update = $dbh->prepare($sql);
-        $update->bindValue(1, md5($usuario->__get("usu_sen")));
+        $update->bindValue(1, $pass);
         $update->bindValue(2, $usuario->__get("usu_cod"));
        
         if ($update->execute())

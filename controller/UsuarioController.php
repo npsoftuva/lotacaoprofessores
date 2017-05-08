@@ -24,7 +24,10 @@ class UsuarioController {
 
   public function search($usu_log, $usu_sen) {
     $usuarioDAO = new UsuarioDAO();
-    return $usuarioDAO->search($usu_log, $usu_sen);
+    $user = $usuarioDAO->search($usu_log);
+    if (password_verify($usu_sen, $user->__get("usu_sen")))
+      return $user;
+    return 0;
   }
 
   public function searchAll() {

@@ -49,12 +49,20 @@
           $sla_cod[] = $lot["sla_cod"];
 
           $lot_dia = NULL;
-          $lot_dia[] = $lot["lot_dia"] . $lot["lot_hor"];
+          $hor = "SELECT hor2str(".$lot['lot_hor'].")";
+          $searchHor = $dbh->prepare($hor);
+          $searchHor->execute();
+          $hor = $searchHor->fetch(PDO::FETCH_ASSOC);
+          $lot_dia[] = $lot["lot_dia"] . $hor['hor2str'];
 
           while ($lot2 = $search2->fetch(PDO::FETCH_ASSOC)) {
             $professores[] = $professorDAO->search($lot2["prf_cod"]);
 
-            $lot_dia[] = $lot2["lot_dia"] . $lot2["lot_hor"];
+            $hor = "SELECT hor2str(".$lot2['lot_hor'].")";
+            $searchHor = $dbh->prepare($hor);
+            $searchHor->execute();
+            $hor = $searchHor->fetch(PDO::FETCH_ASSOC);
+            $lot_dia[] = $lot2["lot_dia"] . $hor['hor2str'];
             $sla_cod[] = $lot2["sla_cod"];
             $lot_qtd += $lot2["lot_qtd"];
           }
