@@ -1,6 +1,8 @@
 <?php
 
   include_once 'Oferta.class.php';
+  include_once 'Sala.class.php';
+  include_once 'Professor.class.php';
 
   class Lotacao {
     private $lot_cod;

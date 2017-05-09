@@ -10,6 +10,53 @@
 
   class LotacaoDAO {
 
+    public function register (Lotacao $lotacao) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "INSERT INTO tab_lot (ofr_cod, prf_cod, sla_cod, lot_dia, lot_hor, lot_int, lot_qtd) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $register = $dbh->prepare($sql);
+        $register->bindValue(1, $lotacao->__get("ofr_cod")->__get("ofr_cod"));
+        $register->bindValue(2, $lotacao->__get("prf_cod")->__get("prf_cod"));
+        $register->bindValue(3, $lotacao->__get("sla_cod")->__get("sla_cod"));
+        $register->bindValue(4, $lotacao->__get("lot_dia"));
+        $register->bindValue(5, $lotacao->__get("lot_hor"));
+        $register->bindValue(6, $lotacao->__get("lot_int"));
+        $register->bindValue(7, $lotacao->__get("lot_qtd"));
+
+        if ($register->execute())
+          return 1;
+
+        return 0;
+      } catch (Exception $e) {
+        echo "Failed: " . $e->getMessage();
+      }
+
+    }
+
+    public function remove ($ofr_cod) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "DELETE FROM tab_lot WHERE ofr_cod = ?";
+
+        $remove = $dbh->prepare($sql);
+        $remove->bindValue(1, $ofr_cod);
+
+        if ($remove->execute())
+          return 1;
+        
+        return 0;
+      } catch(Exception $e) {
+        //echo "Failed: "  . $e->getMessage();
+        return 0;
+      }
+
+    }
+
     public function searchAll() {
 
       try {
@@ -34,6 +81,7 @@
           $lot = $search2->fetch(PDO::FETCH_ASSOC);
 
           $lotacao = new Lotacao();
+          $lotacao->__set("lot_cod", $lot["lot_cod"]);
 
           $ofertaDAO = new OfertaDAO();
           $lotacao->__set("ofr_cod", $ofertaDAO->search($lot["ofr_cod"]));
