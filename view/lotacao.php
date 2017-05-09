@@ -2,11 +2,58 @@
   require_once('verificaSessao.php');
   require_once('../controller/LotacaoController.php');
   require_once('../controller/OfertaController.php');
+  require_once('../controller/ProfessorController.php');
+  require_once('../controller/SalaController.php');
 
   $lotacaoController = new LotacaoController();
-  $lotacoes = $lotacaoController->searchAll();
 
   $ofertaController = new OfertaController();
+  $professorController = new ProfessorController();
+  $salaController = new SalaController();
+
+  if (isset($_POST["Excluir"])) {
+    $lotacaoController->remove($_POST["lot_codx"]);
+  }
+
+  if (isset($_POST["Adicionar"])) {
+    $lotacao = new Lotacao();
+
+    $oferta = new Oferta();
+    $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
+    $lotacao->__set("ofr_cod", $oferta);
+
+    $professor = new Professor();
+    $professor->__set("prf_cod", $_POST["prf_cod"]);
+    $lotacao->__set("prf_cod", $professor);
+
+    $sala = new Sala();
+    $sala->__set("sla_cod", $_POST["sla_cod"]);
+    $lotacao->__set("sla_cod", $sala);
+
+    $lot_int = 0;
+    $lot_dia = "2";
+
+    $aux = ["2", "3", "4", "5", "6", "7"];
+    foreach ($aux as $dia)
+      if (isset($_POST[$dia])) {
+        $lot_dia = $dia;
+        $lot_int = 0;
+        foreach ($_POST[$dia] as $value)
+          $lot_int += pow(2, $value);
+      }
+
+    $lotacao->__set("lot_dia", $lot_dia);
+    $lotacao->__set("lot_hor", $lot_int);
+    $lotacao->__set("lot_int", $lot_int);
+    $lotacao->__set("lot_qtd", 5);
+
+    $lotacaoController->register($lotacao);
+
+ }
+ /*
+  A B C D  E  F
+  0 2 4 8 16 32
+ */
 ?>
 <!doctype html>
 <html lang="en">
@@ -77,7 +124,9 @@
                         <th>Ações</th>
                       </thead>
                       <tbody>
-<?php if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
+<?php
+  $lotacoes = $lotacaoController->searchAll();
+  if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
                         <tr>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
@@ -103,9 +152,9 @@
                             }
                         ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="1" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("lot_cod"); ?>" data-prd="" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="1" title="Excluir" data-cod="222" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("ofr_cod")->__get("ofr_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -152,20 +201,26 @@
             <div class="modal-body">
             <div class="form-group">
               <label>Oferta *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+              <select class="form-control" name="ofr_cod" id="ofr_cod">
+                <?php foreach ($ofertaController->searchAll() as $oferta) { ?>
+                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("ofr_cod"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Professor *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+              <select class="form-control" name="prf_cod" id="prf_cod">
+                <?php foreach ($professorController->searchAll() as $professor) { ?>
+                <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Sala *</label>
               <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+                <?php foreach ($salaController->searchAll() as $sala) { ?>
+                <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
@@ -214,20 +269,26 @@
           <div class="modal-body">
             <div class="form-group">
               <label>Oferta *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+              <select class="form-control" name="ofr_cod" id="ofr_cod">
+                <?php foreach ($ofertaController->searchAll() as $key => $oferta) { ?>
+                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("ofr_cod"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Professor *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+              <select class="form-control" name="prf_cod" id="prf_cod">
+                <?php foreach ($professorController->searchAll() as $professor) { ?>
+                <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Sala *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
-                <option value="0">0</option>
+              <select class="form-control" name="sla_cod" id="sla_cod">
+                <?php foreach ($salaController->searchAll() as $sala) { ?>
+                <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
+                <?php } ?>
               </select>
             </div>
             <div class="form-group">
@@ -240,12 +301,12 @@
                     <?php } ?>
                   </thead>
                   <tbody>
-                    <?php for ($i = 2; $i <= 7; $i++) { ?>
+                    <?php for ($i = 2; $i <= 7; $i++) { $j = 0; ?>
                     <tr>
                       <td><?php echo $i; ?></td>
                       <?php for ($c = ord('A'); $c <= ord('Q'); $c++) { ?>
                       <td>
-                        <input type="checkbox">
+                        <input type="checkbox" name="<?php echo $i; ?>[]" value="<?php echo $j++; ?>">
                       </td>
                       <?php } ?>
                     </tr>
@@ -298,9 +359,9 @@
       var ofr_cod = $(this).data('cod');
       $(".modal-body #ofr_cod").val(ofr_cod);
       var prd_cod = $(this).data('prd');
-      $(".modal-body #cmp_sem").val(cmp_sem);
-      var cmp_sem = $(this).data('sem');
       $(".modal-body #prd_cod").val(prd_cod);
+      var cmp_sem = $(this).data('sem');
+      $(".modal-body #cmp_sem").val(cmp_sem);
       var dcp_cod = $(this).data('dcp');
       $(".modal-body #dcp_cod").val(dcp_cod);
       var flx_cod = $(this).data('flx');
