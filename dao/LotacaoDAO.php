@@ -6,6 +6,7 @@
   require_once('../model/Lotacao.class.php');
   require_once('OfertaDAO.php');
   require_once('ProfessorDAO.php');
+  require_once('SalaDAO.php');
   require_once('../lib/BD.class.php');
 
   class LotacaoDAO {
@@ -93,8 +94,8 @@
           $lot_qtd = NULL;
           $lot_qtd = $lot["lot_qtd"];
 
-          $sla_cod = NULL;
-          $sla_cod[] = $lot["sla_cod"];
+          $sla_codx = NULL;
+          $sla_codx[] = $lot["sla_cod"];
 
           $lot_dia = NULL;
           $hor = "SELECT hor2str(".$lot['lot_hor'].")";
@@ -111,9 +112,15 @@
             $searchHor->execute();
             $hor = $searchHor->fetch(PDO::FETCH_ASSOC);
             $lot_dia[] = $lot2["lot_dia"] . $hor['hor2str'];
-            $sla_cod[] = $lot2["sla_cod"];
+            $sla_codx[] = $lot2["sla_cod"];
             $lot_qtd += $lot2["lot_qtd"];
           }
+
+          $sla_cod = NULL;
+          $salaDAO = new SalaDAO();
+          $sla_codx = array_unique($sla_codx);
+          foreach ($sla_codx as $codigo)
+            $sla_cod[] = $salaDAO->search($codigo);
 
           $lotacao->__set("prf_cod", $professores);
           $lotacao->__set("lot_qtd", $lot_qtd);
