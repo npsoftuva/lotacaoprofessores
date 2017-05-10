@@ -195,6 +195,7 @@
     }
 
     public function searchAll() {
+      $ofertas = NULL;
 
       try {
         $dbh = Connection::connect();

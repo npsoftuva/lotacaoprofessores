@@ -103,6 +103,7 @@
     }
 
     public function searchAll() {
+      $flxs = NULL;
 
       try {
         $dbh = Connection::connect();

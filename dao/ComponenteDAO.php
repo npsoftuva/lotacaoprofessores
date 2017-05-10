@@ -134,6 +134,7 @@
     }
     
     public function searchAll() {
+      $componentes = NULL;
 
       try {
         $dbh = Connection::connect();
