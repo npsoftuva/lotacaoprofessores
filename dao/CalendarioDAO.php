@@ -109,6 +109,7 @@
     }
 
     public function searchAll() {
+      $clds = NULL;
 
       try {
         $dbh = Connection::connect();

@@ -136,7 +136,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($componentes as $componente) { ?>
+<?php if(isset($componentes)) foreach ($componentes as $componente) { ?>
                         <tr>
                           <td><?php echo $componente->__get("flx_cod")->__get("flx_cod"); ?></td>
                           <td><?php echo $componente->__get("dcp_cod")->__get("dcp_nom"); ?></td>

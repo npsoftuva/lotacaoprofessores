@@ -99,7 +99,8 @@
     }
 		
     public function searchAll() {
-			
+      $dcps = NULL;
+
       try {
         $dbh = Connection::connect();
 				

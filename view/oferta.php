@@ -164,7 +164,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($ofertas as $oferta) { ?>
+<?php if (isset($ofertas)) foreach ($ofertas as $oferta) { ?>
                         <tr>
                           <td><?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?></td>
                           <td><?php echo $oferta->__get("cmp")->__get("cmp_sem"); ?></td>

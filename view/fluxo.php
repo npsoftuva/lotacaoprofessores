@@ -121,7 +121,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($fluxos as $fluxo) { ?>
+<?php if (isset($fluxos)) foreach ($fluxos as $fluxo) { ?>
                         <tr>
                           <td><?php echo $fluxo->__get("flx_cod"); ?></td>
                           <td><?php echo ($fluxo->__get("flx_trn") == "0" ? "Integral" : ($fluxo->__get("flx_trn") == "1" ? "Manhã" : ($fluxo->__get("flx_trn") == "2" ? "Tarde" : "Noite"))); ?></td>

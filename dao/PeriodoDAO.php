@@ -125,6 +125,7 @@
     }
 
     public function searchAll() {
+      $periodos = NULL;
 
       try {
         $dbh = Connection::connect();
