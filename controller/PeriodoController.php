@@ -36,6 +36,7 @@ class PeriodoController {
   public function searchAll () {
     $periodoDAO = new PeriodoDAO();
     $periodos = $periodoDAO->searchAll();
+    if (isset($periodos))
     foreach ($periodos as $periodo) {
       $periodo->__get("prd_ini")->__set("cld_dta", date('d/m/Y', strtotime($periodo->__get("prd_ini")->__get("cld_dta"))));
       $periodo->__get("prd_fim")->__set("cld_dta", date('d/m/Y', strtotime($periodo->__get("prd_fim")->__get("cld_dta"))));

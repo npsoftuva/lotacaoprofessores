@@ -117,7 +117,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($calendarios as $calendario) { ?>
+<?php if (isset($calendarios)) foreach ($calendarios as $calendario) { ?>
                         <tr>
                           <td><?php echo date_format(date_create($calendario->__get("cld_dta")), 'd/m/Y'); ?></td>
                           <td><?php echo $calendario->__get("cld_evt"); ?></td>

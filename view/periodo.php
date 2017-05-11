@@ -139,7 +139,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($periodos as $periodo) { ?>
+<?php if (isset($periodos)) foreach ($periodos as $periodo) { ?>
                         <tr>
                           <td><?php echo $periodo->__get("prd_cod"); ?></td>
                           <td><?php echo $periodo->__get("prd_ini")->__get("cld_dta"); ?></td>

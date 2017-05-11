@@ -269,6 +269,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label>Oferta *</label>
+              <small>Semestre / Fluxo / Disciplina / Turma</small>
               <select class="form-control" name="ofr_cod" id="ofr_cod">
                 <?php foreach ($ofertaController->searchAll() as $key => $oferta) { ?>
                 <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod") . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>

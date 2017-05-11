@@ -115,7 +115,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($disciplinas as $disciplina) { ?>
+<?php if (isset($disciplinas)) foreach ($disciplinas as $disciplina) { ?>
                         <tr>
                           <td><?php echo $disciplina->__get("dcp_nom"); ?></td>
                           <td>
