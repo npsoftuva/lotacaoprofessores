@@ -1,5 +1,6 @@
 <?php
   require_once('verificaSessao.php');
+  require_once('verificaPapel.php');
   require_once('../controller/DisciplinaController.php');
 
   $disciplinaController = new DisciplinaController();

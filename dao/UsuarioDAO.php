@@ -75,10 +75,8 @@
         return 0;
       } catch(PDOException $e) {
         //var_dump($e);
-        if ($e->getCode() == "P0001")
-          echo $e->errorInfo[2];
-        
-        return 0;
+        if ($e->getCode() == "P0001")   
+          return array('msg' => $e->errorInfo[2]);
       }
       
     }
@@ -113,7 +111,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_usu";
+        $sql = "SELECT * FROM tab_usu ORDER BY usu_tpo";
 
         $search = $dbh->prepare($sql);
         

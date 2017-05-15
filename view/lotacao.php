@@ -1,5 +1,6 @@
 <?php
   require_once('verificaSessao.php');
+  require_once('verificaPapel.php');
   require_once('../controller/LotacaoController.php');
   require_once('../controller/OfertaController.php');
   require_once('../controller/ProfessorController.php');

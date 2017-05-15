@@ -1,5 +1,6 @@
 <?php
   require_once('verificaSessao.php');
+  require_once('verificaPapel.php');
   require_once('../controller/UsuarioController.php');
 
   $usuarioController = new UsuarioController();
@@ -65,7 +66,8 @@
                     <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                      if ($usuarioController->remove($_POST["usu_codx"])) { ?>
+                      $return = $usuarioController->remove($_POST["usu_codx"]);
+                      if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-date"></span>
                         <span data-notify="message">Usuário excluído com sucesso!</span>
@@ -73,7 +75,7 @@
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message">Ocorreu um erro ao tentar excluir o usuário.</span>
+                        <span data-notify="message"><?php echo $return["msg"]; ?></span>
                       </div>
                     <?php }
                     } else
