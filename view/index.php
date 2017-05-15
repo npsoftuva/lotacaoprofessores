@@ -51,9 +51,44 @@
                 </div>
               </div>
             </div>
+						
+						<button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#lot-prof">
+            	Gerar relatório de lotação de professores
+            </button>
+
+						<br><br>
+						
+						<button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#">
+            	Gerar relatório de lotação de laboratórios
+            </button>
+							
           </div>
         </div>
         <?php include("footer.inc"); ?>
+      </div>
+    </div>
+
+		<!-- Modal Lotação Prof -->
+    <div class="modal fade" id="lot-prof" tabindex="-1" role="dialog" aria-labelledby="add">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add"><span class="pe-7s-file"></span> Número do Ofício</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" method="POST" action="relatorioProf.php" target="_blank">
+              <div class="form-group">
+                <label>Ofício Nº *</label>
+                <input class="form-control" placeholder="Número do Ofício" name="num_ofc" required autocomplete="off">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="Gerar" id="Gerar">
+            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </body>
@@ -82,4 +117,10 @@
 
   <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
   <script src="assets/js/demo.js"></script>
+	
+	<script type="text/javascript">
+		$('#Gerar').on('click', function() {
+			$('#lot-prof').modal('hide');
+		});
+	</script>
 </html>

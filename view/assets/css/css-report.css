@@ -1,0 +1,36 @@
+body {
+	font-family: "Arial", sans-serif 
+}
+
+.header {
+	font-size: 16px;
+}
+
+table {
+	border-collapse: collapse;
+	text-align: center;
+	width: 100%;
+	margin: auto;
+}
+
+table th {
+	background-color: #ccc;
+}
+
+table tr td, th {
+	border: 1px solid black;
+	padding: 2px 5px;
+}
+
+.content {
+	font-size: 12px;
+	margin-top: 1000px;
+}
+
+.esquerda {
+	text-align: left;
+}
+
+.zebra{  
+  background: lightgray;  
+} 

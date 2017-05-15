@@ -21,6 +21,8 @@
           <i class="pe-7s-home"></i><p>Dashboard</p>
         </a>
       </li>
+			<?php
+			if ($_SESSION['usuarioTpo'] == 0) { ?>
       <li <?php if ($atual == "professor") echo 'class="active"';?> >
         <a href="professor.php">
           <i class="pe-7s-users"></i><p>Professor</p>
@@ -68,9 +70,10 @@
       </li>
       <li <?php if ($atual == "usuario") echo 'class="active"';?> >
         <a href="usuario.php">
-          <i class="pe-7s-user"></i><p>Usuário</p>
+          <i class="pe-7s-user"></i><p>Usuários</p>
         </a>
       </li>
+			<?php } ?>
     </ul>
   </div>
 </div>

@@ -114,7 +114,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_cld WHERE cld_tpo <> '2' ORDER BY cld_dta";
+        $sql = "SELECT * FROM tab_cld WHERE cld_tpo = 1 OR cld_tpo = 3 ORDER BY cld_dta";
 
         $search = $dbh->prepare($sql);
         
