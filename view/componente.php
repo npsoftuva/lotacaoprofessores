@@ -33,8 +33,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -303,11 +301,6 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
 
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
 
@@ -337,49 +330,55 @@
   </script>
 
   <script type="text/javascript">
-  $(document).ready(function() {
-    var fluxo = {};
+    $(document).ready(function() {
+      var fluxo = {};
 
-    <?php
-      $fluxoController = new FluxoController();
-      $fluxos = $fluxoController->searchAll();
-      foreach ($fluxos as $f) { ?>
-      fluxo[<?php echo $f->__get("flx_cod"); ?>] = [
-      <?php for ($i = 1; $i < $f->__get("flx_sem"); $i++) { ?>
-      {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
+      <?php
+        $fluxoController = new FluxoController();
+        $fluxos = $fluxoController->searchAll();
+        foreach ($fluxos as $f) { ?>
+        fluxo[<?php echo $f->__get("flx_cod"); ?>] = [
+        <?php for ($i = 1; $i < $f->__get("flx_sem"); $i++) { ?>
+        {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
+        <?php } ?>
+        {display: "<?php echo $f->__get('flx_sem'); ?>", value: "<?php echo $f->__get('flx_sem'); ?>" }
+        ];
       <?php } ?>
-      {display: "<?php echo $f->__get('flx_sem'); ?>", value: "<?php echo $f->__get('flx_sem'); ?>" }
-      ];
-    <?php } ?>
 
-    $("#flx_cod").change(function() {
-      var parent = $(this).val();
-      list(fluxo[parent]);
-    });
-
-    list(fluxo[<?php echo $fluxos[0]->__get('flx_cod');?>]);
-
-    function list(array_list) {
-      $("#cmp_sem").html("");
-      $(array_list).each(function (i) {
-        $("#cmp_sem").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+      $("#flx_cod").change(function() {
+        var parent = $(this).val();
+        list(fluxo[parent]);
       });
-    }
 
-    $("#flx_code").change(function() {
-      var parent = $(this).val();
-      liste(fluxo[parent]);
-    });
+      list(fluxo[<?php echo $fluxos[0]->__get('flx_cod');?>]);
 
-    liste(fluxo[$('#flx_code').val()]);
+      function list(array_list) {
+        $("#cmp_sem").html("");
+        $(array_list).each(function (i) {
+          $("#cmp_sem").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+        });
+      }
 
-    function liste(array_list) {
-      $("#cmp_seme").html("");
-      $(array_list).each(function (i) {
-        $("#cmp_seme").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+      $("#flx_code").change(function() {
+        var parent = $(this).val();
+        liste(fluxo[parent]);
       });
-    }
-  });
-</script>
+
+      liste(fluxo[$('#flx_code').val()]);
+
+      function liste(array_list) {
+        $("#cmp_seme").html("");
+        $(array_list).each(function (i) {
+          $("#cmp_seme").append("<option value="+array_list[i].value+">"+array_list[i].display+"</option>");
+        });
+      }
+    });
+  </script>
+
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
+    });
+  </script>
 
 </html>

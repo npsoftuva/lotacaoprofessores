@@ -2,13 +2,13 @@
 // @arquivo = /dao/LotacaoDAO.php
 // MVC = controller
 // objeto = Lotacao
-
+  
   require_once('../model/Lotacao.class.php');
   require_once('OfertaDAO.php');
   require_once('ProfessorDAO.php');
   require_once('SalaDAO.php');
   require_once('../lib/BD.class.php');
-
+  
   class LotacaoDAO {
 
     public function register (Lotacao $lotacao) {
@@ -136,6 +136,66 @@
         return 0;
       }
 
+    }
+
+    public function searchClassInRoom($cod_sala) {
+      
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT l.lot_dia, l.lot_int, d.dcp_nom
+                FROM tab_dcp AS d INNER JOIN tab_ofr AS o
+                                    ON d.dcp_cod = o.dcp_cod
+                                  INNER JOIN tab_lot AS l
+                                    ON o.ofr_cod = l.ofr_cod
+                                  INNER JOIN tab_sla AS s
+                                    ON s.sla_cod = l.sla_cod
+                WHERE s.sla_cod = ?
+                ORDER BY l.lot_dia";
+
+        $search = $dbh->prepare($sql);
+        $search->bindValue(1, $cod_sala);
+       
+        if (!$search->execute())
+          return 0;
+
+        $matriz = array(
+          'A' => array('', '', '', '', ''),
+          'B' => array('', '', '', '', ''),
+          'C' => array('', '', '', '', ''),
+          'D' => array('', '', '', '', ''),
+          'E' => array('', '', '', '', ''),
+          'F' => array('', '', '', '', ''),
+          'G' => array('', '', '', '', ''),
+          'H' => array('', '', '', '', ''),
+          'I' => array('', '', '', '', ''),
+          'J' => array('', '', '', '', ''),
+          'K' => array('', '', '', '', ''),
+          'L' => array('', '', '', '', ''),
+          'M' => array('', '', '', '', ''),
+          'N' => array('', '', '', '', ''),
+          'O' => array('', '', '', '', ''),
+          'P' => array('', '', '', '', ''),
+          'Q' => array('', '', '', '', '')
+        );
+
+        while ($class = $search->fetch(PDO::FETCH_ASSOC)) {
+          $horario = $class['lot_int'];
+          $tam = strlen($horario);
+          $dia = $class['lot_dia'] - 1; // diminui o dia da semana em um para ficar igual ao indice do vetor
+
+          for ($i = 0; $i < $tam; $i++) {
+            $matriz[ $horario[$i] ][ $dia ] = $class['dcp_nom'];
+          }
+        }
+        
+        return $matriz;
+
+      } catch(PDOException $e) {
+        die($e->getMessage());
+        return 0;
+      }
+      
     }
     
   }

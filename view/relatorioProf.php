@@ -1,12 +1,11 @@
 <?php
   require_once('verificaSessao.php');
   require_once('../lib/Report.php');
-	require_once('../controller/LotacaoController.php');
-	require_once('../controller/OfertaController.php');
+  require_once('../controller/LotacaoController.php');
+  require_once('../controller/OfertaController.php');
 
   $lotacaoController = new LotacaoController();
-	$lotacoes = $lotacaoController->searchAll();
-
+  $lotacoes = $lotacaoController->searchAll();
 
   $ofertaController = new OfertaController();
 ?>
@@ -21,33 +20,13 @@
 
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
-
-    <!-- Bootstrap core CSS     -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Animation library for notifications   -->
-    <link href="assets/css/animate.min.css" rel="stylesheet"/>
-
-    <!--  Light Bootstrap Table core CSS    -->
-    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
-
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="assets/css/demo.css" rel="stylesheet" />
-
-    <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-		
-		<!--  CSS for Report    -->
-    <link href="assets/css/css-report.css" rel="stylesheet" />
 	</head>
 	<body>
 		
-		<?php	  
-		  /* Se existirem lotações cadastradas cria uma linha de tabela para cada lotação */
-			if ($lotacoes) {
-				$lots = "";
+	  <?php	  
+	    /* Se existirem lotações cadastradas cria uma linha de tabela para cada lotação */
+	    if ($lotacoes) {
+		    $lots = "";
 				
 				foreach ($lotacoes as $lotacao) {
 					$semestre = $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem");
@@ -98,19 +77,21 @@
 		  	}
 				
 				$periodo = $lotacao->__get("ofr_cod")->__get("prd_cod")->__get("prd_cod");
+		
+			  $header = "<table class='header'><tr><td><strong>Ofertas Ciências da Computação - Bacharelado - Semestre: " . substr($periodo, 0, 4) . "." . substr($periodo, 4, 1) . " - Ofício " . $_POST['num_ofc'] . "</strong></td></tr></table>";
+		
+			  $content = "<br><table class='content'><tr><th>Período</th><th>Disciplina</th><th>Fluxo</th><th>Turma</th><th>Turno</th><th>C.H.</th><th>Aulas</th><th>Semanas</th><th>Horário</th><th>Vagas</th><th>Sala</th><th>Professor(a)</th></tr>" . $lots . "</table>";
+
+			  $report = new Report();
+			  $report->setCss('../view/assets/css/css-report.css');
+				$report->setHeader($header);
+				$report->setContent($content);
+				$report->buildPDF();
+				$report->displayPDF('lota_prof_' . $periodo . '.pdf');
+				exit;
+			} else {
+				echo 'nao há lotações cadastradas';
 			}
-		
-			$header = "<table class='header'><tr><td><strong>Ofertas Ciências da Computação - Bacharelado - Semestre: " . substr($periodo, 0, 4) . "." . substr($periodo, 4, 1) . " - Ofício " . $_POST['num_ofc'] . "</strong></td></tr></table>";
-		
-			$content = "<table class='content'><tr><th>Período</th><th>Disciplina</th><th>Fluxo</th><th>Turma</th><th>Turno</th><th>C.H.</th><th>Aulas</th><th>Semanas</th><th>Horário</th><th>Vagas</th><th>Sala</th><th>Professor(a)</th></tr>" . $lots . "</table>";
-		
-			$report = new report();
-		  $report->setCss('../view/assets/css/css-report.css');
-			$report->setHeader($header);
-			$report->setContent($content);
-			$report->buildPDF();
-			$report->displayPDF('lota_prof_' . $periodo . '.pdf');
-			exit;
 		?>
 	</body>
 </html>

@@ -81,8 +81,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -343,11 +341,6 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
 
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
 
@@ -379,11 +372,6 @@
     $(document).on("click", ".openDelete", function () {
       var lot_cod = $(this).data('cod');
       $(".modal-footer #lot_codx").val(lot_cod);
-    });
-  </script>
-  <script>
-    $(".alert").fadeTo(1000, 500).slideUp(1000, function(){
-      $(".alert").slideUp(4000);
     });
   </script>
   
@@ -426,6 +414,12 @@
           $("#dcp_cod").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
         });
       }
+    });
+  </script>
+
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>
