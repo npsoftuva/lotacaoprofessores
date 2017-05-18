@@ -32,8 +32,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -256,11 +254,6 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
 
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
 
@@ -283,6 +276,12 @@
       var flx_cod = $(this).data('cod');
       $(".modal-footer #flx_codx").val( flx_cod );
       $(".modal-footer #flx_codxx").html( flx_cod );
+    });
+  </script>
+
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>

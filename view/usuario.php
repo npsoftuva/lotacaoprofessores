@@ -31,8 +31,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -225,11 +223,11 @@
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Login *</label>
-                <input class="form-control" placeholder="Login do Usuário" name="usu_log" required minlength="5" maxlength="25" autocomplete="off">
+                <input class="form-control" placeholder="Login do Usuário" name="usu_log" required maxlength="25" autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Senha *</label>
-                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Nível *</label>
@@ -262,11 +260,11 @@
               <input type="hidden" name="usu_codp" id="usu_codp" value="">
               <div class="form-group">
                 <label>Nova senha *</label>
-                <input class="form-control" placeholder="Nova senha" name="usu_senp" id="usu_senp" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Nova senha" name="usu_senp" id="usu_senp" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Repita a senha *</label>
-                <input class="form-control" placeholder="Repita a senha" name="rep_senp" id="rep_senp" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Repita a senha" name="rep_senp" id="rep_senp" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
@@ -292,11 +290,6 @@
 
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
-
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
 
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
@@ -341,7 +334,7 @@
       }
     });
   </script>
-  
+
   <script>
     $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
       $(".alert").slideUp(4000);
