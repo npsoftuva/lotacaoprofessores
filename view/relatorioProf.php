@@ -83,7 +83,7 @@
 			  $content = "<br><table class='content'><tr><th>Período</th><th>Disciplina</th><th>Fluxo</th><th>Turma</th><th>Turno</th><th>C.H.</th><th>Aulas</th><th>Semanas</th><th>Horário</th><th>Vagas</th><th>Sala</th><th>Professor(a)</th></tr>" . $lots . "</table>";
 
 			  $report = new Report();
-			  $report->setCss('../view/assets/css/css-report.css');
+			  $report->setCss('../view/assets/css/css-lot-prof.css'); // caminho relativo a localização da classe Report
 				$report->setHeader($header);
 				$report->setContent($content);
 				$report->buildPDF();

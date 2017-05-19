@@ -85,7 +85,7 @@
         $('div.mensagem-erro').html('');
  
         $(this).ajaxSubmit(function(resposta) {
-          if (!resposta) {
+          if (resposta) {
             window.location.href = 'index.php';
           } else {
             $('div.mensagem-erro').html(resposta);

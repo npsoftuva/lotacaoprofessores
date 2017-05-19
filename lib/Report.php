@@ -24,8 +24,7 @@
 		
 		public function buildPDF() {
 			$this->pdf = new mPDF('utf-8', 'A4-L');
-			$this->pdf->setHTMLHeader($this->header);
-			$this->pdf->setTitle("teste");
+			$this->pdf->setHTMLHeader($this->header);			
 			$this->pdf->WriteHTML($this->css, 1);
 			$this->pdf->WriteHTML($this->content, 2);
 		}

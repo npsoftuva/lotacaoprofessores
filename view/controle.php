@@ -14,6 +14,6 @@
     $_SESSION['usuarioLog'] = $usuario->__get('usu_log');
     $_SESSION['usuarioTpo'] = $usuario->__get('usu_tpo');
 
-    echo false;
+    echo true;
   }
 ?>

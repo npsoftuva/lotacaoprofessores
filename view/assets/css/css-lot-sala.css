@@ -1,0 +1,20 @@
+body {
+	font-family: "Arial", sans-serif 
+}
+
+span {
+	font-size: 26px;
+  text-align: center;
+}
+
+table {
+	border-collapse: collapse;
+	text-align: center;
+	width: 100%;
+  font-size: 18px;
+}
+
+table tr td, th {
+	border: 1px solid black;
+	padding: 5px 5px;
+}
