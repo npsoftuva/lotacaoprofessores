@@ -68,12 +68,13 @@
 
         if ($remove->execute())
           return 1;
-        
-        return 0;
+                
       } catch(Exception $e) {
-        //echo "Failed: "  . $e->getMessage();
-        return 0;
+        if ($e->getCode() == '23503')
+          return 'ERRO: Fluxo está sendo usado em alguma componente';
       }
+
+      return 'Ocorreu um erro ao tentar excluir o fluxo.';
 
     }
 

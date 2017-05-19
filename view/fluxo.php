@@ -54,26 +54,27 @@
                         $fluxo->__set("flx_sem", $_POST["flx_sem"]);
                         if ($fluxoController->register($fluxo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
                             <span data-notify="message">Fluxo adicionado com sucesso!</span>
                           </div>
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
                             <span data-notify="message">Ocorreu um erro ao tentar adicionar o fluxo.</span>
                           </div>
                         <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                        if ($fluxoController->remove($_POST["flx_codx"])) { ?>
+                        $return = $fluxoController->remove($_POST["flx_codx"]);
+                        if ($return === 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
                             <span data-notify="message">Fluxo excluído com sucesso!</span>
                           </div>
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar excluir o fluxo.</span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                            <span data-notify="message"><?php echo $return; ?></span>
                           </div>
                         <?php }
                     } else
@@ -85,12 +86,12 @@
 
                         if ($fluxoController->update($fluxo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
                             <span data-notify="message">Fluxo editado com sucesso!</span>
                           </div>
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
                             <span data-notify="message">Ocorreu um erro ao tentar editar o fluxo.</span>
                           </div>
                         <?php }

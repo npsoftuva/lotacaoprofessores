@@ -74,7 +74,8 @@
                       <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                      if ($componenteController->remove($_POST["flx_codx"],$_POST["dcp_codx"])) { ?>
+                      $return = $componenteController->remove($_POST["flx_codx"],$_POST["dcp_codx"]);
+                      if ($return === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-notebook"></span>
                           <span data-notify="message">Componente excluído com sucesso!</span>
@@ -82,7 +83,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-notebook"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar excluir o componente.</span>
+                          <span data-notify="message"><?php echo $return; ?></span>
                         </div>
                       <?php }
                     } else

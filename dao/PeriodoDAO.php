@@ -25,7 +25,7 @@
 
         return 0;
       } catch (Exception $e) {
-        echo "Failed: " . $e->getMessage();
+        //echo "Failed: " . $e->getMessage();
         return 0;
       }
 
@@ -51,7 +51,6 @@
 
         return 0;
       } catch (Exception $e) {
-        die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
@@ -68,14 +67,13 @@
 
         if ($remove->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        //echo "Failed: " . $e->getMessage();
-        return 0;
+        if ($e->getCode() == '23503')
+          return 'ERRO: Período está sendo usado em alguma oferta';
       }
 
-      return 0;
+      return 'Ocorreu um erro ao tentar excluir o período.';
     }
 
     public function search($prd_cod) {

@@ -88,7 +88,8 @@
                       <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                      if ($ofertaController->remove($_POST["ofr_codx"])) { ?>
+                      $return = $ofertaController->remove($_POST["ofr_codx"]);
+                      if ($return === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
                           <span data-notify="message">Oferta removida com sucesso!</span>
@@ -96,7 +97,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar excluir a oferta.</span>
+                          <span data-notify="message"><?php echo $return; ?></span>
                         </div>
                       <?php }
                     } else

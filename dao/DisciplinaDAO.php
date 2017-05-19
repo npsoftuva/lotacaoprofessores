@@ -46,8 +46,7 @@
         
         return 0;
       } catch(Exception $e) {
-        //die("Unable to connect: " . $e->getMessage());
-        return 0;
+				return 0;
       }
 			
     }
@@ -65,11 +64,12 @@
         if ($remove->execute())
           return 1;
 
-        return 0;
       } catch(Exception $e) {
-        //echo "Failed: "  . $e->getMessage();
-        return 0;
+				if ($e->getCode() == '23503')
+					return 'ERRO: Disciplina está sendo usada em alguma componente';  
       }
+
+      return 'Ocorreu um erro ao tentar excluir a disciplina.';
 			
     }
 		
@@ -130,9 +130,10 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT d.dcp_cod, d.dcp_nom FROM tab_cmp AS c INNER JOIN tab_dcp AS d
-                ON d.dcp_cod = c.dcp_cod
-                WHERE c.cmp_sem = ?";
+        $sql = "SELECT d.dcp_cod, d.dcp_nom 
+				        FROM   tab_cmp AS c INNER JOIN tab_dcp AS d
+                ON     d.dcp_cod = c.dcp_cod
+                WHERE  c.cmp_sem = ?";
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $sem);

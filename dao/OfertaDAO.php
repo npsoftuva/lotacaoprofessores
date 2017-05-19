@@ -77,12 +77,13 @@
 
         if ($remove->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        //echo "Failed: " . $e->getMessage();
-        return 0;
+        if ($e->getCode() == '23503')
+          return 'ERRO: Oferta está sendo usada em alguma lotação';
       }
+
+      return 'Ocorreu um erro ao tentar excluir a oferta.';
 
     }
 

@@ -53,12 +53,12 @@
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
                       if ($usuarioController->register($usuario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário adicionado com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar adicionar o usuário.</span>
                       </div>
                     <?php }
@@ -67,13 +67,13 @@
                       $return = $usuarioController->remove($_POST["usu_codx"]);
                       if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário excluído com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message"><?php echo $return["msg"]; ?></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
+                        <span data-notify="message"><?php echo $return; ?></span>
                       </div>
                     <?php }
                     } else
@@ -82,15 +82,16 @@
                       $usuario->__set("usu_cod", $_POST["usu_cod"]);
                       $usuario->__set("usu_log", $_POST["usu_log"]);
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
-                      if ($usuarioController->update($usuario)) { ?>
+											$return = $usuarioController->update($usuario);
+                      if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário editado com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message">Ocorreu um erro ao tentar editar o usuário.</span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
+                        <span data-notify="message"><?php echo $return; ?></span>
                       </div>
                     <?php }
                     } else
@@ -100,12 +101,12 @@
                       $usuario->__set("usu_sen", $_POST["usu_senp"]);
                       if ($usuarioController->newPassword($usuario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Senha alterada com sucesso!</span>
                       </div>  
                       <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar editar a senha do usuário.</span>
                       </div>
                       <?php }
@@ -140,7 +141,6 @@
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" title="Nova senha" class="openNewPass btn btn-info" href="#new-pass"><span class="pe-7s-lock" aria-hidden="true"></span> </a>
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" data-tpo="<?php echo $usuario->__get("usu_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
-
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>

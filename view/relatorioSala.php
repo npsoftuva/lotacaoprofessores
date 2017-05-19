@@ -2,9 +2,13 @@
   require_once('verificaSessao.php');
   require_once('../lib/Report.php');
 	require_once('../controller/LotacaoController.php');
+  require_once('../controller/SalaController.php');
 
   $lotacaoController = new LotacaoController();
 	$lotacoes = $lotacaoController->searchClassInRoom($_POST['sla_cod']);
+
+  $salaController = new SalaController();
+  $sala = $salaController->search($_POST['sla_cod']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,9 +24,9 @@
 	</head>
 	<body>
 	  <?php
-	  	$header = "<p>LOTAÇÃO DA SALA - LABORATÓRIO 1</p>";
-
-	  	$content = "<br><table><tr><th>HORÁRIOS</th><th>SEGUNDA-FEIRA</th><th>TERÇA-FEIRA</th><th>QUARTA-FEIRA</th><th>QUINTA-FEIRA</th><th>SEXTA-FEIRA</th></tr>";
+	  	$header = "<br><span>LOTAÇÃO DA SALA - " . $sala->__get('sla_nom') . "</span>";
+      
+	  	$content = "<br><br><br><table><tr><th>HORÁRIOS</th><th>SEGUNDA-FEIRA</th><th>TERÇA-FEIRA</th><th>QUARTA-FEIRA</th><th>QUINTA-FEIRA</th><th>SEXTA-FEIRA</th></tr>";
 
 		  foreach ($lotacoes as $key => $line) {
 		    $content .= "<tr><td>" . $key . "</td>";
@@ -37,11 +41,11 @@
 		  $content .= "</table>";
 		
 		  $report = new report();
-		  $report->setCss('../view/assets/css/css-report.css'); // caminho relativo a localização da classe Report
+		  $report->setCss('../view/assets/css/css-lot-sala.css'); // caminho relativo a localização da classe Report
 			$report->setHeader($header);
 			$report->setContent($content);
 			$report->buildPDF();
-			$report->displayPDF('lota_sala_.pdf');
+			$report->displayPDF('lota_sala_' . $sala->__get('sla_nom') . 'pdf');
 			exit;
 		?>	 
 	</body>

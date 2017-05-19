@@ -70,7 +70,8 @@
                       <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                      if ($professorController->remove($_POST["prf_codx"])) { ?>
+											$return = $professorController->remove($_POST["prf_codx"]);
+                      if ($return === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
                           <span data-notify="message">Professor(a) removido(a) com sucesso!</span>
@@ -78,7 +79,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar excluir o(a) professor(a).</span>
+                          <span data-notify="message"><?php echo $return; ?></span>
                         </div>
                       <?php }
                     } else
@@ -101,7 +102,6 @@
                         </div>
                       <?php }
                     }
-
 
                     $professores = $professorController->searchAll();
                   ?>

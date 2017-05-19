@@ -85,7 +85,7 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="Gerar" id="Gerar">
+            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="GerarP" id="GerarP">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
             </form>
           </div>
@@ -99,10 +99,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add"><span class="pe-7s-file"></span> Sala</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-display2"></span> Sala</h4>
           </div>
           <div class="modal-body">
-            <form role="form" method="POST" action="relatorioLab.php" target="_blank">
+            <form role="form" method="POST" action="relatorioSala.php" target="_blank">
               <div class="form-group">
                 <label>Escolha a Sala *</label>
 								<select class="form-control" name="sla_cod" id="sla_cod">
@@ -113,7 +113,7 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="Gerar" id="Gerar">
+            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="GerarS" id="GerarS">
             </form>
           </div>
         </div>
@@ -142,8 +142,14 @@
   <script src="assets/js/demo.js"></script>
 	
 	<script type="text/javascript">
-		$('#Gerar').on('click', function() {
+		$('#GerarP').on('click', function() {
 			$('#lot-prof').modal('hide');
+		});
+	</script>
+  
+  <script type="text/javascript">
+		$('#GerarS').on('click', function() {
+			$('#lot-sala').modal('hide');
 		});
 	</script>
 </html>

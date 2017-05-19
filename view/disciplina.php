@@ -63,7 +63,8 @@
                         <?php }
 
                     } else if (isset($_POST["Excluir"])) {
-                        if ($disciplinaController->remove($_POST["dcp_codx"])) { ?>
+											  $return = $disciplinaController->remove($_POST["dcp_codx"]);
+                        if ($return === 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Disciplina excluída com sucesso!</span>
@@ -71,7 +72,7 @@
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar excluir a disciplina.</span>
+                            <span data-notify="message"><?php echo $return; ?></span>
                           </div>
                         <?php }
 
@@ -79,7 +80,7 @@
                         $disciplina = new Disciplina();
                         $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
                         $disciplina->__set("dcp_nom", $_POST["dcp_nom"]);
-
+												
                         if ($disciplinaController->update($disciplina)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -92,7 +93,6 @@
                           </div>
                         <?php }
                     }
-
 
                     $disciplinas  = $disciplinaController->searchAll();
                 ?>
