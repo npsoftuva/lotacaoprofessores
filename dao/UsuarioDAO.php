@@ -1,3 +1,4 @@
+
 <?php
 // @arquivo = /dao/UsuarioDAO.php
 // MVC = controller
@@ -50,12 +51,13 @@
 
         if ($update->execute())
           return 1;
-
-        return 0;
+        
       } catch(Exception $e) {
-        //die("Unable to connect: " . $e->getMessage());
-        return 0;
+        if ($e->getCode() == 'P0001')
+          return 'ERRO: sistema não pode ficar sem administrador';
       }
+
+      return 'Ocorreu um erro ao tentar editar o usuário.';
 
     }
     
@@ -72,12 +74,12 @@
         if ($remove->execute())
           return 1;
         
-        return 0;
-      } catch(PDOException $e) {
-        //var_dump($e);
-        if ($e->getCode() == "P0001")   
-          return array('msg' => $e->errorInfo[2]);
+      } catch(Exception $e) {        
+        if ($e->getCode() == 'P0001')
+          return 'ERRO: sistema não pode ficar sem administrador';	
       }
+
+      return 'Ocorreu um erro ao tentar excluir o usuário.';
       
     }
     

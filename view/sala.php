@@ -31,8 +31,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -55,26 +53,27 @@
                       $sala->__set("sla_cap", $_POST["sla_cap"]);
                       if ($salaController->register($sala)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Sala adicionada com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar adicionar a sala.</span>
                       </div>
                     <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                      if ($salaController->remove($_POST["sla_codx"])) { ?>
+                      $return = $salaController->remove($_POST["sla_codx"]);
+                      if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Sala excluída com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message">Ocorreu um erro ao tentar excluir a sala.</span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
+                        <span data-notify="message"><?php echo $return; ?></span>
                       </div>
                     <?php }
                     } else
@@ -85,12 +84,12 @@
                       $sala->__set("sla_nom", $_POST["sla_nom"]);
                       if ($salaController->update($sala)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Sala editada com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar editar a sala.</span>
                       </div>
                     <?php }
@@ -245,11 +244,6 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
 
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
 
@@ -273,6 +267,11 @@
       $(".modal-footer #sla_codx").val( sla_cod );
       var sla_nom = $(this).data('nom');
       $(".modal-footer #sla_nomx").html(sla_nom);
+    });
+  </script>
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>

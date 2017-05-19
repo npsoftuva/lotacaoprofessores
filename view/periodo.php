@@ -32,8 +32,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -56,14 +54,14 @@
                     if (isset($_POST["Adicionar"])) {
                         // criando um objeto Periodo.
                         $periodo = new Periodo();
-                        $periodo->__set("prd_cod", $_POST["prd_cod"]);
+                        $periodo->__set("prd_cod", $_POST["prd_coda"]);
                         // criando um objeto Calendario para setar em Periodo
                         $prd_ini = new Calendario();
-                        $prd_ini->__set("cld_dta", $_POST["prd_ini"]);
+                        $prd_ini->__set("cld_dta", $_POST["prd_inia"]);
                         $periodo->__set("prd_ini", $prd_ini);
                         // criando um objeto Calendario para setar em Periodo
                         $prd_fim = new Calendario();
-                        $prd_fim->__set("cld_dta", $_POST["prd_fim"]);
+                        $prd_fim->__set("cld_dta", $_POST["prd_fima"]);
                         $periodo->__set("prd_fim", $prd_fim);
                         if ($periodoController->register($periodo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
@@ -78,7 +76,8 @@
                         <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                        if ($periodoController->remove($_POST["prd_codx"])) { ?>
+                        $return = $periodoController->remove($_POST["prd_codx"]);
+                        if ($return === 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Período excluído com sucesso!</span>
@@ -86,7 +85,7 @@
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar excluir o período.</span>
+                            <span data-notify="message"><?php echo $return; ?></span>
                           </div>
                         <?php }
                     } else
@@ -102,8 +101,8 @@
                         $prd_fim = new Calendario();
                         $prd_fim->__set("cld_dta", $_POST["prd_fim"]);
                         $periodo->__set("prd_fim", $prd_fim);
-
-                        if ($periodoController->update($periodo)) { ?>
+                        $return = $periodoController->update($periodo);
+                        if ($return === 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Período editado com sucesso!</span>
@@ -111,12 +110,10 @@
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar editar o período.</span>
+                            <span data-notify="message"><?php echo $return; ?></span>
                           </div>
                         <?php }
                     }
-
-
 
                     $periodos = $periodoController->searchAll();
                 ?>
@@ -195,7 +192,7 @@
             <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" type="text" name="prd_cod" id="prd_cod" value="">
+                <input class="form-control" type="text" name="prd_cod" id="prd_cod" value="" readonly>
               </div>
               <div class="form-group">
                 <label>Início *</label>
@@ -227,15 +224,15 @@
             <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" type="text" name="prd_cod" id="prd_cod">
+                <input class="form-control" placeholder="Código do Período" type="text" name="prd_coda" id="prd_coda">
               </div>
               <div class="form-group">
                 <label>Início *</label>
-                <input class="form-control" type="text" name="prd_ini" id="prd_ini" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" placeholder="Início do Período" type="text" name="prd_inia" id="prd_inia" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
               <div class="form-group">
                 <label>Fim *</label>
-                <input class="form-control" type="text" name="prd_fim" id="prd_fim" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
+                <input class="form-control" placeholder="Fim do Período" type="text" name="prd_fima" id="prd_fima" maxlength="10" onkeyup="mascara( this, mskDate );" pattern=".{10}">
               </div>
             </div>
             <div class="modal-footer">
@@ -263,11 +260,6 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
 
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
-
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
 
@@ -291,6 +283,11 @@
     $(document).on("click", ".openDelete", function () {
       var prd_cod = $(this).data('cod');
       $(".modal-footer #prd_codx").val( prd_cod );
+    });
+  </script>
+  <script>
+    $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
+      $(".alert").slideUp(4000);
     });
   </script>
 </html>

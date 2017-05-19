@@ -31,8 +31,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -55,12 +53,12 @@
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
                       if ($usuarioController->register($usuario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário adicionado com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar adicionar o usuário.</span>
                       </div>
                     <?php }
@@ -69,13 +67,13 @@
                       $return = $usuarioController->remove($_POST["usu_codx"]);
                       if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário excluído com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message"><?php echo $return["msg"]; ?></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
+                        <span data-notify="message"><?php echo $return; ?></span>
                       </div>
                     <?php }
                     } else
@@ -84,15 +82,16 @@
                       $usuario->__set("usu_cod", $_POST["usu_cod"]);
                       $usuario->__set("usu_log", $_POST["usu_log"]);
                       $usuario->__set("usu_tpo", $_POST["usu_tpo"]);
-                      if ($usuarioController->update($usuario)) { ?>
+											$return = $usuarioController->update($usuario);
+                      if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Usuário editado com sucesso!</span>
                       </div>
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
-                        <span data-notify="message">Ocorreu um erro ao tentar editar o usuário.</span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
+                        <span data-notify="message"><?php echo $return; ?></span>
                       </div>
                     <?php }
                     } else
@@ -102,12 +101,12 @@
                       $usuario->__set("usu_sen", $_POST["usu_senp"]);
                       if ($usuarioController->newPassword($usuario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Senha alterada com sucesso!</span>
                       </div>  
                       <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
-                        <span data-notify="icon" class="pe-7s-date"></span>
+                        <span data-notify="icon" class="pe-7s-user"></span>
                         <span data-notify="message">Ocorreu um erro ao tentar editar a senha do usuário.</span>
                       </div>
                       <?php }
@@ -142,7 +141,6 @@
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" title="Nova senha" class="openNewPass btn btn-info" href="#new-pass"><span class="pe-7s-lock" aria-hidden="true"></span> </a>
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" data-tpo="<?php echo $usuario->__get("usu_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
-
                             <a data-toggle="modal" data-cod="<?php echo $usuario->__get("usu_cod"); ?>" data-log="<?php echo $usuario->__get("usu_log"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
@@ -225,11 +223,11 @@
             <form role="form" method="POST">
               <div class="form-group">
                 <label>Login *</label>
-                <input class="form-control" placeholder="Login do Usuário" name="usu_log" required minlength="5" maxlength="25" autocomplete="off">
+                <input class="form-control" placeholder="Login do Usuário" name="usu_log" required maxlength="25" autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Senha *</label>
-                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Senha do Usuário" name="usu_sen" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Nível *</label>
@@ -262,11 +260,11 @@
               <input type="hidden" name="usu_codp" id="usu_codp" value="">
               <div class="form-group">
                 <label>Nova senha *</label>
-                <input class="form-control" placeholder="Nova senha" name="usu_senp" id="usu_senp" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Nova senha" name="usu_senp" id="usu_senp" required autocomplete="off">
               </div>
               <div class="form-group">
                 <label>Repita a senha *</label>
-                <input class="form-control" placeholder="Repita a senha" name="rep_senp" id="rep_senp" required minlength="8" autocomplete="off">
+                <input class="form-control" placeholder="Repita a senha" name="rep_senp" id="rep_senp" required autocomplete="off">
               </div>
           </div>
           <div class="modal-footer">
@@ -292,11 +290,6 @@
 
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
-
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
 
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>
@@ -341,7 +334,7 @@
       }
     });
   </script>
-  
+
   <script>
     $(".alert").fadeTo(4000, 500).slideUp(1000, function(){
       $(".alert").slideUp(4000);

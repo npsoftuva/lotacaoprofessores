@@ -26,6 +26,7 @@
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+				return 0;
       }
 
     }
@@ -55,13 +56,14 @@
         return 0;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+				return 0;
       }
 
-      return 0;
     }
 
     public function remove ($prf_cod) {
-      try {
+
+			try {
         $dbh = Connection::connect();
 
         $sql = "DELETE FROM tab_prf WHERE prf_cod = ?";
@@ -71,13 +73,14 @@
 
         if ($remove->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        //echo "Failed: " . $e->getMessage();
+				if ($e->getCode() == '23503')
+					return 'ERRO: Professor(a) está sendo usado(a) em alguma lotação';
       }
 
-      return 0;
+      return 'Ocorreu um erro ao tentar excluir o(a) professor(a).';
+
     }
 
     public function search($id) {
@@ -100,9 +103,9 @@
         return $aux;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+				return 0;
       }
 
-      return 0;
     }
 
     public function searchAll() {
@@ -126,9 +129,9 @@
         return $prfs;
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
+				return 0;
       }
 
-      return 0;
     }
 
   }

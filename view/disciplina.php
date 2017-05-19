@@ -32,8 +32,6 @@
     <link href="assets/css/demo.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
   </head>
   <body>
@@ -65,7 +63,8 @@
                         <?php }
 
                     } else if (isset($_POST["Excluir"])) {
-                        if ($disciplinaController->remove($_POST["dcp_codx"])) { ?>
+											  $return = $disciplinaController->remove($_POST["dcp_codx"]);
+                        if ($return === 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Disciplina excluída com sucesso!</span>
@@ -73,7 +72,7 @@
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar excluir a disciplina.</span>
+                            <span data-notify="message"><?php echo $return; ?></span>
                           </div>
                         <?php }
 
@@ -81,7 +80,7 @@
                         $disciplina = new Disciplina();
                         $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
                         $disciplina->__set("dcp_nom", $_POST["dcp_nom"]);
-
+												
                         if ($disciplinaController->update($disciplina)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
@@ -94,7 +93,6 @@
                           </div>
                         <?php }
                     }
-
 
                     $disciplinas  = $disciplinaController->searchAll();
                 ?>
@@ -224,11 +222,6 @@
 
   <!--  Notifications Plugin    -->
   <script src="assets/js/bootstrap-notify.js"></script>
-
-
-  <!--  Google Maps Plugin    -->
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
 
   <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
   <script src="assets/js/light-bootstrap-dashboard.js"></script>

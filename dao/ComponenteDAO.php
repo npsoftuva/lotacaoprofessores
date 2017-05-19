@@ -71,11 +71,12 @@
         if ($remove->execute())
           return 1;
 
-        return 0;
       } catch (Exception $e) {
-        //echo "Failed: " . $e->getMessage();
-        return 0;
+        if ($e->getCode() == '23503')
+          return 'ERRO: Componente está sendo usada em alguma oferta';
       }
+
+      return 'Ocorreu um erro ao tentar excluir a componente.';
 
     }
     
