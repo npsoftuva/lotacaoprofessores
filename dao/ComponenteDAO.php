@@ -24,11 +24,13 @@
         if ($register->execute())
           return 1;
         
-        return 0;
       } catch (Exception $e){
-        //echo "Failed: " . $e->getMessage();
-        return 0;
-      }   
+        if ($e->getCode() == '23505')
+          return 'ERRO: A componente (fluxo, disciplina) já existe';
+      }
+
+      return 'Ocorreu um erro ao tentar adicionar a componente.';
+
     } 
     
     public function update (Componente $componente) {
@@ -140,7 +142,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_cmp ORDER BY flx_cod, dcp_cod";
+        $sql = "SELECT * FROM tab_cmp ORDER BY flx_cod, cmp_sem";
 
         $search = $dbh->prepare($sql);
 

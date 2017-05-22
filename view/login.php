@@ -84,11 +84,11 @@
       $('#frmLogin').submit(function() {
         $('div.mensagem-erro').html('');
  
-        $(this).ajaxSubmit(function(resposta) {
-          if (resposta) {
+        $(this).ajaxSubmit(function(resposta) {          
+          if (resposta == 1) {            
             window.location.href = 'index.php';
-          } else {
-            $('div.mensagem-erro').html(resposta);
+          } else {            
+            $('div.mensagem-erro').html('Login e/ou senha inválido(s)');
           }
         });
         

@@ -323,17 +323,6 @@
       $(".modal-body #usu_codp").val(usu_cod);
     });
   </script>
-  
-  <script type="text/javascript">
-    $("#NewPass").click(function() {
-      var usu_sen = $("#usu_senp").val();
-      var rep_sen = $("#rep_senp").val();
-      
-      if (usu_sen != rep_sen) {
-        return false;
-      }
-    });
-  </script>
 
   <script>
     $(".alert").fadeTo(4000, 500).slideUp(1000, function(){

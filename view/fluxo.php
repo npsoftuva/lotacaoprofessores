@@ -48,56 +48,54 @@
                 <div class="card card-plain">
                  <?php
                     if (isset($_POST["Adicionar"])) {
-                        $fluxo = new Fluxo();
-                        $fluxo->__set("flx_cod", $_POST["flx_cod"]);
-                        $fluxo->__set("flx_trn", $_POST["flx_trn"]);
-                        $fluxo->__set("flx_sem", $_POST["flx_sem"]);
-                        if ($fluxoController->register($fluxo)) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message">Fluxo adicionado com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar adicionar o fluxo.</span>
-                          </div>
-                        <?php }
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                      $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                      $fluxo->__set("flx_sem", $_POST["flx_sem"]);
+                      if ($fluxoController->register($fluxo)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message">Fluxo adicionado com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar adicionar o fluxo.</span>
+                        </div>
+                      <?php }
                     } else
                     if (isset($_POST["Excluir"])) {
-                        $return = $fluxoController->remove($_POST["flx_codx"]);
-                        if ($return === 1) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message">Fluxo excluído com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message"><?php echo $return; ?></span>
-                          </div>
-                        <?php }
+                      $return = $fluxoController->remove($_POST["flx_codx"]);
+                      if ($return === 1) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message">Fluxo excluído com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message"><?php echo $return; ?></span>
+                        </div>
+                      <?php }
                     } else
                     if (isset($_POST["Editar"])) {
-                        $fluxo = new Fluxo();
-                        $fluxo->__set("flx_cod", $_POST["flx_cod"]);
-                        $fluxo->__set("flx_trn", $_POST["flx_trn"]);
-                        $fluxo->__set("flx_sem", $_POST["flx_sem"]);
+                      $fluxo = new Fluxo();
+                      $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                      $fluxo->__set("flx_trn", $_POST["flx_trn"]);
+                      $fluxo->__set("flx_sem", $_POST["flx_sem"]);
 
-                        if ($fluxoController->update($fluxo)) { ?>
-                          <div class="alert alert-success alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message">Fluxo editado com sucesso!</span>
-                          </div>
-                        <?php } else { ?>
-                          <div class="alert alert-danger alert-with-icon" data-notify="container">
-                            <span data-notify="icon" class="pe-7s-refresh-2"></span>
-                            <span data-notify="message">Ocorreu um erro ao tentar editar o fluxo.</span>
-                          </div>
-                        <?php }
+                      if ($fluxoController->update($fluxo)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message">Fluxo editado com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-refresh-2"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar editar o fluxo.</span>
+                        </div>
+                      <?php }
                     }
-
-
 
                     $fluxos = $fluxoController->searchAll();
                 ?>
@@ -123,7 +121,7 @@
                       <tbody>
 <?php if (isset($fluxos)) foreach ($fluxos as $fluxo) { ?>
                         <tr>
-                          <td><?php echo $fluxo->__get("flx_cod"); ?></td>
+                          <td><?php echo substr($fluxo->__get("flx_cod"), 0, 4) . '.' . substr($fluxo->__get("flx_cod"), 4, 1); ?></td>
                           <td><?php echo ($fluxo->__get("flx_trn") == "0" ? "Integral" : ($fluxo->__get("flx_trn") == "1" ? "Manhã" : ($fluxo->__get("flx_trn") == "2" ? "Tarde" : "Noite"))); ?></td>
                           <td><?php echo $fluxo->__get("flx_sem"); ?></td>
                           <td>
@@ -214,7 +212,7 @@
             <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" placeholder="Código do Fluxo" name="flx_cod" required autocomplete="off" maxlength="5" max="5" min="5">
+                <input class="form-control" placeholder="Código do Fluxo" name="flx_cod" required autocomplete="off" maxlength="5" min="5" max="5">
               </div>
               <div class="form-group">
                 <label>Turno *</label>
@@ -264,7 +262,7 @@
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
       var flx_cod = $(this).data('cod');
-      $(".modal-body #flx_cod").val(flx_cod);
+      $(".modal-body #flx_cod").val(flx_cod.toString().substr(0, 4)+'.'+flx_cod.toString().substr(4, 5));
       var flx_trn = $(this).data('trn');
       $("#flx_trn").val(flx_trn);
       var flx_sem = $(this).data('sem');

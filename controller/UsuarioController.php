@@ -27,7 +27,7 @@ class UsuarioController {
     $user = $usuarioDAO->search($usu_log);
     if (isset($user) and password_verify($usu_sen, $user->__get("usu_sen")))
       return $user;
-    return 0;
+    return null;
   }
 
   public function searchAll() {
