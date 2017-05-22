@@ -63,6 +63,56 @@
       try {
         $dbh = Connection::connect();
 
+        $sql = "
+          SELECT * 
+          FROM tab_lot
+          INNER JOIN tab_ofr ON tab_lot.ofr_cod = tab_ofr.ofr_cod
+          INNER JOIN tab_cmp ON tab_ofr.flx_cod = tab_cmp.flx_cod AND tab_ofr.dcp_cod = tab_cmp.dcp_cod
+          ORDER BY tab_cmp.cmp_sem
+        ";
+        $search = $dbh->prepare($sql);
+
+        if (!$search->execute())
+          return 0;
+
+        $lotacoes = NULL;
+        $ofertaDAO = new OfertaDAO();
+        $professorDAO = new ProfessorDAO();
+        $salaDAO = new SalaDAO;
+
+        while ($aux = $search->fetch(PDO::FETCH_ASSOC)) {
+          $lotacao = new Lotacao();
+          $lotacao->__set("lot_cod", $aux["lot_cod"]);
+          $lotacao->__set("ofr_cod", $ofertaDAO->search($aux["ofr_cod"]));
+          $lotacao->__set("prf_cod", $professorDAO->search($aux["prf_cod"]));
+          $lotacao->__set("sla_cod", $salaDAO->search($aux["sla_cod"]));
+          $lotacao->__set("lot_dia", $aux["lot_dia"]);
+          $lotacao->__set("lot_hor", $aux["lot_hor"]);
+
+          $hor = "SELECT hor2str(".$aux['lot_hor'].")";
+          $searchHor = $dbh->prepare($hor);
+          $searchHor->execute();
+          $hor = $searchHor->fetch(PDO::FETCH_ASSOC);
+
+          $lotacao->__set("lot_int", $hor['hor2str']);
+          $lotacao->__set("lot_qtd", $aux['lot_qtd']);
+
+          $lotacoes[] = $lotacao;
+        }
+
+        return $lotacoes;
+      } catch(Exception $e) {
+        die("Unable to connect: " . $e->getMessage());
+        return 0;
+      }
+
+    }
+
+    public function searchAll2() {
+
+      try {
+        $dbh = Connection::connect();
+
         $sql = "SELECT ofr_cod FROM tab_lot GROUP BY ofr_cod";
         $search = $dbh->prepare($sql);
 

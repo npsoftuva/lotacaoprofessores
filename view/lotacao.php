@@ -81,22 +81,16 @@
                       $lotacao->__set("sla_cod", $sala);
 
                       $lot_int = 0;
-                      $lot_dia = "2";
 
                       /*
                         A B C D  E  F
                         0 2 4 8 16 32
                       */
-                      $aux = ["2", "3", "4", "5", "6", "7"];
-                      foreach ($aux as $dia)
-                        if (isset($_POST[$dia])) {
-                          $lot_dia = $dia;
-                          $lot_int = 0;
-                          foreach ($_POST[$dia] as $value)
-                            $lot_int += pow(2, $value);
-                        }
+                      $lot_int = 0;
+                      foreach ($_POST["lot_hor"] as $value)
+                        $lot_int += pow(2, $value);
 
-                      $lotacao->__set("lot_dia", $lot_dia);
+                      $lotacao->__set("lot_dia", $_POST["lot_dia"]);
                       $lotacao->__set("lot_hor", $lot_int);
                       $lotacao->__set("lot_int", $lot_int);
                       $lotacao->__set("lot_qtd", 5);
@@ -112,6 +106,7 @@
                           <span data-notify="message">Ocorreu um erro ao tentar adicionar a lotação.</span>
                         </div>
                       <?php }
+
                     }
                   ?>
                   <div class="header">
@@ -153,22 +148,10 @@
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_hor"); ?></td>
                           <td><?php echo $lotacao->__get("lot_qtd"); ?></td>
                           <td><?php echo count($ofertaController->gerarFrequencia($lotacao->__get("ofr_cod")->__get("ofr_cod"))); ?></td>
-                          <td><?php
-                            foreach ($lotacao->__get("lot_dia") as $dia) {
-                              echo $dia . "<br>";
-                            }
-                        ?></td>
+                          <td><?php echo $lotacao->__get("lot_dia") . $lotacao->__get("lot_int"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("ofr_vag"); ?></td>
-                          <td><?php
-                            foreach ($lotacao->__get("sla_cod") as $sala) {
-                              echo $sala->__get("sla_nom") . "<br>";
-                            }
-                        ?></td>
-                          <td><?php
-                            foreach ($lotacao->__get("prf_cod") as $professor) {
-                              echo $professor->__get("prf_nom") . "<br>";
-                            }
-                        ?></td>
+                          <td><?php echo $lotacao->__get("sla_cod")->__get("sla_nom"); ?></td>
+                          <td><?php echo $lotacao->__get("prf_cod")->__get("prf_nom"); ?></td>
                           <td>
                             <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("lot_cod"); ?>" data-prd="" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
@@ -311,25 +294,29 @@
               </select>
             </div>
             <div class="form-group">
+              <label>Dia da semana *</label>
+              <select class="form-control" name="lot_dia" id="sla_cod">
+                <?php for ($i = 2; $i <= 7; $i++) { ?>
+                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="form-group">
               <div class="content table-responsive table-full-width">
                 <table class="table table-striped table-hover" id="dataTables-example">
                   <thead>
-                    <th> </th>
                     <?php for ($i = ord('A'); $i <= ord('Q'); $i++) { ?>
                       <th><?php echo chr($i); ?></th>
                     <?php } ?>
                   </thead>
                   <tbody>
-                    <?php for ($i = 2; $i <= 7; $i++) { $j = 0; ?>
                     <tr>
-                      <td><?php echo $i; ?></td>
-                      <?php for ($c = ord('A'); $c <= ord('Q'); $c++) { ?>
+                      <?php $j = 0; for ($c = ord('A'); $c <= ord('Q'); $c++) { ?>
                       <td>
-                        <input type="checkbox" name="<?php echo $i; ?>[]" value="<?php echo $j++; ?>">
+                        <input type="checkbox" name="lot_hor[]" value="<?php echo $j++; ?>">
                       </td>
                       <?php } ?>
                     </tr>
-                    <?php } ?>
                   </tbody>
                 </table>
               </div>
