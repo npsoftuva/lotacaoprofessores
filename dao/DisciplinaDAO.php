@@ -133,7 +133,8 @@
         $sql = "SELECT d.dcp_cod, d.dcp_nom 
 				        FROM   tab_cmp AS c INNER JOIN tab_dcp AS d
                 ON     d.dcp_cod = c.dcp_cod
-                WHERE  c.cmp_sem = ?";
+                WHERE  c.cmp_sem = ?
+                ORDER BY d.dcp_nom";
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $sem);

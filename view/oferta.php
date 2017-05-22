@@ -166,9 +166,9 @@
                       <tbody>
 <?php if (isset($ofertas)) foreach ($ofertas as $oferta) { ?>
                         <tr>
-                          <td><?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?></td>
+                          <td><?php echo substr($oferta->__get("prd_cod")->__get("prd_cod"), 0, 4) . '.' . substr($oferta->__get("prd_cod")->__get("prd_cod"), 4, 1); ?></td>
                           <td><?php echo $oferta->__get("cmp")->__get("cmp_sem"); ?></td>
-                          <td><?php echo $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 0, 4) . '.' . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 4, 1); ?></td>
                           <td><?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
                           <td><?php echo $oferta->__get("ofr_trm"); ?></td>
                           <td><?php echo $oferta->__get("ofr_vag"); ?></td>
@@ -216,17 +216,17 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit"><span class="pe-7s-users"></span> Editar Oferta</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-users"></span> Editar Oferta  - Período <b><?php echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></b></h4>
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
               <input type="hidden" name="ofr_cod" id="ofr_cod" value="">
-              <div class="form-group">
+              <!--<div class="form-group">
                 <label>Período *</label>
                 <select class="form-control" name="prd_cod" id="prd_cod">
-                  <option value="<?php echo $lastPeriodo->__get("prd_cod"); ?>"><?php echo $lastPeriodo->__get("prd_cod"); ?></option>
+                  <option value="<?php //echo $lastPeriodo->__get("prd_cod"); ?>"><?php //echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></option>
                 </select>
-              </div>
+              </div>-->
               <div class="form-group">
                 <label>Semestre *</label>
                 <select class="form-control" name="cmp_sem" id="cmp_sem">
@@ -234,6 +234,7 @@
                   for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) { ?>
                   <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                   <?php } ?>
+                  <option value="<?php echo (int) $lastFluxo->__get("flx_sem") + 1; ?>">OPTATIVAS</option>
                 </select>
               </div>
               <div class="form-group">
@@ -245,7 +246,7 @@
                 <label>Fluxo *</label>
                 <select class="form-control" name="flx_cod" id="flx_cod">
                   <?php foreach ($fluxos as $fluxo) { ?>
-                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo $fluxo->__get("flx_cod"); ?></option>
+                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo substr($fluxo->__get("flx_cod"), 0, 4) . '.' . substr($fluxo->__get("flx_cod"), 4, 1); ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -273,16 +274,16 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add"><span class="pe-7s-users"></span> Adicionar Oferta</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-users"></span> Adicionar Oferta - Período <b><?php echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></b></h4>
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label>Período *</label>
                 <select class="form-control" name="prd_coda" id="prd_coda">
-                  <option value="<?php echo $lastPeriodo->__get("prd_cod"); ?>"><?php echo $lastPeriodo->__get("prd_cod"); ?></option>
+                  <option value="<?php //echo $lastPeriodo->__get("prd_cod"); ?>"><?php //echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></option>
                 </select>
-              </div>
+              </div>-->
               <div class="form-group">
                 <label>Semestre *</label>
                 <select class="form-control" name="cmp_sema" id="cmp_sema">
@@ -290,6 +291,7 @@
                   for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) { ?>
                   <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                   <?php } ?>
+                  <option value="<?php echo (int) $lastFluxo->__get("flx_sem") + 1; ?>">OPTATIVAS</option>
                 </select>
               </div>
               <div class="form-group">
@@ -301,7 +303,7 @@
                 <label>Fluxo *</label>
                 <select class="form-control" name="flx_coda" id="flx_coda">
                   <?php foreach ($fluxos as $fluxo) { ?>
-                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo $fluxo->__get("flx_cod"); ?></option>
+                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo substr($fluxo->__get("flx_cod"), 0, 4) . '.' . substr($fluxo->__get("flx_cod"), 4, 1); ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -352,9 +354,9 @@
       var ofr_cod = $(this).data('cod');
       $(".modal-body #ofr_cod").val(ofr_cod);
       var prd_cod = $(this).data('prd');
-      $(".modal-body #cmp_sem").val(cmp_sem);
-      var cmp_sem = $(this).data('sem');
       $(".modal-body #prd_cod").val(prd_cod);
+      var cmp_sem = $(this).data('sem');
+      $(".modal-body #cmp_sem").val(cmp_sem);
       var dcp_cod = $(this).data('dcp');
       $(".modal-body #dcp_cod").val(dcp_cod);
       var flx_cod = $(this).data('flx');
@@ -387,8 +389,19 @@
             <?php } ?>
           ];
         <?php }
-      } ?>
-        
+      }
+      $opt = (int) $lastFluxo->__get("flx_sem") + 1;
+      $disciplinas = $disciplinaController->disciplinasFromSemestre($opt);
+      if ($disciplinas != null) { ?>
+        disciplinas[<?php echo $opt; ?>] = [
+          <?php foreach ($disciplinas as $d) { ?>
+          {display: "<?php echo $d->__get("dcp_nom"); ?>", value: "<?php echo $d->__get("dcp_cod"); ?>" },
+          <?php } ?>
+        ];
+      <?php } ?>
+      
+      listaDisciplinasA(disciplinas[1]);
+
       $("#cmp_sema").change(function() {
         var parent = $(this).val();
         listaDisciplinasA(disciplinas[parent]);
