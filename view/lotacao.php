@@ -12,49 +12,6 @@
   $professorController = new ProfessorController();
   $salaController = new SalaController();
 
-  if (isset($_POST["Excluir"])) {
-    $lotacaoController->remove($_POST["lot_codx"]);
-  }
-
-  if (isset($_POST["Adicionar"])) {
-    $lotacao = new Lotacao();
-
-    $oferta = new Oferta();
-    $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
-    $lotacao->__set("ofr_cod", $oferta);
-
-    $professor = new Professor();
-    $professor->__set("prf_cod", $_POST["prf_cod"]);
-    $lotacao->__set("prf_cod", $professor);
-
-    $sala = new Sala();
-    $sala->__set("sla_cod", $_POST["sla_cod"]);
-    $lotacao->__set("sla_cod", $sala);
-
-    $lot_int = 0;
-    $lot_dia = "2";
-
-    $aux = ["2", "3", "4", "5", "6", "7"];
-    foreach ($aux as $dia)
-      if (isset($_POST[$dia])) {
-        $lot_dia = $dia;
-        $lot_int = 0;
-        foreach ($_POST[$dia] as $value)
-          $lot_int += pow(2, $value);
-      }
-
-    $lotacao->__set("lot_dia", $lot_dia);
-    $lotacao->__set("lot_hor", $lot_int);
-    $lotacao->__set("lot_int", $lot_int);
-    $lotacao->__set("lot_qtd", 5);
-
-    $lotacaoController->register($lotacao);
-
- }
- /*
-  A B C D  E  F
-  0 2 4 8 16 32
- */
 ?>
 <!doctype html>
 <html lang="en">
@@ -95,6 +52,68 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
+                  <?php
+                    if (isset($_POST["Excluir"])) {
+                      if ($lotacaoController->remove($_POST["lot_codx"])) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Lotação removida com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar remover a lotação.</span>
+                        </div>
+                      <?php }
+                    } else if (isset($_POST["Adicionar"])) {
+                      $lotacao = new Lotacao();
+
+                      $oferta = new Oferta();
+                      $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
+                      $lotacao->__set("ofr_cod", $oferta);
+
+                      $professor = new Professor();
+                      $professor->__set("prf_cod", $_POST["prf_cod"]);
+                      $lotacao->__set("prf_cod", $professor);
+
+                      $sala = new Sala();
+                      $sala->__set("sla_cod", $_POST["sla_cod"]);
+                      $lotacao->__set("sla_cod", $sala);
+
+                      $lot_int = 0;
+                      $lot_dia = "2";
+
+                      /*
+                        A B C D  E  F
+                        0 2 4 8 16 32
+                      */
+                      $aux = ["2", "3", "4", "5", "6", "7"];
+                      foreach ($aux as $dia)
+                        if (isset($_POST[$dia])) {
+                          $lot_dia = $dia;
+                          $lot_int = 0;
+                          foreach ($_POST[$dia] as $value)
+                            $lot_int += pow(2, $value);
+                        }
+
+                      $lotacao->__set("lot_dia", $lot_dia);
+                      $lotacao->__set("lot_hor", $lot_int);
+                      $lotacao->__set("lot_int", $lot_int);
+                      $lotacao->__set("lot_qtd", 5);
+
+                      if ($lotacaoController->register($lotacao)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Lotação adicionada com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar adicionar a lotação.</span>
+                        </div>
+                      <?php }
+                    }
+                  ?>
                   <div class="header">
                     <h4 class="title">Lotações</h4>
                     <p class="category">
@@ -123,9 +142,9 @@
                         <th>Ações</th>
                       </thead>
                       <tbody>
-<?php
-  $lotacoes = $lotacaoController->searchAll();
-  if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
+                      <?php
+                      $lotacoes = $lotacaoController->searchAll();
+                      if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
                         <tr>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>

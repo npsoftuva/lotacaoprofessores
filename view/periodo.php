@@ -139,7 +139,7 @@
                       <tbody>
 <?php if (isset($periodos)) foreach ($periodos as $periodo) { ?>
                         <tr>
-                          <td><?php echo $periodo->__get("prd_cod"); ?></td>
+                          <td><?php echo substr($periodo->__get("prd_cod"), 0, 4) . '.' . substr($periodo->__get("prd_cod"), 4, 1); ?></td>
                           <td><?php echo $periodo->__get("prd_ini")->__get("cld_dta"); ?></td>
                           <td><?php echo $periodo->__get("prd_fim")->__get("cld_dta"); ?></td>
                           <td>
@@ -172,6 +172,7 @@
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="prd_codx" id="prd_codx" value="">
+              <p>Você deseja excluir o período <b id="prd_codxx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -271,7 +272,7 @@
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
       var prd_cod = $(this).data('cod');
-      $(".modal-body #prd_cod").val(prd_cod);
+      $(".modal-body #prd_cod").val(prd_cod.toString().substr(0, 4)+'.'+prd_cod.toString().substr(4, 5));
       var prd_ini = $(this).data('ini');
       $(".modal-body #prd_ini").val(prd_ini);
       var prd_fim = $(this).data('fim');
@@ -283,6 +284,7 @@
     $(document).on("click", ".openDelete", function () {
       var prd_cod = $(this).data('cod');
       $(".modal-footer #prd_codx").val( prd_cod );
+      $(".modal-footer #prd_codxx").html(prd_cod.toString().substr(0, 4)+'.'+prd_cod.toString().substr(4, 5));
     });
   </script>
   <script>

@@ -189,7 +189,7 @@
                 </div>
                 <div class="form-group">
                   <label>CPF *</label>
-                  <input class="form-control" id="prf_cpf" name="prf_cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)"  onkeyup="mascara( this, mskCPF );">
+                  <input class="form-control" id="prf_cpf" name="prf_cpf" maxlength="11" required autocomplete="off" onblur="ValidaCPF(this)" onkeyup="mascara( this, mskCPF );">
                 </div>
                 <div class="form-group">
                   <label>E-mail *</label>
