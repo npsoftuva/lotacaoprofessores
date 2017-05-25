@@ -107,6 +107,48 @@
                         </div>
                       <?php }
 
+                    } else if (isset($_POST["Editar"])) {
+                      $lotacao = new Lotacao();
+                      $lotacao->__set("lot_cod", $_POST["lot_cod"]);
+
+                      $oferta = new Oferta();
+                      $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
+                      $lotacao->__set("ofr_cod", $oferta);
+
+                      $professor = new Professor();
+                      $professor->__set("prf_cod", $_POST["prf_cod"]);
+                      $lotacao->__set("prf_cod", $professor);
+
+                      $sala = new Sala();
+                      $sala->__set("sla_cod", $_POST["sla_cod"]);
+                      $lotacao->__set("sla_cod", $sala);
+
+                      $lot_int = 0;
+
+                      /*
+                        A B C D  E  F
+                        0 2 4 8 16 32
+                      */
+                      $lot_int = 0;
+                      foreach ($_POST["lot_horx"] as $value)
+                        $lot_int += pow(2, $value);
+
+                      $lotacao->__set("lot_dia", $_POST["lot_dia"]);
+                      $lotacao->__set("lot_hor", $lot_int);
+                      $lotacao->__set("lot_int", $lot_int);
+                      $lotacao->__set("lot_qtd", 5);
+
+                      if ($lotacaoController->update($lotacao)) { ?>
+                        <div class="alert alert-success alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Lotação editada com sucesso!</span>
+                        </div>
+                      <?php } else { ?>
+                        <div class="alert alert-danger alert-with-icon" data-notify="container">
+                          <span data-notify="icon" class="pe-7s-users"></span>
+                          <span data-notify="message">Ocorreu um erro ao tentar editar a lotação.</span>
+                        </div>
+                      <?php }
                     }
                   ?>
                   <div class="header">
@@ -153,9 +195,9 @@
                           <td><?php echo $lotacao->__get("sla_cod")->__get("sla_nom"); ?></td>
                           <td><?php echo $lotacao->__get("prf_cod")->__get("prf_nom"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("lot_cod"); ?>" data-prd="" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-lot="<?php echo $lotacao->__get("lot_cod"); ?>" data-ofr="<?php echo $lotacao->__get("ofr_cod")->__get("ofr_cod"); ?>" data-pfr="<?php echo $lotacao->__get("prf_cod")->__get("prf_cod"); ?>" data-sla="<?php echo $lotacao->__get("sla_cod")->__get("sla_cod"); ?>" data-dia="<?php echo $lotacao->__get("lot_dia"); ?>" data-int="<?php echo $lotacao->__get("lot_int"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
-                            <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("ofr_cod")->__get("ofr_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $lotacao->__get("lot_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
                         </tr>
 <?php } ?>
@@ -200,17 +242,19 @@
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
+            <input type="hidden" name="lot_cod" id="lot">
             <div class="form-group">
               <label>Oferta *</label>
-              <select class="form-control" name="ofr_cod" id="ofr_cod">
-                <?php foreach ($ofertaController->searchAll() as $oferta) { ?>
-                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("ofr_cod"); ?></option>
+              <small>Semestre / Fluxo / Disciplina / Turma</small>
+              <select class="form-control" name="ofr_cod" id="ofr">
+                <?php foreach ($ofertaController->searchAll() as $key => $oferta) { ?>
+                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod") . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
                 <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Professor *</label>
-              <select class="form-control" name="prf_cod" id="prf_cod">
+              <select class="form-control" name="prf_cod" id="pfr">
                 <?php foreach ($professorController->searchAll() as $professor) { ?>
                 <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
                 <?php } ?>
@@ -218,32 +262,36 @@
             </div>
             <div class="form-group">
               <label>Sala *</label>
-              <select class="form-control" name="flx_cod" id="flx_cod">
+              <select class="form-control" name="sla_cod" id="sla">
                 <?php foreach ($salaController->searchAll() as $sala) { ?>
                 <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
                 <?php } ?>
               </select>
             </div>
             <div class="form-group">
+              <label>Dia da semana *</label>
+              <select class="form-control" name="lot_dia" id="dia">
+                <?php for ($i = 2; $i <= 7; $i++) { ?>
+                <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="form-group">
               <div class="content table-responsive table-full-width">
-                <table class="table table-striped table-hover" id="dataTables-example">
+                <table class="table table-striped table-hover" id="dataTables-example hor">
                   <thead>
-                    <th> </th>
                     <?php for ($i = ord('A'); $i <= ord('Q'); $i++) { ?>
                       <th><?php echo chr($i); ?></th>
                     <?php } ?>
                   </thead>
                   <tbody>
-                    <?php for ($i = 2; $i <= 7; $i++) { ?>
                     <tr>
-                      <td><?php echo $i; ?></td>
-                      <?php for ($c = ord('A'); $c <= ord('Q'); $c++) { ?>
+                      <?php $j = 0; for ($c = ord('A'); $c <= ord('Q'); $c++) { ?>
                       <td>
-                        <input type="checkbox">
+                        <input type="checkbox" name="lot_horx[]" value="<?php echo $j++; ?>">
                       </td>
                       <?php } ?>
                     </tr>
-                    <?php } ?>
                   </tbody>
                 </table>
               </div>
@@ -295,7 +343,7 @@
             </div>
             <div class="form-group">
               <label>Dia da semana *</label>
-              <select class="form-control" name="lot_dia" id="sla_cod">
+              <select class="form-control" name="lot_dia">
                 <?php for ($i = 2; $i <= 7; $i++) { ?>
                 <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                 <?php } ?>
@@ -357,20 +405,20 @@
   
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
-      var ofr_cod = $(this).data('cod');
-      $(".modal-body #ofr_cod").val(ofr_cod);
-      var prd_cod = $(this).data('prd');
-      $(".modal-body #prd_cod").val(prd_cod);
-      var cmp_sem = $(this).data('sem');
-      $(".modal-body #cmp_sem").val(cmp_sem);
-      var dcp_cod = $(this).data('dcp');
-      $(".modal-body #dcp_cod").val(dcp_cod);
-      var flx_cod = $(this).data('flx');
-      $(".modal-body #flx_cod").val(flx_cod);
-      var ofr_trm = $(this).data('trm');
-      $(".modal-body #ofr_trm").val(ofr_trm);
-      var ofr_vag = $(this).data('vag');
-      $(".modal-body #ofr_vag").val(ofr_vag);
+      var lot = $(this).data('lot');
+      $(".modal-body #lot").val(lot);
+      var ofr = $(this).data('ofr');
+      $(".modal-body #ofr").val(ofr);
+      var pfr = $(this).data('pfr');
+      $(".modal-body #pfr").val(pfr);
+      var sla = $(this).data('sla');
+      $(".modal-body #sla").val(sla);
+      var dia = $(this).data('dia');
+      $(".modal-body #dia").val(dia);
+      var int = $(this).data('int');
+      var checks = document.getElementsByName("lot_horx[]");
+      checks.forEach(function (check, index, array) { check.checked = false; });
+      for (var i = 0; i < int.length; i++) checks[int[i].charCodeAt(0) - 65].checked = true;
     });
   </script>
 
