@@ -37,15 +37,15 @@
 
     }
 
-    public function remove ($ofr_cod) {
+    public function remove ($lot_cod) {
 
       try {
         $dbh = Connection::connect();
 
-        $sql = "DELETE FROM tab_lot WHERE ofr_cod = ?";
+        $sql = "DELETE FROM tab_lot WHERE lot_cod = ?";
 
         $remove = $dbh->prepare($sql);
-        $remove->bindValue(1, $ofr_cod);
+        $remove->bindValue(1, $lot_cod);
 
         if ($remove->execute())
           return 1;
@@ -53,6 +53,44 @@
         return 0;
       } catch(Exception $e) {
         //echo "Failed: "  . $e->getMessage();
+        return 0;
+      }
+
+    }
+
+    public function update (Lotacao $lotacao) {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "UPDATE  tab_lot
+                SET     ofr_cod = ?,
+                        prf_cod = ?,
+                        sla_cod = ?,
+                        lot_dia = ?,
+                        lot_hor = ?,
+                        lot_int = ?,
+                        lot_qtd = ?
+                WHERE   lot_cod = ?;
+
+                ";
+
+        $update = $dbh->prepare($sql);
+        $update->bindValue(1, $lotacao->__get("ofr_cod")->__get("ofr_cod"));
+        $update->bindValue(2, $lotacao->__get("prf_cod")->__get("prf_cod"));
+        $update->bindValue(3, $lotacao->__get("sla_cod")->__get("sla_cod"));
+        $update->bindValue(4, $lotacao->__get("lot_dia"));
+        $update->bindValue(5, $lotacao->__get("lot_hor"));
+        $update->bindValue(6, $lotacao->__get("lot_int"));
+        $update->bindValue(7, $lotacao->__get("lot_qtd"));
+        $update->bindValue(8, $lotacao->__get("lot_cod"));
+
+        if($update->execute())
+          return 1;
+
+        return 0;
+      } catch (Exception $e) {
+        die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
