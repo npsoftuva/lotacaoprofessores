@@ -102,13 +102,15 @@
             <h4 class="modal-title" id="add"><span class="pe-7s-display2"></span> Sala</h4>
           </div>
           <div class="modal-body">
-            <form role="form" method="POST" action="relatorioSala.php" target="_blank">
+            <form role="form" method="GET" action="relatorioSala.php" target="_blank">
               <div class="form-group">
                 <label>Escolha a Sala *</label>
 								<select class="form-control" name="sla_cod" id="sla_cod">
-                <?php foreach ($salaController->searchAll() as $sala) { ?>
-                <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
-                <?php } ?>
+                <?php 
+                  $salas = $salaController->searchAll();
+                  if (isset($salas)) foreach ($salaController->searchAll() as $sala) { ?>
+                      <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
+                    <?php } ?>
               </select>
               </div>
           </div>

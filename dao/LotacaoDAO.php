@@ -101,13 +101,12 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "
-          SELECT * 
-          FROM tab_lot
-          INNER JOIN tab_ofr ON tab_lot.ofr_cod = tab_ofr.ofr_cod
-          INNER JOIN tab_cmp ON tab_ofr.flx_cod = tab_cmp.flx_cod AND tab_ofr.dcp_cod = tab_cmp.dcp_cod
-          ORDER BY tab_cmp.cmp_sem
-        ";
+        $sql = "SELECT * 
+                FROM tab_lot L
+                INNER JOIN tab_ofr O ON L.ofr_cod = O.ofr_cod
+                INNER JOIN tab_cmp C ON (O.flx_cod = C.flx_cod AND O.dcp_cod = C.dcp_cod)
+                ORDER BY C.cmp_sem";
+
         $search = $dbh->prepare($sql);
 
         if (!$search->execute())
@@ -116,7 +115,7 @@
         $lotacoes = NULL;
         $ofertaDAO = new OfertaDAO();
         $professorDAO = new ProfessorDAO();
-        $salaDAO = new SalaDAO;
+        $salaDAO = new SalaDAO();
 
         while ($aux = $search->fetch(PDO::FETCH_ASSOC)) {
           $lotacao = new Lotacao();
@@ -146,7 +145,7 @@
 
     }
 
-    public function searchAll2() {
+    public function searchAllReport() {
 
       try {
         $dbh = Connection::connect();
@@ -231,15 +230,13 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT l.lot_dia, l.lot_int, d.dcp_nom
-                FROM tab_dcp AS d INNER JOIN tab_ofr AS o
-                                    ON d.dcp_cod = o.dcp_cod
-                                  INNER JOIN tab_lot AS l
-                                    ON o.ofr_cod = l.ofr_cod
-                                  INNER JOIN tab_sla AS s
-                                    ON s.sla_cod = l.sla_cod
-                WHERE s.sla_cod = ?
-                ORDER BY l.lot_dia";
+        $sql = "SELECT L.lot_dia, L.lot_int, D.dcp_nom
+                FROM tab_dcp D 
+                INNER JOIN tab_ofr O ON D.dcp_cod = O.dcp_cod
+                INNER JOIN tab_lot L ON O.ofr_cod = L.ofr_cod
+                INNER JOIN tab_sla S ON S.sla_cod = L.sla_cod
+                WHERE S.sla_cod = ?
+                ORDER BY L.lot_dia";
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $cod_sala);

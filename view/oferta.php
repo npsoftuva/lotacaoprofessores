@@ -12,7 +12,8 @@
   $periodoController = new PeriodoController();
   $disciplinaController = new DisciplinaController();
   $componenteController = new ComponenteController();
-
+  $lastPeriodo = $periodoController->searchLastCod();
+  $lastFluxo = $fluxoController->searchLastCod();
 ?>
 <!doctype html>
 <html lang="en">
@@ -55,20 +56,24 @@
                 <div class="card card-plain">
                   <?php
                     if (isset($_POST["Adicionar"])) {
+                      // cmp_coda vem no formato 'dcp_cod-flx_cod'
+                      $codgs = explode('-', $_POST["cmp_coda"]);
+                      $dcp_cod = $codgs[0];
+                      $flx_cod = $codgs[1];
                       // criando um objeto Oferta
                       $oferta = new Oferta();
                       $oferta->__set("ofr_trm", $_POST["ofr_trma"]);
                       $oferta->__set("ofr_vag", $_POST["ofr_vaga"]);
                       // criando um objeto Periodo para setar em Oferta
                       $periodo = new Periodo();
-                      $periodo->__set("prd_cod", $_POST["prd_coda"]);
+                      $periodo->__set("prd_cod", $lastPeriodo->__get("prd_cod"));
                       $oferta->__set("prd_cod", $periodo);
                       // criando um objeto Fluxo para setar em Oferta
                       $fluxo = new Fluxo();
-                      $fluxo->__set("flx_cod", $_POST["flx_coda"]);
+                      $fluxo->__set("flx_cod", $flx_cod);
                       // criando um objeto Disciplina para setar em Oferta
                       $disciplina = new Disciplina();
-                      $disciplina->__set("dcp_cod", $_POST["dcp_coda"]);
+                      $disciplina->__set("dcp_cod", $dcp_cod);
                       // criando um objeto Componente para setar em Oferta
                       $componente = new Componente();
                       $componente->__set("flx_cod", $fluxo);
@@ -102,6 +107,10 @@
                       <?php }
                     } else
                     if (isset($_POST["Editar"])) {
+                      // cmp_coda vem no formato 'dcp_cod-flx_cod'
+                      $codgs = explode('-', $_POST["cmp_cod"]);
+                      $dcp_cod = $codgs[0];
+                      $flx_cod = $codgs[1];
                       // criando um objeto Oferta
                       $oferta = new Oferta();
                       $oferta->__set("ofr_cod", $_POST["ofr_cod"]);
@@ -109,14 +118,14 @@
                       $oferta->__set("ofr_vag", $_POST["ofr_vag"]);
                       // criando um objeto Periodo para setar em Oferta
                       $periodo = new Periodo();
-                      $periodo->__set("prd_cod", $_POST["prd_cod"]);
+                      $periodo->__set("prd_cod", $lastPeriodo->__get("prd_cod"));
                       $oferta->__set("prd_cod", $periodo);
                       // criando um objeto Fluxo para setar em Oferta
                       $fluxo = new Fluxo();
-                      $fluxo->__set("flx_cod", $_POST["flx_cod"]);
+                      $fluxo->__set("flx_cod", $flx_cod);
                       // criando um objeto Disciplina para setar em Oferta
                       $disciplina = new Disciplina();
-                      $disciplina->__set("dcp_cod", $_POST["dcp_cod"]);
+                      $disciplina->__set("dcp_cod", $dcp_cod);
                       // criando um objeto Componente para setar em Oferta
                       $componente = new Componente();
                       $componente->__set("flx_cod", $fluxo);
@@ -137,9 +146,8 @@
                     }
 
                     $ofertas = $ofertaController->searchAll();
-                    $fluxos = $fluxoController->searchAll();
-                    $lastPeriodo = $periodoController->searchLastCod();
-                    $lastFluxo = $fluxoController->searchLastCod();
+                    $fluxos = $fluxoController->searchAll();                    
+
                   ?>
                   <div class="header">
                     <h4 class="title">Ofertas</h4>
@@ -166,14 +174,14 @@
                       <tbody>
 <?php if (isset($ofertas)) foreach ($ofertas as $oferta) { ?>
                         <tr>
-                          <td><?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?></td>
+                          <td><?php echo substr($oferta->__get("prd_cod")->__get("prd_cod"), 0, 4) . '.' . substr($oferta->__get("prd_cod")->__get("prd_cod"), 4, 1); ?></td>
                           <td><?php echo $oferta->__get("cmp")->__get("cmp_sem"); ?></td>
-                          <td><?php echo $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 0, 4) . '.' . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 4, 1); ?></td>
                           <td><?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
                           <td><?php echo $oferta->__get("ofr_trm"); ?></td>
                           <td><?php echo $oferta->__get("ofr_vag"); ?></td>
                           <td>
-                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-sem="<?php echo $oferta->__get("cmp")->__get("cmp_sem"); ?>" data-flx="<?php echo $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?>" data-dcp="<?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
+                            <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" data-prd="<?php echo $oferta->__get("prd_cod")->__get("prd_cod"); ?>" data-sem="<?php echo $oferta->__get("cmp")->__get("cmp_sem"); ?>" data-cmp="<?php echo $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_cod").'-'.$oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?>" data-trm="<?php echo $oferta->__get("ofr_trm"); ?>" data-vag="<?php echo $oferta->__get("ofr_vag"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
 
                             <a data-toggle="modal" data-cod="<?php echo $oferta->__get("ofr_cod"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
                           </td>
@@ -216,17 +224,11 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="edit"><span class="pe-7s-users"></span> Editar Oferta</h4>
+            <h4 class="modal-title" id="edit"><span class="pe-7s-users"></span> Editar Oferta  - Período <b><?php echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></b></h4>
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
               <input type="hidden" name="ofr_cod" id="ofr_cod" value="">
-              <div class="form-group">
-                <label>Período *</label>
-                <select class="form-control" name="prd_cod" id="prd_cod">
-                  <option value="<?php echo $lastPeriodo->__get("prd_cod"); ?>"><?php echo $lastPeriodo->__get("prd_cod"); ?></option>
-                </select>
-              </div>
               <div class="form-group">
                 <label>Semestre *</label>
                 <select class="form-control" name="cmp_sem" id="cmp_sem">
@@ -234,19 +236,13 @@
                   for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) { ?>
                   <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                   <?php } ?>
+                  <option value="<?php echo (int) $lastFluxo->__get("flx_sem") + 1; ?>">OPTATIVAS</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>Disciplina *</label>
-                <select class="form-control" name="dcp_cod" id="dcp_cod">
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Fluxo *</label>
-                <select class="form-control" name="flx_cod" id="flx_cod">
-                  <?php foreach ($fluxos as $fluxo) { ?>
-                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo $fluxo->__get("flx_cod"); ?></option>
-                  <?php } ?>
+                <label>Componente *</label>
+                <small>(Fluxo - Disciplina)</small>
+                <select class="form-control" name="cmp_cod" id="cmp_cod">
                 </select>
               </div>
               <div class="form-group">
@@ -273,16 +269,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add"><span class="pe-7s-users"></span> Adicionar Oferta</h4>
+            <h4 class="modal-title" id="add"><span class="pe-7s-users"></span> Adicionar Oferta - Período <b><?php echo substr($lastPeriodo->__get("prd_cod"), 0, 4) . '.' . substr($lastPeriodo->__get("prd_cod"), 4, 1); ?></b></h4>
           </div>
           <form role="form" method="POST">
             <div class="modal-body">
-              <div class="form-group">
-                <label>Período *</label>
-                <select class="form-control" name="prd_coda" id="prd_coda">
-                  <option value="<?php echo $lastPeriodo->__get("prd_cod"); ?>"><?php echo $lastPeriodo->__get("prd_cod"); ?></option>
-                </select>
-              </div>
               <div class="form-group">
                 <label>Semestre *</label>
                 <select class="form-control" name="cmp_sema" id="cmp_sema">
@@ -290,19 +280,13 @@
                   for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) { ?>
                   <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                   <?php } ?>
+                  <option value="<?php echo (int) $lastFluxo->__get("flx_sem") + 1; ?>">OPTATIVAS</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>Disciplina *</label>
-                <select class="form-control" name="dcp_coda" id="dcp_coda">
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Fluxo *</label>
-                <select class="form-control" name="flx_coda" id="flx_coda">
-                  <?php foreach ($fluxos as $fluxo) { ?>
-                  <option value="<?php echo $fluxo->__get("flx_cod"); ?>"><?php echo $fluxo->__get("flx_cod"); ?></option>
-                  <?php } ?>
+                <label>Componente *</label>
+                <small>(Fluxo - Disciplina)</small>
+                <select class="form-control" name="cmp_coda" id="cmp_coda">
                 </select>
               </div>
               <div class="form-group">
@@ -315,8 +299,8 @@
               </div>
             </div>
               <div class="modal-footer">
-                <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
                 <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+                <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
               </div>
           </form>
         </div>
@@ -348,22 +332,7 @@
   <script src="assets/js/mask.js"></script>
   
   <script type="text/javascript">
-    $(document).on("click", ".openEdit", function () {
-      var ofr_cod = $(this).data('cod');
-      $(".modal-body #ofr_cod").val(ofr_cod);
-      var prd_cod = $(this).data('prd');
-      $(".modal-body #cmp_sem").val(cmp_sem);
-      var cmp_sem = $(this).data('sem');
-      $(".modal-body #prd_cod").val(prd_cod);
-      var dcp_cod = $(this).data('dcp');
-      $(".modal-body #dcp_cod").val(dcp_cod);
-      var flx_cod = $(this).data('flx');
-      $(".modal-body #flx_cod").val(flx_cod);
-      var ofr_trm = $(this).data('trm');
-      $(".modal-body #ofr_trm").val(ofr_trm);
-      var ofr_vag = $(this).data('vag');
-      $(".modal-body #ofr_vag").val(ofr_vag);
-    });
+
   </script>
 
   <script type="text/javascript">
@@ -375,43 +344,63 @@
   
   <script type="text/javascript">
     $(document).ready(function() {
-      var disciplinas = {};
+      var componentes = {};
       
-      <?php      
-      for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) {
-        $disciplinas = $disciplinaController->disciplinasFromSemestre($i); 
-        if ($disciplinas != null) { ?>
-          disciplinas[<?php echo $i; ?>] = [
-            <?php foreach ($disciplinas as $d) { ?>
-            {display: "<?php echo $d->__get("dcp_nom"); ?>", value: "<?php echo $d->__get("dcp_cod"); ?>" },
+      <?php
+      $qtdSemestres = (int) $lastFluxo->__get("flx_sem") + 1;
+      for ($i = 1; $i <= $qtdSemestres; $i++) {
+        $componentes = $componenteController->componenteBySemestre($i); 
+        if (isset($componentes)) { ?>
+          componentes[<?php echo $i; ?>] = [
+            <?php foreach ($componentes as $c) { ?>
+            {display: "<?php echo substr($c->__get('flx_cod')->__get('flx_cod'), 0, 4) . '.' . substr($c->__get('flx_cod')->__get('flx_cod'), 4, 1) . ' - ' . $c->__get('dcp_cod')->__get('dcp_nom'); ?>", value: "<?php echo $c->__get('dcp_cod')->__get('dcp_cod').'-'.$c->__get('flx_cod')->__get('flx_cod'); ?>" },
             <?php } ?>
           ];
         <?php }
       } ?>
-        
+      
+      listaComponentesA(componentes[1]);
+
       $("#cmp_sema").change(function() {
         var parent = $(this).val();
-        listaDisciplinasA(disciplinas[parent]);
+        listaComponentesA(componentes[parent]);
       });
       
-      function listaDisciplinasA(array_list) {
-        $("#dcp_coda").html("");
+      function listaComponentesA(array_list) {
+        $("#cmp_coda").html("");
         $(array_list).each(function (i) {
-          $("#dcp_coda").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+          $("#cmp_coda").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
         });
       }
       
       $("#cmp_sem").change(function() {
         var parent = $(this).val();
-        listaDisciplinasE(disciplinas[parent]);
+        listaComponentesE(componentes[parent]);
       });
       
-      function listaDisciplinasE(array_list) {
-        $("#dcp_cod").html("");
+      function listaComponentesE(array_list) {
+        $("#cmp_cod").html("");
         $(array_list).each(function (i) {
-          $("#dcp_cod").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
+          $("#cmp_cod").append("<option value='"+array_list[i].value+"'>"+array_list[i].display+"</option>");
         });
       }
+
+      $(document).on("click", ".openEdit", function () {
+        var ofr_cod = $(this).data('cod');
+        $(".modal-body #ofr_cod").val(ofr_cod);
+        var prd_cod = $(this).data('prd');
+        $(".modal-body #prd_cod").val(prd_cod);
+        var cmp_sem = $(this).data('sem');
+        $(".modal-body #cmp_sem").val(cmp_sem);
+        listaComponentesE(componentes[cmp_sem]);
+        var cmp_cod = $(this).data('cmp');
+        $(".modal-body #cmp_cod").val(cmp_cod);
+        var ofr_trm = $(this).data('trm');
+        $(".modal-body #ofr_trm").val(ofr_trm);
+        var ofr_vag = $(this).data('vag');
+        $(".modal-body #ofr_vag").val(ofr_vag);
+      });
+
     });
   </script>
   <script>

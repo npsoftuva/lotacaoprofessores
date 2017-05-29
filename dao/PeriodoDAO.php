@@ -5,7 +5,8 @@
 
   require_once('../model/Periodo.class.php');
   require_once('../lib/BD.class.php');
-
+  require_once('CalendarioDAO.php');
+  
   class PeriodoDAO {
     
     public function register (Periodo $periodo) {
@@ -135,31 +136,13 @@
         if (!$search->execute())
           return 0;
 
+        $calendarioDAO = new CalendarioDAO();
+
         while ($per = $search->fetch(PDO::FETCH_ASSOC)) {
           $periodo = new Periodo();
           $periodo->__set("prd_cod", $per["prd_cod"]);
-
-          // Seta o objeto Calendario em PRD_INI
-          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-          $searchCalendario = $dbh->prepare($sql);
-          $searchCalendario->bindValue(1, $per["prd_ini"]);
-          $searchCalendario->execute();
-
-          $cld = $searchCalendario->fetch(PDO::FETCH_ASSOC);
-          $prd_ini = new Calendario();
-          $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-          $periodo->__set("prd_ini", $prd_ini);
-
-          // Seta o objeto Calendario em PRD_FIM
-          $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-          $searchCalendario = $dbh->prepare($sql);
-          $searchCalendario->bindValue(1, $per["prd_fim"]);
-          $searchCalendario->execute();
-
-          $cld = $searchCalendario->fetch(PDO::FETCH_ASSOC);
-          $prd_fim = new Calendario();
-          $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-          $periodo->__set("prd_fim", $prd_fim);
+          $periodo->__set("prd_ini", $calendarioDAO->search($per["prd_ini"]));
+          $periodo->__set("prd_fim", $calendarioDAO->search($per["prd_fim"]));
           $periodos[] = $periodo;
         }
 
@@ -185,36 +168,13 @@
         if (!$search->execute())
           return 0;
 
-        // Inicia o objeto Periodo
+        $calendarioDAO = new CalendarioDAO();
+
         $per = $search->fetch(PDO::FETCH_ASSOC);
         $periodo = new Periodo();
         $periodo->__set("prd_cod", $per["prd_cod"]);
-
-        // Seta o objeto Calendario em PRD_INI
-        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $per["prd_ini"]);
-        
-        if (!$search->execute())
-          return 0;
-
-        $cld = $search->fetch(PDO::FETCH_ASSOC);
-        $prd_ini = new Calendario();
-        $prd_ini->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-        $periodo->__set("prd_ini", $prd_ini);
-
-        // Seta o objeto Calendario em PRD_FIM
-        $sql = "SELECT * FROM tab_cld WHERE cld_dta = ?";
-        $search = $dbh->prepare($sql);
-        $search->bindValue(1, $per["prd_fim"]);
-        
-        if (!$search->execute())
-          return 0;
-
-        $cld = $search->fetch(PDO::FETCH_ASSOC);
-        $prd_fim = new Calendario();
-        $prd_fim->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
-        $periodo->__set("prd_fim", $prd_fim);
+        $periodo->__set("prd_ini", $calendarioDAO->search($per["prd_ini"]));
+        $periodo->__set("prd_fim", $calendarioDAO->search($per["prd_fim"]));
 
         return $periodo;
       } catch (Exception $e) {

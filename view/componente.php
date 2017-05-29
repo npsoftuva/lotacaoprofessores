@@ -243,9 +243,11 @@
                   <?php
                   $fluxoController = new FluxoController();
                   $fluxos = $fluxoController->searchAll();
-                  foreach ($fluxos as $fluxo) { ?>
-                    <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo $fluxo->__get('flx_cod'); ?></option>
-                  <?php } ?>
+                  if (isset($fluxos)) {
+                    foreach ($fluxos as $fluxo) { ?>
+                      <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo $fluxo->__get('flx_cod'); ?></option>
+                    <?php } 
+                  } ?>
                 </select>
               </div>
               <div class="form-group">
@@ -254,9 +256,11 @@
                   <?php
                   $disciplinaController = new DisciplinaController();
                   $disciplinas = $disciplinaController->searchAll();
-                  foreach ($disciplinas as $disciplina) { ?>
-                    <option value="<?php echo $disciplina->__get('dcp_cod'); ?>"><?php echo $disciplina->__get('dcp_nom'); ?></option>
-                  <?php } ?>
+                  if (isset($disciplinas)) {
+                    foreach ($disciplinas as $disciplina) { ?>
+                      <option value="<?php echo $disciplina->__get('dcp_cod'); ?>"><?php echo $disciplina->__get('dcp_nom'); ?></option>
+                    <?php } 
+                  } ?>
                 </select>
               </div>
               <div class="form-group">
@@ -269,8 +273,8 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             </form>
           </div>
         </div>
@@ -315,14 +319,16 @@
       <?php
         $fluxoController = new FluxoController();
         $fluxos = $fluxoController->searchAll();
-        foreach ($fluxos as $f) { ?>
-        fluxo[<?php echo $f->__get("flx_cod"); ?>] = [
-        <?php for ($i = 1; $i <= $f->__get("flx_sem"); $i++) { ?>
-        {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
-        <?php } ?>
-        {display: "OPTATIVA", value: "<?php echo (int) $f->__get('flx_sem') + 1; ?>" }
-        ];
-      <?php } ?>
+        if (isset($fluxos)) {
+          foreach ($fluxos as $f) { ?>
+            fluxo[<?php echo $f->__get("flx_cod"); ?>] = [
+              <?php for ($i = 1; $i <= $f->__get("flx_sem"); $i++) { ?>
+                {display: "<?php echo $i; ?>", value: "<?php echo $i; ?>" },
+              <?php } ?>
+              {display: "OPTATIVA", value: "<?php echo (int) $f->__get('flx_sem') + 1; ?>" }
+            ];
+          <?php }
+        } ?>
 
       $("#flx_cod").change(function() {
         var parent = $(this).val();
