@@ -5,10 +5,10 @@
   require_once('../controller/SalaController.php');
 
   $lotacaoController = new LotacaoController();
-	$lotacoes = $lotacaoController->searchClassInRoom($_POST['sla_cod']);
+	$lotacoes = $lotacaoController->searchClassInRoom($_GET['sla_cod']);
 
   $salaController = new SalaController();
-  $sala = $salaController->search($_POST['sla_cod']);
+  $sala = $salaController->search($_GET['sla_cod']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -24,7 +24,7 @@
 	</head>
 	<body>
 	  <?php
-	  	$header = "<br><span>LOTAÇÃO DA SALA - " . $sala->__get('sla_nom') . "</span>";
+	  	$header = "<br><h2>LOTAÇÃO DE SALA - " . $sala->__get('sla_nom') . "</h2>";
       
 	  	$content = "<br><br><br><table><tr><th>HORÁRIOS</th><th>SEGUNDA-FEIRA</th><th>TERÇA-FEIRA</th><th>QUARTA-FEIRA</th><th>QUINTA-FEIRA</th><th>SEXTA-FEIRA</th></tr>";
 
@@ -41,7 +41,8 @@
 		  $content .= "</table>";
 		
 		  $report = new report();
-		  $report->setCss('../view/assets/css/css-lot-sala.css'); // caminho relativo a localização da classe Report
+		  // caminho relativo a localização da classe Report
+		  $report->setCss('../view/assets/css/css-lot-sala.css'); 
 			$report->setHeader($header);
 			$report->setContent($content);
 			$report->buildPDF();

@@ -2,9 +2,12 @@ body {
 	font-family: "Arial", sans-serif 
 }
 
-span {
-	font-size: 26px;
+h2 {
+	font-size: 20px;
   text-align: center;
+  font-weight: normal;
+  border-top: 0.05cm solid #000000; 
+	border-bottom: 0.05cm solid #000000;
 }
 
 table {

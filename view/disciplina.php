@@ -199,8 +199,8 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             </form>
           </div>
         </div>

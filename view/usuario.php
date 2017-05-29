@@ -134,7 +134,7 @@
                         <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3">Ações</th>
                       </thead>
                       <tbody>
-<?php if ($usuarios) foreach ($usuarios as $usuario) { ?>
+<?php if (isset($usuarios)) foreach ($usuarios as $usuario) { ?>
                         <tr>
                           <td><?php echo $usuario->__get("usu_log"); ?></td>
                           <td><?php echo $usuario->__get("usu_tpo") ? "Secretário(a)" : "Coordenador(a)"; ?></td>
@@ -239,8 +239,8 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             </form>
           </div>
         </div>

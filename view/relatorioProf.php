@@ -5,7 +5,7 @@
   require_once('../controller/OfertaController.php');
 
   $lotacaoController = new LotacaoController();
-  $lotacoes = $lotacaoController->searchAll();
+  $lotacoes = $lotacaoController->searchAllReport();
 
   $ofertaController = new OfertaController();
 ?>
@@ -25,7 +25,7 @@
 		
 	  <?php	  
 	    /* Se existirem lotações cadastradas cria uma linha de tabela para cada lotação */
-	    if ($lotacoes) {
+	    if (isset($lotacoes)) {
 		    $lots = "";
 				
 				foreach ($lotacoes as $lotacao) {

@@ -31,10 +31,5 @@ class DisciplinaController {
     $disciplinaDAO = new DisciplinaDAO();
     return $disciplinaDAO->searchAll();
   }
-  
-  public function disciplinasFromSemestre($sem) {
-    $disciplinaDAO = new DisciplinaDAO();
-    return $disciplinaDAO->disciplinasFromSemestre($sem);
-  }
 }
 ?>

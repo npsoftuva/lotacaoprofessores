@@ -5,6 +5,8 @@
 
   require_once('../model/Componente.class.php');
   require_once('../lib/BD.class.php');
+  require_once('FluxoDAO.php');
+  require_once('DisciplinaDAO.php');
   
   class ComponenteDAO {
     
@@ -149,36 +151,15 @@
         if (!$search->execute())
           return 0;
 
+        $fluxoDAO = new FluxoDAO();
+        $disciplinaDAO = new DisciplinaDAO();
+
         while ($cmp = $search->fetch(PDO::FETCH_ASSOC)) {
           $componente = new Componente();
           $componente->__set("cmp_sem", $cmp["cmp_sem"]);
           $componente->__set("cmp_hor", $cmp["cmp_hor"]);
-
-          // Seta o objeto Fluxo em FLX_COD
-          $sql = "SELECT * FROM tab_flx WHERE flx_cod = ?";
-          $search2 = $dbh->prepare($sql);
-          $search2->bindValue(1, $cmp["flx_cod"]);
-
-          if (!$search2->execute())
-            return 0;
-
-          $flx = $search2->fetch(PDO::FETCH_ASSOC);
-          $flx_cod = new Fluxo();
-          $flx_cod->setAll($flx["flx_cod"], $flx["flx_trn"], $flx["flx_sem"]);
-          $componente->__set("flx_cod", $flx_cod);
-
-          // Seta o objeto Disciplina em DCP_COD
-          $sql = "SELECT * FROM tab_dcp WHERE dcp_cod = ?";
-          $search2 = $dbh->prepare($sql);
-          $search2->bindValue(1, $cmp["dcp_cod"]);
-
-          if (!$search2->execute())
-            return 0;
-
-          $dcp = $search2->fetch(PDO::FETCH_ASSOC);
-          $dcp_cod = new Disciplina();
-          $dcp_cod->setAll($dcp["dcp_cod"], $dcp["dcp_nom"]);
-          $componente->__set("dcp_cod", $dcp_cod);
+          $componente->__set("flx_cod", $fluxoDAO->search($cmp["flx_cod"]));
+          $componente->__set("dcp_cod", $disciplinaDAO->search($cmp["dcp_cod"]));
           $componentes[] = $componente;
         }
 
@@ -189,47 +170,47 @@
       }
 
     }
-    
-    public function searchDisciplinas($flx_cod, $cmp_sem) {
-      
+
+    public function componenteBySemestre($semestre) {
+
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT dcp_cod FROM tab_cmp WHERE flx_cod = ? AND cmp_sem = ?";
+        $sql = "SELECT * 
+                FROM tab_cmp C
+                INNER JOIN tab_dcp D ON D.dcp_cod = C.dcp_cod
+                WHERE cmp_sem = ?
+                ORDER BY D.dcp_nom";
 
         $search = $dbh->prepare($sql);
-        $search->bindValue(1, $flx_cod);
-        $search->bindValue(2, $cmp_sem);
+        $search->bindValue(1, $semestre);
 
         if (!$search->execute())
           return 0;
 
-        $disciplinas = null;
-        
-        while ($dcp = $search->fetch(PDO::FETCH_ASSOC)) {
+        $componentes = NULL;
+        $fluxoDAO = new FluxoDAO();
+
+        while ($cmp = $search->fetch(PDO::FETCH_ASSOC)) {
           $disciplina = new Disciplina();
-          $disciplina->__set("dcp_cod", $dcp["dcp_cod"]);
+          $disciplina->__set("dcp_cod", $cmp["dcp_cod"]);
+          $disciplina->__set("dcp_nom", $cmp["dcp_nom"]);
 
-          // Seta o nome da disciplina em $disciplina
-          $sql = "SELECT dcp_nom FROM tab_dcp WHERE dcp_cod = ?";
-          $searchAux = $dbh->prepare($sql);
-          $searchAux->bindValue(1, $dcp["dcp_cod"]);
+          $componente = new Componente();
+          $componente->__set("flx_cod", $fluxoDAO->search($cmp["flx_cod"]));
+          $componente->__set("dcp_cod", $disciplina);
+          $componente->__set("cmp_sem", $cmp["cmp_sem"]);
+          $componente->__set("cmp_hor", $cmp["cmp_hor"]);
 
-          if (!$searchAux->execute())
-            return 0;
-
-          $dcp_nom = $searchAux->fetch(PDO::FETCH_ASSOC);
-          $disciplina->__set("dcp_nom", $dcp_nom["dcp_nom"]);
-          $disciplinas[] = $disciplina;
+          $componentes[] = $componente;
         }
-        
-        return $disciplinas;
-      } catch (Exception $e) {
-        //die("Unable to connect: " . $e->getMessage());
+
+        return $componentes;
+      } catch(Exception $e) {
         return 0;
       }
-      
     }
+
   }
 
 ?>

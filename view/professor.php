@@ -126,7 +126,7 @@
                         <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
                       </thead>
                       <tbody>
-<?php foreach ($professores as $professor) { ?>
+<?php if (isset($professores)) foreach ($professores as $professor) { ?>
                         <tr>
                           <td><?php echo $professor->__get("prf_nom"); ?></td>
                           <td><?php echo substr($professor->__get('prf_cpf'), 0, 3).".".substr($professor->__get('prf_cpf'), 3, 3).".".substr($professor->__get('prf_cpf'), 6, 3).".".substr($professor->__get('prf_cpf'), 9, 2); ?></td>
@@ -237,8 +237,8 @@
               </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             </form>
           </div>
         </div>

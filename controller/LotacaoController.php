@@ -21,6 +21,11 @@ class LotacaoController {
     $lotacaoDAO = new LotacaoDAO();
     return $lotacaoDAO->searchAll();
   }
+
+  public function searchAllReport() {
+    $lotacaoDAO = new LotacaoDAO();
+    return $lotacaoDAO->searchAllReport();
+  }
   
   public function searchClassInRoom($cod_sala) {
     $lotacaoDAO = new LotacaoDAO();

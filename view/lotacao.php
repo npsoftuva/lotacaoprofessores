@@ -11,7 +11,10 @@
   $ofertaController = new OfertaController();
   $professorController = new ProfessorController();
   $salaController = new SalaController();
-
+  
+  $ofertas = $ofertaController->searchAll();
+  $professores = $professorController->searchAll();
+  $salas = $salaController->searchAll();
 ?>
 <!doctype html>
 <html lang="en">
@@ -139,7 +142,7 @@
                       <tbody>
                       <?php
                       $lotacoes = $lotacaoController->searchAll();
-                      if ($lotacoes) foreach ($lotacoes as $lotacao) { ?>
+                      if (isset($lotacoes)) foreach ($lotacoes as $lotacao) { ?>
                         <tr>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
@@ -203,24 +206,27 @@
             <div class="form-group">
               <label>Oferta *</label>
               <select class="form-control" name="ofr_cod" id="ofr_cod">
-                <?php foreach ($ofertaController->searchAll() as $oferta) { ?>
-                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("ofr_cod"); ?></option>
-                <?php } ?>
+                <?php
+                  if (isset($ofertas)) foreach ($ofertas as $oferta) { ?>
+                  <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("ofr_cod"); ?></option>
+                  <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Professor *</label>
               <select class="form-control" name="prf_cod" id="prf_cod">
-                <?php foreach ($professorController->searchAll() as $professor) { ?>
-                <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
+                <?php 
+                  if (isset($professores)) foreach ($professores as $professor) { ?>
+                  <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
                 <?php } ?>
               </select>
             </div>
             <div class="form-group">
               <label>Sala *</label>
               <select class="form-control" name="flx_cod" id="flx_cod">
-                <?php foreach ($salaController->searchAll() as $sala) { ?>
-                <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
+                <?php 
+                  if (isset($salas)) foreach ($salas as $sala) { ?>
+                  <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
                 <?php } ?>
               </select>
             </div>
@@ -272,7 +278,8 @@
               <label>Oferta *</label>
               <small>Semestre / Fluxo / Disciplina / Turma</small>
               <select class="form-control" name="ofr_cod" id="ofr_cod">
-                <?php foreach ($ofertaController->searchAll() as $key => $oferta) { ?>
+                <?php 
+                if (isset($ofertas)) foreach ($ofertas as $key => $oferta) { ?>
                 <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod") . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
                 <?php } ?>
               </select>
@@ -280,7 +287,8 @@
             <div class="form-group">
               <label>Professor *</label>
               <select class="form-control" name="prf_cod" id="prf_cod">
-                <?php foreach ($professorController->searchAll() as $professor) { ?>
+                <?php
+                if (isset($professores)) foreach ($professores as $professor) { ?>
                 <option value="<?php echo $professor->__get("prf_cod"); ?>"><?php echo $professor->__get("prf_nom"); ?></option>
                 <?php } ?>
               </select>
@@ -288,7 +296,8 @@
             <div class="form-group">
               <label>Sala *</label>
               <select class="form-control" name="sla_cod" id="sla_cod">
-                <?php foreach ($salaController->searchAll() as $sala) { ?>
+                <?php
+                if (isset($salas)) foreach ($salas as $sala) { ?>
                 <option value="<?php echo $sala->__get("sla_cod"); ?>"><?php echo $sala->__get("sla_nom"); ?></option>
                 <?php } ?>
               </select>
@@ -323,8 +332,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <input type="submit" class="btn btn-success btn-fill" value="Adicionar" name="Adicionar" id="Adicionar">
           </div>
           </form>
         </div>
@@ -388,7 +397,7 @@
       <?php      
       for ($i = 1; $i <= $lastFluxo->__get("flx_sem"); $i++) {
         $disciplinas = $disciplinaController->disciplinasFromSemestre($i); 
-        if ($disciplinas != null) { ?>
+        if (isset($disciplinas)) { ?>
           disciplinas[<?php echo $i; ?>] = [
             <?php foreach ($disciplinas as $d) { ?>
             {display: "<?php echo $d->__get("dcp_nom"); ?>", value: "<?php echo $d->__get("dcp_cod"); ?>" },
