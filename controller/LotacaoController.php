@@ -17,14 +17,14 @@ class LotacaoController {
     return $lotacaoDAO->remove($ofr_cod);
   }
   
-  public function searchAll() {
-    $lotacaoDAO = new LotacaoDAO();
-    return $lotacaoDAO->searchAll();
-  }
-
   public function update (Lotacao $lotacao) {
     $lotacaoDAO = new LotacaoDAO();
     return $lotacaoDAO->update($lotacao);
+  }
+  
+  public function searchAll() {
+    $lotacaoDAO = new LotacaoDAO();
+    return $lotacaoDAO->searchAll();
   }
 
   public function searchAllReport() {

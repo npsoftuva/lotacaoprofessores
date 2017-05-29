@@ -4,7 +4,6 @@
   require_once('../controller/PeriodoController.php');
 
   $periodoController = new PeriodoController();
-  $periodos = $periodoController->searchAll();
 
 ?>
 <!doctype html>
@@ -40,10 +39,6 @@
 
       <div class="main-panel">
         <?php include("navbar.inc"); ?>
-
-<?php
-	$periodos = $periodoController->searchAll();
-?>
 
         <div class="content">
           <div class="container-fluid">
@@ -90,6 +85,7 @@
                         <?php }
                     } else
                     if (isset($_POST["Editar"])) {
+                        var_dump($_POST);
                         // criando um objeto Periodo.
                         $periodo = new Periodo();
                         $periodo->__set("prd_cod", $_POST["prd_cod"]);
@@ -101,8 +97,7 @@
                         $prd_fim = new Calendario();
                         $prd_fim->__set("cld_dta", $_POST["prd_fim"]);
                         $periodo->__set("prd_fim", $prd_fim);
-                        $return = $periodoController->update($periodo);
-                        if ($return === 1) { ?>
+                        if ($periodoController->update($periodo)) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Período editado com sucesso!</span>
@@ -110,7 +105,7 @@
                         <?php } else { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
-                            <span data-notify="message"><?php echo $return; ?></span>
+                            <span data-notify="message">Ocorreu um erro ao tentar editar o período.</span>
                           </div>
                         <?php }
                     }
@@ -225,7 +220,7 @@
             <div class="modal-body">
               <div class="form-group">
                 <label>Código *</label>
-                <input class="form-control" placeholder="Código do Período" type="text" name="prd_coda" id="prd_coda">
+                <input class="form-control" placeholder="Código do Período" type="text" maxlength="5" name="prd_coda" id="prd_coda">
               </div>
               <div class="form-group">
                 <label>Início *</label>
@@ -272,7 +267,8 @@
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
       var prd_cod = $(this).data('cod');
-      $(".modal-body #prd_cod").val(prd_cod.toString().substr(0, 4)+'.'+prd_cod.toString().substr(4, 5));
+      $(".modal-body #prd_cod").html(prd_cod.toString().substr(0, 4)+'.'+prd_cod.toString().substr(4, 5));
+      $(".modal-body #prd_cod").val(prd_cod);
       var prd_ini = $(this).data('ini');
       $(".modal-body #prd_ini").val(prd_ini);
       var prd_fim = $(this).data('fim');

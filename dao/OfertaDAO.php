@@ -58,12 +58,13 @@
 
         if ($update->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        //die("Unable to connect: " . $e->getMessage());
-        return 0;
+        if ($e->getCode() == 'P0001')
+          return $e->errorInfo[2];
       }
+
+      return 'Ocorreu um erro ao tentar editar a oferta.';
       
     }
     

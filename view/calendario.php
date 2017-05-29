@@ -45,7 +45,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card card-plain">
-                 <?php
+                  <?php
                   if (isset($_POST["Adicionar"])) {
                     $calendario = new Calendario();
                     $calendario->__set("cld_dta", date_format(date_create(implode("-",array_reverse(explode("/",$_POST["cld_dta"])))), 'Y-m-d'));
@@ -95,41 +95,8 @@
                   }
 
                   $calendarios = $calendarioController->searchAll();
-                ?>
-                  <div class="header">
-                    <h4 class="title">Eventos</h4>
-                    <p class="category">
-                      Lista de eventos cadastradas
-                      <span class="pull-right">
-                        <button type="button" class="btn btn-success btn-fill" data-toggle="modal" data-target="#add">
-                          Adicionar
-                        </button>
-                      </span>
-                    </p>
-                  </div>
-                  <div class="content table-responsive table-full-width">
-                    <table class="table table-striped table-hover" id="dataTables-example">
-                      <thead>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Data</th>
-                        <th class="col-xs-6 col-sm-6 col-md-6 col-lg-6">Nome</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Tipo</th>
-                        <th class="col-xs-2 col-sm-2 col-md-2 col-lg-2">Ações</th>
-                      </thead>
-                      <tbody>
-<?php if (isset($calendarios)) foreach ($calendarios as $calendario) { ?>
-                        <tr>
-                          <td><?php echo date_format(date_create($calendario->__get("cld_dta")), 'd/m/Y'); ?></td>
-                          <td><?php echo $calendario->__get("cld_evt"); ?></td>
-                          <td><?php echo ($calendario->__get("cld_tpo") == "1" ? "Feriado" : ($calendario->__get("cld_tpo") == "3" ? "Facultativo" : "-")); ?></td>
-                          <td>
-                            <a data-toggle="modal" data-dta="<?php echo $calendario->__get("cld_dta"); ?>" data-evt="<?php echo $calendario->__get("cld_evt"); ?>" data-tpo="<?php echo $calendario->__get("cld_tpo"); ?>" title="Editar" class="openEdit btn btn-warning" href="#edit"><span class="pe-7s-note" aria-hidden="true"></span></a>
-
-                            <a data-toggle="modal" data-dta="<?php echo $calendario->__get("cld_dta"); ?>" data-evt="<?php echo $calendario->__get("cld_evt"); ?>" title="Excluir" class="openDelete btn btn-danger" href="#delete"><span class="pe-7s-trash" aria-hidden="true"></span></a>
-                          </td>
-                        </tr>
-<?php } ?>
-                      </tbody>
-                    </table>
+                  ?>
+                  <div id="calendario">
                   </div>
                 </div>
               </div>
@@ -206,19 +173,19 @@
           <div class="modal-body">
             <form role="form" method="POST">
               <div class="form-group">
-                  <label>Data</label>
-                  <input class="form-control" type="text" name="cld_dta" id="cld_dta" placeholder="01/01/2017" required autocomplete="off" onkeyup="mascara( this, mskDate );" maxlength="10" min="10" max="10">
-                </div>
-                <div class="form-group">
-                  <label>Nome</label>
-                  <input class="form-control" type="text" name="cld_evt" id="cld_evt" placeholder="Nome do Evento" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                  <label>Tipo *</label>
-                  <select class="form-control" name="cld_tpo" id="cld_tpo" required>
-                    <option value="1">Feriado</option>
-                    <option value="3">Facultativo</option>
-                  </select>
+                <label>Data</label>
+                <input class="form-control" type="text" name="cld_dta" id="cld_dta" readonly>
+              </div>
+              <div class="form-group">
+                <label>Nome</label>
+                <input class="form-control" type="text" name="cld_evt" id="cld_evt" placeholder="Nome do Evento" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Tipo *</label>
+                <select class="form-control" name="cld_tpo" id="cld_tpo" required>
+                  <option value="1">Feriado</option>
+                  <option value="3">Facultativo</option>
+                </select>
           </div>
           <div class="modal-footer">
             <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
@@ -234,6 +201,14 @@
   <!--   Core JS Files   -->
   <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
   <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+  
+  <!--  FullCalendar  -->
+  <link rel='stylesheet' href='assets/fullcalendar/fullcalendar.css' />
+  <script src='assets/fullcalendar/lib/jquery.min.js'></script>
+  <script src='assets/fullcalendar/lib/moment.min.js'></script>
+  <script src='assets/fullcalendar/fullcalendar.js'></script>
+  <!-- script de tradução -->
+  <script src='assets/fullcalendar/locale/pt-br.js'></script>
 
   <!--  Checkbox, Radio & Switch Plugins -->
   <script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
@@ -271,6 +246,40 @@
       $(".modal-footer #cld_dtax").val( cld_dta );
       var cld_evt = $(this).data('evt');
       $(".modal-footer #cld_evtx").html(cld_evt);
+    });
+  </script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // carrega calendario e eventos do banco
+      $('#calendario').fullCalendar({
+        customButtons: {
+          botaoIrParaData: {
+            text: 'Ir para ...',
+            click: function() {
+              // usar gotoDate
+              alert('aqui vai aparecer um datepicker!');              
+            }
+          }
+        },
+        header: {
+          left: 'prevYear prev today botaoIrParaData',
+          center: 'title',
+          right: 'next nextYear'
+        },
+        defaultDate: $.now(),
+        selectable: true,
+        editable: true,
+        eventLimit: true, 
+        events: 'eventos.php',           
+        eventColor: '#dd6777',
+        hiddenDays: [0],        
+        dayClick: function(date) {
+          jQuery.noConflict();              
+          $('#add').modal('show');
+          $('.modal-body #cld_dta').val(date.date() + "/" + date.month() + "/" + date.year());
+        }
+      });
     });
   </script>
 

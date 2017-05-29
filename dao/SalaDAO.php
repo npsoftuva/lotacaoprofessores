@@ -51,8 +51,11 @@
 
         return 0;
       } catch (Exception $e) {
-        return 0;
+        if ($e->getCode() == 'P0001')
+          return $e->errorInfo[2];
       }
+
+      return 'Ocorreu um erro ao tentar editar a sala.';
 
     }
     
