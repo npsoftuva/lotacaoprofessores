@@ -1,0 +1,16 @@
+.quadrado {
+  border: 1px solid black;
+  width: 15px;
+  height: 15px;
+  position: relative;
+  top: 16px;
+}
+.feriado {
+  background-color: #378006;
+}
+.facultativo {
+  background-color: #9e0b0b;
+}
+#legenda span {        
+  margin-left: 20px;
+}

@@ -82,7 +82,8 @@
                       $sala->__set("sla_cod", $_POST["sla_cod"]);
                       $sala->__set("sla_cap", $_POST["sla_cap"]);
                       $sala->__set("sla_nom", $_POST["sla_nom"]);
-                      if ($salaController->update($sala)) { ?>
+                      $result = $salaController->update($sala);
+                      if ($result === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-display2"></span>
                         <span data-notify="message">Sala editada com sucesso!</span>
@@ -90,7 +91,7 @@
                     <?php } else { ?>
                       <div class="alert alert-danger alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-display2"></span>
-                        <span data-notify="message">Ocorreu um erro ao tentar editar a sala.</span>
+                        <span data-notify="message"><?php echo $result; ?></span>
                       </div>
                     <?php }
                     }

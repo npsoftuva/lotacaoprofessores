@@ -29,11 +29,13 @@
 
         if ($register->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        echo "Failed: " . $e->getMessage();
+        if ($e->getCode() == 'P0001')
+          return $e->errorInfo[2];
       }
+
+      return 'Ocorreu um erro ao tentar adicionar a lotação.';
 
     }
 
@@ -71,9 +73,7 @@
                         lot_hor = ?,
                         lot_int = ?,
                         lot_qtd = ?
-                WHERE   lot_cod = ?;
-
-                ";
+                WHERE   lot_cod = ?";
 
         $update = $dbh->prepare($sql);
         $update->bindValue(1, $lotacao->__get("ofr_cod")->__get("ofr_cod"));
@@ -87,13 +87,13 @@
 
         if($update->execute())
           return 1;
-
-        return 0;
+        
       } catch (Exception $e) {
-        die("Unable to connect: " . $e->getMessage());
-        return 0;
+        if ($e->getCode() == 'P0001')
+          return $e->errorInfo[2];
       }
 
+      return 'Ocorreu um erro ao tentar editar a lotação.';
     }
 
     public function searchAll() {
@@ -139,7 +139,7 @@
 
         return $lotacoes;
       } catch(Exception $e) {
-        die("Unable to connect: " . $e->getMessage());
+        //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
@@ -219,7 +219,7 @@
 
         return $lotacoes;
       } catch(Exception $e) {
-        die("Unable to connect: " . $e->getMessage());
+        //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
@@ -276,8 +276,8 @@
         
         return $matriz;
 
-      } catch(PDOException $e) {
-        die($e->getMessage());
+      } catch(Exception $e) {
+        //die($e->getMessage());
         return 0;
       }
       

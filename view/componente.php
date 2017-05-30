@@ -5,8 +5,7 @@
   require_once('../controller/FluxoController.php');
   require_once('../controller/DisciplinaController.php');
 
-  $componenteController = new ComponenteController();
-  $componentes = $componenteController->searchAll();
+  $componenteController = new ComponenteController();  
 ?>
 <!doctype html>
 <html lang="en">
@@ -199,15 +198,6 @@
               <div class="form-group">
                 <label>Disciplina *</label>
                 <input class="form-control" type="text" name="dcp_code" id="dcp_code" value="" readonly>
-                <!-- <select class="form-control" name="dcp_code" id="dcp_code" required>
-                  <?php
-                  $disciplinaController = new DisciplinaController();
-                  $disciplinas = $disciplinaController->searchAll();
-                  foreach ($disciplinas as $disciplina) {
-                  ?>
-                  <option value="<?php echo $disciplina->__get('dcp_cod'); ?>"><?php echo $disciplina->__get('dcp_nom'); ?></option>
-                  <?php } ?>
-                </select> -->
               </div>
               <div class="form-group">
                 <label>Semestre *</label>
@@ -245,7 +235,7 @@
                   $fluxos = $fluxoController->searchAll();
                   if (isset($fluxos)) {
                     foreach ($fluxos as $fluxo) { ?>
-                      <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo $fluxo->__get('flx_cod'); ?></option>
+                      <option value="<?php echo $fluxo->__get('flx_cod'); ?>"><?php echo substr($fluxo->__get('flx_cod'), 0, 4) . '.' . substr($fluxo->__get('flx_cod'), 4, 1); ?></option>
                     <?php } 
                   } ?>
                 </select>

@@ -94,7 +94,9 @@
 
         $search = $dbh->prepare($sql);
         $search->bindValue(1, $cld_dta);
-        $search->execute();
+        
+        if (!$search->execute())
+          return 0;
 
         $cld = $search->fetch(PDO::FETCH_ASSOC);
         $aux = new Calendario();
@@ -114,20 +116,26 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_cld WHERE cld_tpo <> 2 ORDER BY cld_dta";
+        $sql = "SELECT * FROM tab_cld WHERE cld_tpo <> 2";
 
         $search = $dbh->prepare($sql);
         
         if (!$search->execute())
           return 0;
-
+        
         while ($cld = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Calendario();
-          $aux->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $cor = ($cld["cld_tpo"] == 1) ? '#378006' : '#9e0b0b';
+          
+          $aux = array(
+            'title' => $cld["cld_evt"],
+            'start' => $cld["cld_dta"],
+            'type' => $cld["cld_tpo"],
+            'color' => $cor);
+
           $clds[] = $aux;
         }
 
-        return $clds;
+        return json_encode($clds);
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
         return 0;
@@ -135,5 +143,24 @@
 
     }
 
+    public function searchMinDate() {
+
+      try {
+        $dbh = Connection::connect();
+
+        $sql = "SELECT MIN(cld_dta) as cld_dta FROM tab_cld";
+
+        $search = $dbh->prepare($sql);        
+        
+        if (!$search->execute())
+          return 0;
+
+        $data = $search->fetch(PDO::FETCH_ASSOC);
+
+        return $data['cld_dta'];
+      } catch(Exception $e) {
+        return 0;
+      }
+    }
   }
 ?>

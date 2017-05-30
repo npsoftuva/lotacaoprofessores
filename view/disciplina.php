@@ -3,8 +3,7 @@
   require_once('verificaPapel.php');
   require_once('../controller/DisciplinaController.php');
 
-  $disciplinaController = new DisciplinaController();
-  $disciplinas = $disciplinaController->searchAll();
+  $disciplinaController = new DisciplinaController();  
 
 ?>
 <!doctype html>
@@ -147,7 +146,7 @@
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="dcp_codx" id="dcp_codx" value="">
-              <p>Você deseja excluir a disciplina "<b id="dcp_nomx"></b>"?</p>
+              <p>Você deseja excluir a disciplina <b id="dcp_nomx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>

@@ -7,7 +7,6 @@
   require_once('../controller/SalaController.php');
 
   $lotacaoController = new LotacaoController();
-
   $ofertaController = new OfertaController();
   $professorController = new ProfessorController();
   $salaController = new SalaController();
@@ -98,7 +97,8 @@
                       $lotacao->__set("lot_int", $lot_int);
                       $lotacao->__set("lot_qtd", 5);
 
-                      if ($lotacaoController->register($lotacao)) { ?>
+                      $return = $lotacaoController->register($lotacao);
+                      if ($return === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
                           <span data-notify="message">Lotação adicionada com sucesso!</span>
@@ -106,7 +106,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar adicionar a lotação.</span>
+                          <span data-notify="message"><?php echo $return; ?></span>
                         </div>
                       <?php }
 
@@ -141,7 +141,8 @@
                       $lotacao->__set("lot_int", $lot_int);
                       $lotacao->__set("lot_qtd", 5);
 
-                      if ($lotacaoController->update($lotacao)) { ?>
+                      $return = $lotacaoController->update($lotacao);
+                      if ($return === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
                           <span data-notify="message">Lotação editada com sucesso!</span>
@@ -149,7 +150,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar editar a lotação.</span>
+                          <span data-notify="message"><?php echo $return; ?></span>
                         </div>
                       <?php }
                     }
@@ -188,7 +189,7 @@
                         <tr>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_sem"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("dcp_cod")->__get("dcp_nom"); ?></td>
-                          <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("flx_cod")->__get("flx_cod"); ?></td>
+                          <td><?php echo substr($lotacao->__get("ofr_cod")->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 0, 4) . '.' . substr($lotacao->__get("ofr_cod")->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 4, 1); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("ofr_trm"); ?></td>
                           <td><?php echo $lotacao->__get("ofr_cod")->__get("cmp")->__get("cmp_hor"); ?></td>
                           <td><?php echo $lotacao->__get("lot_qtd"); ?></td>
@@ -251,7 +252,7 @@
               <small>Semestre / Fluxo / Disciplina / Turma</small>
               <select class="form-control" name="ofr_cod" id="ofr">
                 <?php if (isset($ofertas)) foreach ($ofertas as $key => $oferta) { ?>
-                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod") . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
+                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 0, 4) . "." . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 4, 1) . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
               <?php } ?>
               </select>
             </div>
@@ -325,7 +326,7 @@
               <select class="form-control" name="ofr_cod" id="ofr_cod">
                 <?php 
                 if (isset($ofertas)) foreach ($ofertas as $key => $oferta) { ?>
-                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . $oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod") . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
+                <option value="<?php echo $oferta->__get("ofr_cod"); ?>"><?php echo $oferta->__get("cmp")->__get("cmp_sem") . " - " . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 0, 4) . "." . substr($oferta->__get("cmp")->__get("flx_cod")->__get("flx_cod"), 4, 1) . " - " . $oferta->__get("cmp")->__get("dcp_cod")->__get("dcp_nom") . " - " . $oferta->__get("ofr_trm"); ?></option>
                 <?php } ?>
               </select>
             </div>

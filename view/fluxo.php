@@ -3,8 +3,7 @@
   require_once('verificaPapel.php');
   require_once('../controller/FluxoController.php');
 
-  $fluxoController = new FluxoController();
-  $fluxos = $fluxoController->searchAll();
+  $fluxoController = new FluxoController();  
 
 ?>
 <!doctype html>
@@ -154,7 +153,7 @@
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="flx_codx" id="flx_codx" value="">
-              <p>Você deseja excluir o fluxo "<b id="flx_codxx"></b>"?</p>
+              <p>Você deseja excluir o fluxo <b id="flx_codxx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -262,7 +261,7 @@
   <script type="text/javascript">
     $(document).on("click", ".openEdit", function () {
       var flx_cod = $(this).data('cod');
-      $(".modal-body #flx_cod").val(flx_cod.toString().substr(0, 4)+'.'+flx_cod.toString().substr(4, 5));
+      $(".modal-body #flx_cod").val(flx_cod);
       var flx_trn = $(this).data('trn');
       $("#flx_trn").val(flx_trn);
       var flx_sem = $(this).data('sem');
@@ -274,7 +273,7 @@
     $(document).on("click", ".openDelete", function () {
       var flx_cod = $(this).data('cod');
       $(".modal-footer #flx_codx").val( flx_cod );
-      $(".modal-footer #flx_codxx").html( flx_cod );
+      $(".modal-footer #flx_codxx").html(flx_cod.toString().substr(0, 4)+'.'+flx_cod.toString().substr(4, 5));
     });
   </script>
 

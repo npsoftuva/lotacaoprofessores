@@ -4,14 +4,13 @@
   require_once('../controller/OfertaController.php');
   require_once('../controller/FluxoController.php');
   require_once('../controller/PeriodoController.php');
-  require_once('../controller/DisciplinaController.php');
   require_once('../controller/ComponenteController.php');
 
   $ofertaController = new OfertaController();
   $fluxoController = new FluxoController();
-  $periodoController = new PeriodoController();
-  $disciplinaController = new DisciplinaController();
+  $periodoController = new PeriodoController();  
   $componenteController = new ComponenteController();
+
   $lastPeriodo = $periodoController->searchLastCod();
   $lastFluxo = $fluxoController->searchLastCod();
 ?>
@@ -132,7 +131,8 @@
                       $componente->__set("dcp_cod", $disciplina);
                       $oferta->__set("cmp", $componente);
                       
-                      if ($ofertaController->update($oferta)) { ?>
+                      $result = $ofertaController->update($oferta);
+                      if ($result === 1) { ?>
                         <div class="alert alert-success alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
                           <span data-notify="message">Oferta editada com sucesso!</span>
@@ -140,7 +140,7 @@
                       <?php } else { ?>
                         <div class="alert alert-danger alert-with-icon" data-notify="container">
                           <span data-notify="icon" class="pe-7s-users"></span>
-                          <span data-notify="message">Ocorreu um erro ao tentar editar a oferta.</span>
+                          <span data-notify="message"><?php echo $result; ?></span>
                         </div>
                       <?php }
                     }
