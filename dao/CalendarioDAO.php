@@ -114,26 +114,24 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_cld WHERE cld_tpo <> 2 ORDER BY cld_dta";
+        $sql = "SELECT * FROM tab_cld WHERE cld_tpo <> 2";
 
         $search = $dbh->prepare($sql);
         
         if (!$search->execute())
           return 0;
-
+        
         while ($cld = $search->fetch(PDO::FETCH_ASSOC)) {
-          $aux = new Calendario();
-          $aux->setAll($cld["cld_dta"], $cld["cld_dia"], $cld["cld_evt"], $cld["cld_tpo"]);
+          $aux = array('title' => $cld["cld_evt"], 'start' => $cld["cld_dta"]);
           $clds[] = $aux;
         }
 
-        return $clds;
+        return json_encode($clds);
       } catch (Exception $e) {
         //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
 
-    }
-
+    }    
   }
 ?>

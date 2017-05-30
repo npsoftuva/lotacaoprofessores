@@ -267,17 +267,25 @@
           center: 'title',
           right: 'next nextYear'
         },
-        defaultDate: $.now(),
+        // definir intervalo a ser mostrado
+        defaultDate: '2016-01-01',//$.now(),
         selectable: true,
-        editable: true,
-        eventLimit: true, 
-        events: 'eventos.php',           
+        editable: false,        
+        eventLimit: true,
+        events: <?php echo $calendarios ?>,
         eventColor: '#dd6777',
-        hiddenDays: [0],        
+        hiddenDays: [0],
         dayClick: function(date) {
-          jQuery.noConflict();              
+          jQuery.noConflict();       
           $('#add').modal('show');
-          $('.modal-body #cld_dta').val(date.date() + "/" + date.month() + "/" + date.year());
+          $('.modal-body #cld_dta').val(date.date() + "/" + (parseInt(date.month()) + 1) + "/" + date.year());
+        },
+        // buscar tipo de feriado e mudar a cor
+        eventClick: function(event) {
+          jQuery.noConflict();          
+          $('#edit').modal('show');
+          $('.modal-body #cld_dta').val(event.start.date() + "/" + (parseInt(event.start.month()) + 1) + "/" + event.start.year());
+          $('.modal-body #cld_evt').val(event.title);          
         }
       });
     });
