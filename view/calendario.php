@@ -32,6 +32,9 @@
 
     <!--     Fonts and icons     -->
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+    <!--  Legenda do calendário  -->
+    <link href="assets/css/legenda-calendario.css" rel="stylesheet" />
   </head>
   <body>
     <div class="wrapper">
@@ -76,11 +79,11 @@
                       </div>
                     <?php }
                   } else
-                  if (isset($_POST["Editar"])) {
+                  if (isset($_POST["Editar"])) {                    
                     $calendario = new Calendario();
-                    $calendario->__set("cld_dta", $_POST["cld_dta"]);
-                    $calendario->__set("cld_evt", $_POST["cld_evt"]);
-                    $calendario->__set("cld_tpo", $_POST["cld_tpo"]);
+                    $calendario->__set("cld_dta", $_POST["cld_dtae"]);
+                    $calendario->__set("cld_evt", $_POST["cld_evte"]);
+                    $calendario->__set("cld_tpo", $_POST["cld_tpoe"]);
                     if ($calendarioController->update($calendario)) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-date"></span>
@@ -98,6 +101,11 @@
                   ?>
                   <div id="calendario">
                   </div>
+                </div>
+                <div id="legenda">
+                  <strong>Legenda:</strong>
+                  <div class="quadrado feriado"></div> <span>Feriado</span>
+                  <div class="quadrado facultativo"></div> <span>Ponto Facultativo</span>
                 </div>
               </div>
             </div>
@@ -118,7 +126,7 @@
           <div class="modal-footer">
             <form role="form" method="POST">
               <input type="hidden" name="cld_dtax" id="cld_dtax" value="">
-              <p>Você deseja excluir o evento "<b id="cld_evtx"></b>"?</p>
+              <p>Você deseja excluir o evento <b id="cld_evtx"></b>?</p>
               <input type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Não">
               <input type="submit" class="btn btn-success btn-fill" value="Sim" name="Excluir">
             </form>
@@ -139,21 +147,24 @@
             <form role="form" method="POST">
                 <div class="form-group">
                   <label>Data</label>
-                  <input class="form-control" type="text" name="cld_dta" id="cld_dta" value="" readonly>
+                  <input class="form-control" type="text" name="cld_dtae" id="cld_dtae" value="" readonly>
                 </div>
                 <div class="form-group">
                   <label>Nome</label>
-                  <input class="form-control" type="text" name="cld_evt" id="cld_evt" value="" required autocomplete="off">
+                  <input class="form-control" type="text" name="cld_evte" id="cld_evte" value="" required autocomplete="off">
                 </div>
                 <div class="form-group">
                   <label>Tipo *</label>
-                  <select class="form-control" name="cld_tpo" id="cld_tpo" required>
+                  <select class="form-control" name="cld_tpoe" id="cld_tpoe" required>
                     <option value="1">Feriado</option>
                     <option value="3">Facultativo</option>
                   </select>
                 </div>
           </div>
           <div class="modal-footer">
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1">
+              <input id="btn-delete" type="button" class="btn btn-danger btn-fill" data-dismiss="modal" value="Deletar">
+            </div>
             <input type="button" class="btn btn-warning btn-fill" data-dismiss="modal" value="Cancelar">
             <input type="submit" class="btn btn-success btn-fill" value="Salvar" name="Editar">
             </form>
@@ -229,63 +240,56 @@
   <script src="assets/js/mask.js"></script>
 
   <script type="text/javascript">
-    $(document).on("click", ".openEdit", function () {
-      var cld_dta = $(this).data('dta');
-      cld_dta = cld_dta.substr(8,2) + "/" + cld_dta.substr(5,2) + "/" + cld_dta.substr(0,4);
-      $(".modal-body #cld_dta").val(cld_dta);
-      var cld_evt = $(this).data('evt');
-      $(".modal-body #cld_evt").val(cld_evt);
-      var cld_tpo = $(this).data('tpo');
-      $(".modal-body #cld_tpo").val(cld_tpo);
-    });
-  </script>
-
-  <script type="text/javascript">
-    $(document).on("click", ".openDelete", function () {
-      var cld_dta = $(this).data('dta');
-      $(".modal-footer #cld_dtax").val( cld_dta );
-      var cld_evt = $(this).data('evt');
+    $('#btn-delete').on("click", function() {
+      $('#delete').modal('show');
+      var cld_dta = $('#cld_dtae').val();
+      $(".modal-footer #cld_dtax").val(cld_dta);
+      var cld_evt = $('#cld_evte').val();
       $(".modal-footer #cld_evtx").html(cld_evt);
     });
   </script>
 
   <script type="text/javascript">
     $(document).ready(function() {
-      // carrega calendario e eventos do banco
+      
       $('#calendario').fullCalendar({
         customButtons: {
           botaoIrParaData: {
-            text: 'Ir para ...',
+            text: 'Ir para',
             click: function() {
               // usar gotoDate
               alert('aqui vai aparecer um datepicker!');              
+              //$('#calendario').fullCalendar('gotoDate', '2016-02-02');              
             }
           }
         },
         header: {
-          left: 'prevYear prev today botaoIrParaData',
+          left: 'prevYear prev',
           center: 'title',
-          right: 'next nextYear'
+          right: 'botaoIrParaData today next nextYear'
         },
-        // definir intervalo a ser mostrado
-        defaultDate: '2016-01-01',//$.now(),
+        validRange: {
+          start: <?php echo "'" . $calendarioController->searchMinDate() . "'"; ?>
+        },        
+        defaultDate: $.now(),
         selectable: true,
         editable: false,        
         eventLimit: true,
-        events: <?php echo $calendarios ?>,
-        eventColor: '#dd6777',
+        events: <?php echo $calendarios ?>,        
         hiddenDays: [0],
         dayClick: function(date) {
           jQuery.noConflict();       
           $('#add').modal('show');
-          $('.modal-body #cld_dta').val(date.date() + "/" + (parseInt(date.month()) + 1) + "/" + date.year());
-        },
-        // buscar tipo de feriado e mudar a cor
+          var month = parseInt(date.month()) + 1;
+          $('.modal-body #cld_dta').val(date.date() + "/" + month + "/" + date.year());
+        },        
         eventClick: function(event) {
           jQuery.noConflict();          
           $('#edit').modal('show');
-          $('.modal-body #cld_dta').val(event.start.date() + "/" + (parseInt(event.start.month()) + 1) + "/" + event.start.year());
-          $('.modal-body #cld_evt').val(event.title);          
+          var month = parseInt(event.start.month()) + 1;
+          $('.modal-body #cld_dtae').val(event.start.date() + "/" + month + "/" + event.start.year());
+          $('.modal-body #cld_evte').val(event.title);
+          $('.modal-body #cld_tpoe').val(event.type);
         }
       });
     });

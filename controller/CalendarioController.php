@@ -32,6 +32,10 @@ class CalendarioController {
     return $calendarioDAO->searchAll();
   }
 
+  public function searchMinDate() {
+    $calendarioDAO = new CalendarioDAO();
+    return $calendarioDAO->searchMinDate();
+  }
 }
 
 ?>
