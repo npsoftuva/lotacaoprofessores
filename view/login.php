@@ -80,6 +80,10 @@
   <script src="assets/js/jquery.form.js"></script>
   
   <script type="text/javascript">
+    $(document).ready(function() {
+      $('#usu_log').focus();
+    });
+
     $(function($) {
       $('#frmLogin').submit(function() {
         $('div.mensagem-erro').html('');

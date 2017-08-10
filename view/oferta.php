@@ -13,7 +13,15 @@
 
   $lastPeriodo = $periodoController->searchLastCod();
   $lastFluxo = $fluxoController->searchLastCod();
+
+
+  /*
+     Prover a opção de visualizar ofertas por chaves escolhíveis.
+  */
+
+
 ?>
+
 <!doctype html>
 <html lang="en">
   <head>

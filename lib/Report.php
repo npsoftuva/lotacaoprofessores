@@ -14,17 +14,12 @@
 			}
 		}
 		
-		public function setHeader($html) {
-			$this->header = $html;
-		}
-		
 		public function setContent($html) {
 			$this->content = $html;
 		}
 		
 		public function buildPDF() {
 			$this->pdf = new mPDF('utf-8', 'A4-L');
-			$this->pdf->setHTMLHeader($this->header);			
 			$this->pdf->WriteHTML($this->css, 1);
 			$this->pdf->WriteHTML($this->content, 2);
 		}

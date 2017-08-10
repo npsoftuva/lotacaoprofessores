@@ -58,17 +58,29 @@
                         $prd_fim = new Calendario();
                         $prd_fim->__set("cld_dta", $_POST["prd_fima"]);
                         $periodo->__set("prd_fim", $prd_fim);
-                        if ($periodoController->register($periodo)) { ?>
+
+                        $resp = $periodoController->register($periodo);
+
+                        if ($resp == 1) { ?>
                           <div class="alert alert-success alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Período adicionado com sucesso!</span>
                           </div>
-                        <?php } else { ?>
+                        <?php } else if ($resp == 2) { ?>
                           <div class="alert alert-danger alert-with-icon" data-notify="container">
+                            <span data-notify="icon" class="pe-7s-notebook"></span>
+                            <span data-notify="message">Por favor, insira dias letivos.</span>
+                          </div>
+                        <?php }
+                         else {
+                            ?>
+                            <div class="alert alert-danger alert-with-icon" data-notify="container">
                             <span data-notify="icon" class="pe-7s-notebook"></span>
                             <span data-notify="message">Ocorreu um erro ao tentar adicionar o período.</span>
                           </div>
-                        <?php }
+                          <?php
+                         }
+
                     } else
                     if (isset($_POST["Excluir"])) {
                         $return = $periodoController->remove($_POST["prd_codx"]);
@@ -85,7 +97,6 @@
                         <?php }
                     } else
                     if (isset($_POST["Editar"])) {
-                        var_dump($_POST);
                         // criando um objeto Periodo.
                         $periodo = new Periodo();
                         $periodo->__set("prd_cod", $_POST["prd_cod"]);

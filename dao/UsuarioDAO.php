@@ -113,7 +113,7 @@
       try {
         $dbh = Connection::connect();
 
-        $sql = "SELECT * FROM tab_usu ORDER BY usu_tpo";
+        $sql = "SELECT * FROM tab_usu ORDER BY usu_tpo, usu_log";
 
         $search = $dbh->prepare($sql);
         

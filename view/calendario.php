@@ -253,7 +253,7 @@
     $(document).ready(function() {
       
       $('#calendario').fullCalendar({
-        customButtons: {
+        /*customButtons: {
           botaoIrParaData: {
             text: 'Ir para',
             click: function() {
@@ -262,11 +262,11 @@
               //$('#calendario').fullCalendar('gotoDate', '2016-02-02');              
             }
           }
-        },
+        },*/
         header: {
           left: 'prevYear prev',
           center: 'title',
-          right: 'botaoIrParaData today next nextYear'
+          right: /*botaoIrParaData*/ 'today next nextYear'
         },
         validRange: {
           start: <?php echo "'" . $calendarioController->searchMinDate() . "'"; ?>

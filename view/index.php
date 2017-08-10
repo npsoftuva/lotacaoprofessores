@@ -84,9 +84,9 @@
                 <input class="form-control" placeholder="Número do Ofício" name="num_ofc" required autocomplete="off">
               </div>
           </div>
-          <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="GerarP" id="GerarP">
-            <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+            <div class="modal-footer">
+              <button type="reset" class="btn btn-warning btn-fill">Limpar</button>
+              <input type="submit" class="btn btn-success btn-fill" value="Gerar" name="GerarP" id="GerarP">
             </form>
           </div>
         </div>

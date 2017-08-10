@@ -65,6 +65,7 @@
                     } else
                     if (isset($_POST["Excluir"])) {
                       $return = $usuarioController->remove($_POST["usu_codx"]);
+                      
                       if ($return === 1) { ?>
                       <div class="alert alert-success alert-with-icon" data-notify="container">
                         <span data-notify="icon" class="pe-7s-user"></span>

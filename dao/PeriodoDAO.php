@@ -13,20 +13,36 @@
 
       try {
         $dbh = Connection::connect();
-
+        $dbh->beginTransaction();
         $sql = "INSERT INTO tab_prd (prd_cod, prd_ini, prd_fim) VALUES (?, ?, ?)";
 
         $register = $dbh->prepare($sql);
+         
+
+        $calendarioDAO = new CalendarioDAO();
+        $per = $register->fetch(PDO::FETCH_ASSOC);
+
+        $calIni = $calendarioDAO->search($per["prd_ini"]);
+        $calFim = $calendarioDAO->search($per["prd_fim"]);
+
+        if (!isset($calIni) || $calIni->__get("cld_tpo") == 1 || !isset($calFim) || $calFim->__get("cld_tpo") == 1) {
+          return 2;
+        }
+
         $register->bindValue(1, $periodo->__get("prd_cod"));
         $register->bindValue(2, $periodo->__get("prd_ini")->__get("cld_dta"));
         $register->bindValue(3, $periodo->__get("prd_fim")->__get("cld_dta"));
 
-        if ($register->execute())
+        if ($register->execute()) {
+          $dbh->commit();
           return 1;
+        }
 
+        $dbh->rollback();
         return 0;
       } catch (Exception $e) {
         //echo "Failed: " . $e->getMessage();
+        $dbh->rollback();          
         return 0;
       }
 
@@ -46,7 +62,7 @@
         $update->bindValue(1, $periodo->__get("prd_ini")->__get("cld_dta"));
         $update->bindValue(2, $periodo->__get("prd_fim")->__get("cld_dta"));
         $update->bindValue(3, $periodo->__get("prd_cod"));
-
+        
         if ($update->execute())
           return 1;
 
@@ -151,11 +167,9 @@
         //die("Unable to connect: " . $e->getMessage());
         return 0;
       }
-
     }
 
     public function searchLastCod() {
-      
       try {
         $dbh = Connection::connect();
 
