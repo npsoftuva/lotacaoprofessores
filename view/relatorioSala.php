@@ -40,15 +40,12 @@
       foreach ($lotacoes as $key => $line) {
         $content .= "<tr><td>" . $key . "</td>";
         
-        $i =  0;
+        $i = 0;
         foreach ($line as $col) {
           if ($i > 0) // precisamos imprimir a partir da segunda coluna
             $content .= "<td>" . $col . "</td>";  
           $i++;
         }
-
-        if (count($line) == 5) // se a linha tiver apenas 5 colunas, imprimir mais uma em branco
-          $content .= "<td></td>";
 
         $content .= "</tr>";
       }
